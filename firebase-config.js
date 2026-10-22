@@ -5,13 +5,20 @@
 // Esses valores não são segredo: quem protege os dados são as regras do Firestore.
 window.GUAPOS_FIREBASE = null;
 
-/* Exemplo de como fica depois de colar:
-window.GUAPOS_FIREBASE = {
-  apiKey: "AIza...",
-  authDomain: "guapos-xxxxx.firebaseapp.com",
-  projectId: "guapos-xxxxx",
-  storageBucket: "guapos-xxxxx.appspot.com",
-  messagingSenderId: "000000000000",
-  appId: "1:000000000000:web:abc123"
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyDbRNdvEonw9hK58MwbWESbe04pEo0etYs",
+  authDomain: "guapo-bd882.firebaseapp.com",
+  projectId: "guapo-bd882",
+  storageBucket: "guapo-bd882.firebasestorage.app",
+  messagingSenderId: "1072982200950",
+  appId: "1:1072982200950:web:1d829912518292c51b4557"
 };
-*/
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
