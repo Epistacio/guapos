@@ -1,0 +1,10 @@
+rules_version = '2';
+// Regras do Firestore para o Guapos.
+// Cada conta só lê e grava dentro de contas/<id da conta>/...; qualquer outro acesso é negado.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /contas/{uid}/{document=**} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+    }
+  }
+}
