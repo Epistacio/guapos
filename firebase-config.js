@@ -3,7 +3,7 @@
 // Para ligar a nuvem, troque o null pelo bloco "firebaseConfig" do seu projeto
 // (Console do Firebase › Configurações do projeto › Seus apps › App da Web).
 // Esses valores não são segredo: quem protege os dados são as regras do Firestore.
-window.GUAPOS_FIREBASE = null;
+window.GUAPOS_FIREBASE = {
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
