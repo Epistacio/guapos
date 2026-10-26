@@ -1891,8 +1891,28 @@ const Sync={
     });
   },
   stop(){if(this.unsub){this.unsub();this.unsub=null}},
+  // Escuta o documento da conta (nomes dos perfis e o pedido de apagar a senha de Finanças feito pelo painel)
+  accData:{},unsubAcc:null,
+  watchAccount(){
+    if(this.unsubAcc)this.unsubAcc();
+    this.unsubAcc=this.account().onSnapshot(d=>{this.accData=(d.exists&&d.data())||{};checkFinReset()},e=>console.warn('conta',e));
+  },
   status(){renderSyncStatus()}
 };
+// Recuperação da senha de Finanças: só quem tem acesso ao painel do Firebase consegue pedir.
+// No documento contas/<conta>, o campo "resetSenhaFinancas" com o nome do perfil (ou p1/p2) apaga a senha desse perfil.
+function checkFinReset(){
+  const alvo=String(Sync.accData.resetSenhaFinancas||'').trim().toLowerCase();
+  if(!alvo||!PID)return;
+  if(alvo!==PID&&alvo!==profName(PID).trim().toLowerCase())return;
+  if(cfg.finPin){
+    delete cfg.finPin;finUnlocked=false;finTries=0;
+    ss('e2_cfg',cfg);Sync.flushKey('cfg');
+    showToast('Senha de Finanças removida','lock');
+    if(!document.getElementById('gate').classList.contains('on'))go(curPage);
+  }
+  Sync.account().update({resetSenhaFinancas:firebase.firestore.FieldValue.delete()}).catch(e=>console.warn('reset',e));
+}
 function syncInfo(){
   if(!Sync.on)return{c:'',t:'Só neste aparelho (nuvem não configurada)'};
   if(!navigator.onLine)return{c:'wait',t:'Sem internet: salvo no aparelho, sincroniza depois'};
@@ -1951,7 +1971,7 @@ async function boot(){
   window.__bootStage='verificando o login';
   Sync.auth.onAuthStateChanged(u=>{
     if(!u){Sync.stop();Sync.uid=null;PID=null;showGate('login');return}
-    Sync.uid=u.uid;afterLogin();
+    Sync.uid=u.uid;Sync.watchAccount();afterLogin();
   });
 }
 async function afterLogin(){
@@ -1998,6 +2018,7 @@ async function forgotPass(){
 }
 async function signOutApp(){
   Sync.flush();Sync.stop();PID=null;
+  if(Sync.unsubAcc){Sync.unsubAcc();Sync.unsubAcc=null}
   if(Sync.on){await Sync.auth.signOut()}else showGate('picker');
 }
 
@@ -2062,7 +2083,7 @@ async function enterProfile(pid){
   Sync.flush();Sync.stop();
   PID=pid;rawSet('g_last',pid);
   resetSession();loadState();
-  if(Sync.on&&Sync.uid){showGate('loading','Sincronizando '+profName(pid)+'…');await Sync.listen(pid)}
+  if(Sync.on&&Sync.uid){showGate('loading','Sincronizando '+profName(pid)+'…');await Sync.listen(pid);checkFinReset()}
   hideGate();buzz(10);
   if(needsOnb()||!habits.length)openOnb();
   else{ensureMonthly();go('dash')}
