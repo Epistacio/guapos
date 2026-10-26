@@ -597,6 +597,9 @@ button,.bni,.sni,.hi,.tk-row,.wday,.chip,.seg-i{-webkit-touch-callout:none}
 .cat-p{font-size:10.5px;color:var(--t3);margin-top:4px}
 
 /* ── LEMBRETES ── */
+.fc-exp{width:100%;margin-top:12px}
+.fc-exp:disabled{opacity:.45;cursor:default}
+.fc-exp-h{text-align:center;margin-top:8px}
 .lemb{display:flex;align-items:center;gap:12px;padding:13px 14px;border-radius:var(--rad);border:1px solid rgba(251,191,36,.28);background:radial-gradient(70% 120% at 0% 0%,rgba(251,191,36,.12),transparent 60%),rgba(12,16,23,.75);margin-bottom:12px;flex-wrap:wrap;cursor:default}
 .lemb[role=button]{cursor:pointer}
 .lemb>.ic{width:22px;height:22px;color:var(--y);flex-shrink:0}
@@ -1192,6 +1195,8 @@ button,.bni,.sni,.hi,.tk-row,.wday,.chip,.seg-i{-webkit-touch-callout:none}
           <span><i class="fdot r"></i>Previsão: saldo pode faltar</span>
         </div>
         <div class="hint">Toque em um dia para ver os lançamentos, informar as horas trabalhadas e comparar os gastos com o valor do seu dia.</div>
+        <button class="btn bg fc-exp" id="fc-exp" onclick="exportarMes()"></button>
+        <div class="fhint fc-exp-h">Cria um evento para cada conta a pagar do mês, com aviso na véspera e no dia, no calendário do celular. Os avisos chegam mesmo com o app fechado.</div>
       </div>
 
       <div class="card" id="f-hora-card">
@@ -3765,6 +3770,9 @@ function renderFinCal(){
   document.getElementById('fc-s').textContent=abertas.length
     ?`${abertas.length} conta${abertas.length>1?'s':''} a pagar · ${fmtShort(somaValor(abertas))}${riscos.length?' · '+riscos.length+' dia'+(riscos.length>1?'s':'')+' em risco':''}`
     :sm.length?'Tudo pago neste mês':'Nenhum gasto neste mês';
+  const nExp=mesAntes(fcM,fcY)?0:contasDoMes(fcM,fcY).length,bx=document.getElementById('fc-exp');
+  bx.innerHTML=ic('calendar')+`<span>Exportar lembretes de ${MS[fcM]}${nExp?' ('+nExp+')':''}</span>`;
+  bx.disabled=!nExp;
   let h='';
   for(let i=0;i<first;i++)h+='<div class="dcell pad"></div>';
   for(let d=1;d<=days;d++){
@@ -3979,30 +3987,38 @@ function renderLembretes(el,dash){
   if(finLocked()){el.innerHTML=`${ic('clock')}<div class="lemb-t"><b>${l.length} conta${l.length>1?'s':''} vencendo</b>Desbloqueie Finanças para ver.</div>`;el.onclick=()=>go('fin');return}
   el.onclick=dash?()=>go('fin'):null;
   el.innerHTML=`${ic('clock')}<div class="lemb-t"><b>Contas para pagar</b>${l.map(x=>`<span class="lemb-i"><em class="${x.quando==='atrasada'?'late':x.quando==='hoje'?'hoje':''}">${x.quando==='atrasada'?'Atrasada':'Vence '+x.quando}</em> ${esc(x.nome)} · ${fmtBRL(x.valor)}</span>`).join('')}</div>`+
-    (dash?'':`<button class="btn bg bs" onclick="lembreteTodas()">${ic('calendar')}<span>Lembrar no calendário</span></button>`);
+    (dash?'':`<button class="btn bg bs" onclick="lembreteTodas()">${ic('calendar')}<span>Exportar lembretes do mês</span></button>`);
 }
 function icsEsc(s){return String(s).replace(/[\\;,]/g,m=>'\\'+m).replace(/\n/g,'\\n')}
+// Um evento de dia inteiro por conta e por vencimento (sem repetição): exportar vários meses não duplica a mesma conta.
+// O UID inclui a data, então reimportar o mesmo mês atualiza o evento nos calendários que reconhecem o UID.
 function icsEvento(x){
   const ymd=k=>k.replace(/-/g,''),fim=shiftKey(x.venc,1),stamp=new Date().toISOString().replace(/[-:]/g,'').slice(0,15)+'Z';
-  const v=[`BEGIN:VEVENT`,`UID:guapos-${x.tipo}-${x.id}@guapos`,`DTSTAMP:${stamp}`,`DTSTART;VALUE=DATE:${ymd(x.venc)}`,`DTEND;VALUE=DATE:${ymd(fim)}`,
-    `SUMMARY:${icsEsc('Pagar: '+x.nome+' ('+fmtBRL(x.valor)+')')}`];
-  // fixo: repete todo mês no mesmo dia (ou no último dia, nos meses mais curtos)
-  if(x.tipo==='fixo'){const d=x.dia||+x.venc.slice(8);v.push(d<=28?`RRULE:FREQ=MONTHLY;BYMONTHDAY=${d}`:`RRULE:FREQ=MONTHLY;BYMONTHDAY=${Array.from({length:d-27},(_,i)=>28+i).join(',')};BYSETPOS=-1`)}
+  const v=[`BEGIN:VEVENT`,`UID:guapos-${x.tipo}-${x.id}-${ymd(x.venc)}@guapos`,`DTSTAMP:${stamp}`,`DTSTART;VALUE=DATE:${ymd(x.venc)}`,`DTEND;VALUE=DATE:${ymd(fim)}`,
+    `SUMMARY:${icsEsc('Pagar: '+x.nome+' ('+fmtBRL(x.valor)+')')}`,
+    `DESCRIPTION:${icsEsc((x.tipo==='fixo'?'Conta fixa':'Conta a pagar')+' · '+catInfo(x.cat).l+' · lembrete criado pelo Guapos')}`,'TRANSP:TRANSPARENT'];
   v.push('BEGIN:VALARM','ACTION:DISPLAY','TRIGGER:-PT15H',`DESCRIPTION:${icsEsc('Vence amanhã: '+x.nome)}`,'END:VALARM',
     'BEGIN:VALARM','ACTION:DISPLAY','TRIGGER:PT9H',`DESCRIPTION:${icsEsc('Vence hoje: '+x.nome)}`,'END:VALARM','END:VEVENT');
   return v.join('\r\n');
 }
-async function baixarICS(itens,nome){
-  if(!itens.length){showToast('Nenhuma conta a pagar','x');return}
-  const txt=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Guapos//Financas//PT-BR','CALSCALE:GREGORIAN',...itens.map(icsEvento),'END:VCALENDAR'].join('\r\n');
-  if(await shareOrDownload(nome,'text/calendar',txt,'Lembretes de contas',!isStandalone()&&isIOS()))
-    showToast('Abra o arquivo para adicionar ao calendário','calendar');
+function icsTexto(itens){return ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Guapos//Financas//PT-BR','CALSCALE:GREGORIAN','METHOD:PUBLISH','X-WR-CALNAME:Guapos · contas',...itens.map(icsEvento),'END:VCALENDAR'].join('\r\n')}
+async function baixarICS(itens,nome,vazio){
+  if(!itens.length){showToast(vazio||'Nenhuma conta a pagar','x');return}
+  if(await shareOrDownload(nome,'text/calendar',icsTexto(itens),'Lembretes de contas',!isStandalone()&&isIOS()))
+    showToast(`${itens.length} lembrete${itens.length>1?'s':''}: abra o arquivo para adicionar ao calendário`,'calendar');
+}
+// Contas a pagar de um mês que ainda vão vencer (as já vencidas não teriam mais aviso)
+function contasDoMes(m,a){const td=today();return saidasMes(m,a).filter(x=>!x.pago&&x.venc>=td).sort((x,y)=>x.venc.localeCompare(y.venc))}
+const slugMes=(m,a)=>MS[m].normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase()+'-'+a;
+function exportarMes(m=fcM,a=fcY){
+  if(mesAntes(m,a)){showToast(MS[m]+' já passou','x');return}
+  baixarICS(contasDoMes(m,a),`guapos-lembretes-${slugMes(m,a)}.ics`,'Nenhuma conta a pagar em '+MS[m]+' daqui para frente');
 }
 function lembreteConta(tipo,id){
   const x=contasAbertas().find(c=>c.tipo===tipo&&c.id===id)||(tipo==='fixo'?(()=>{const d=new Date(fcSel+'T12:00:00');return saidasMes(d.getMonth(),d.getFullYear()).find(c=>c.id===id)})():null);
   if(x)baixarICS([x],'guapos-lembrete.ics');
 }
-function lembreteTodas(){baixarICS(contasAbertas().filter(x=>x.venc>=today()),'guapos-lembretes.ics')}
+function lembreteTodas(){exportarMes(curMes(),curAno())}
 
 // ── Saldo dia a dia (gráfico) ──
 function renderFinChart(m){
