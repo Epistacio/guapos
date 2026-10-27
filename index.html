@@ -3015,6 +3015,7 @@ const Sync={
   },
   account(){return this.db.collection('contas').doc(this.uid)},
   ref(pid){return this.account().collection('perfis').doc(pid).collection('dados')},
+  arquivo(pid){return this.account().collection('perfis').doc(pid).collection('arquivo')},
   write(pid,key,v){
     this.writing++;this.status();
     return this.ref(pid).doc(key).set({json:JSON.stringify(v),at:firebase.firestore.FieldValue.serverTimestamp(),dev:DEVICE})
@@ -3261,6 +3262,7 @@ async function enterProfile(pid){
   hideGate();buzz(10);
   if(needsOnb()||!habits.length)openOnb();
   else{ensureMonthly();go('dash')}
+  arquivarTarefas();
 }
 function switchProfile(){Sync.flush();Sync.stop();PID=null;showGate('picker')}
 let taskDay=null,taskOpen={},editTaskId=null;
@@ -4249,7 +4251,7 @@ function repLabel(r){
 }
 // Cria as ocorrencias das tarefas repetidas no dia k (no maximo 60 dias a frente)
 function ensureRecurring(k){
-  if(!taskRules.length||k>shiftKey(today(),60))return;
+  if(!taskRules.length||k>shiftKey(today(),60)||k<arqCorte())return;
   let added=false;
   taskRules.forEach(r=>{
     if(!ruleHits(r,k)||tasks.some(t=>t.ruleId===r.id&&t.date===k))return;
@@ -4264,6 +4266,63 @@ function dropRule(rid,fromDate){
   tasks=tasks.filter(t=>!(t.ruleId===rid&&t.date>fromDate&&untouched(t)));
   tasks.forEach(t=>{if(t.ruleId===rid)delete t.ruleId});
   ss('e2_taskRules',taskRules);
+}
+
+// ── Arquivo de tarefas antigas ──
+// Cada tipo de dado fica num documento só, e o Firestore aceita até 1 MB por documento.
+// Para a lista de tarefas não crescer para sempre, as de mais de 6 meses vão para o arquivo, um documento por semestre.
+// Ficam na lista as pendentes sem repetição, que ainda aparecem em "Pendentes de antes".
+const ARQ_MESES=6;
+// Primeiro dia do mês de 6 meses atrás: o que for de antes dele vai para o arquivo
+function arqCorte(){const d=new Date();d.setDate(1);d.setMonth(d.getMonth()-ARQ_MESES);return dkey(d.getFullYear(),d.getMonth(),1)}
+const arqSem=k=>k.slice(0,4)+'-'+(+k.slice(5,7)<=6?1:2); // "2026-1" = janeiro a junho
+let arquivando=false,arqCache=null;
+// grupos = {semestre:{id:tarefa}}. Na nuvem, cada tarefa é um campo do documento do semestre,
+// então gravar de novo a mesma tarefa (ou dois aparelhos arquivando juntos) não duplica nada.
+async function arqGravar(pid,grupos){
+  arqCache=null;
+  if(Sync.on){
+    await withTimeout(Promise.all(Object.entries(grupos).map(([s,ts])=>{
+      const t={};Object.entries(ts).forEach(([id,x])=>{t[id]=JSON.stringify(x)});
+      return Sync.arquivo(pid).doc('tarefas-'+s).set({t},{merge:true});
+    })),15000);
+    return;
+  }
+  const a=rawGet(`g_${pid}_arquivo`,{});
+  Object.entries(grupos).forEach(([s,ts])=>{a[s]={...(a[s]||{}),...ts}});
+  rawSet(`g_${pid}_arquivo`,a);
+}
+async function arqLer(pid){
+  if(!Sync.on)return rawGet(`g_${pid}_arquivo`,{});
+  const qs=await withTimeout(Sync.arquivo(pid).get({source:'server'}),10000),a={};
+  qs.docs.forEach(d=>{
+    const s=d.id.replace(/^tarefas-/,''),t=d.data().t||{};a[s]={};
+    Object.entries(t).forEach(([id,j])=>{try{a[s][id]=JSON.parse(j)}catch(e){}});
+  });
+  return a;
+}
+// O backup precisa do arquivo na hora do toque (o iPhone só abre o compartilhar logo depois dele), então a leitura vem antes
+function arqPrefetch(){
+  if(!Sync.on||!PID||(arqCache&&arqCache.pid===PID))return;
+  const pid=PID;
+  arqLer(pid).then(a=>{if(PID===pid)arqCache={pid,a}}).catch(e=>console.warn('arquivo',e));
+}
+// Roda ao entrar no perfil e depois de restaurar um backup. Só tira da lista depois que o arquivo foi gravado.
+async function arquivarTarefas(){
+  if(arquivando||!PID||(Sync.on&&(!Sync.uid||!navigator.onLine)))return;
+  const corte=arqCorte(),velhas=tasks.filter(t=>t.date<corte&&(taskDone(t)||t.ruleId));
+  if(!velhas.length)return;
+  const pid=PID,grupos={},gravadas=new Map(velhas.map(t=>[t.id,JSON.stringify(t)]));
+  velhas.forEach(t=>{const s=arqSem(t.date);(grupos[s]=grupos[s]||{})[t.id]=t});
+  arquivando=true;
+  try{await arqGravar(pid,grupos)}
+  catch(e){console.warn('arquivo',e);return}
+  finally{arquivando=false}
+  if(PID!==pid)return; // trocou de perfil no meio: na próxima entrada ela sai da lista
+  // se alguma foi mexida enquanto gravava, continua na lista e entra na próxima vez
+  tasks=tasks.filter(t=>gravadas.get(t.id)!==JSON.stringify(t));
+  ss('e2_tasks',tasks);
+  if(curPage==='tasks')renderTasks();
 }
 
 function renderTasks(){
@@ -4298,7 +4357,7 @@ function renderTasks(){
   document.getElementById('t-sub').textContent=list.length?`${done.length} de ${list.length}`:'';
   document.getElementById('t-list').innerHTML=list.length
     ?pend.map(t=>taskHTML(t,false,pend.length>1)).join('')+done.map(t=>taskHTML(t)).join('')
-    :`<div class="empty"><div class="eico">${ic('list')}</div>${isToday?'Nenhuma tarefa para hoje.<br>Escreva no campo acima para criar.':'Nenhuma tarefa neste dia.'}</div>`;
+    :`<div class="empty"><div class="eico">${ic('list')}</div>${isToday?'Nenhuma tarefa para hoje.<br>Escreva no campo acima para criar.':taskDay<arqCorte()?'Nenhuma tarefa aqui.<br>As concluídas há mais de 6 meses vão para o arquivo e entram no backup.':'Nenhuma tarefa neste dia.'}</div>`;
 
   const ov=isToday?overdueTasks():[];
   document.getElementById('t-over-card').style.display=ov.length?'':'none';
@@ -5650,7 +5709,9 @@ function renderPerfil(){
   const bs0=backupSince(),bkOk=Sync.on||(bs0!==null&&bs0<7);
   document.getElementById('p-bk-status').innerHTML=ic(bkOk?'shield':'clock')+'<span>'+(Sync.on
     ?'Os dados de '+esc(profName(PID))+' ficam salvos na nuvem. O backup em arquivo é só uma cópia extra deste perfil.'
-    :backupText()+'. O backup é um arquivo que você guarda no iCloud, Arquivos ou e-mail. Se trocar de aparelho, restaure por aqui.')+'</span>';
+    :backupText()+'. O backup é um arquivo que você guarda no iCloud, Arquivos ou e-mail. Se trocar de aparelho, restaure por aqui.')
+    +' Tarefas concluídas há mais de 6 meses vão sozinhas para o arquivo, que entra no backup.</span>';
+  arqPrefetch();
   document.getElementById('p-bk-status').style.color=bkOk?'var(--t2)':'var(--y)';
   renderInstall();
 
@@ -5729,10 +5790,12 @@ const isTouch=()=>window.matchMedia&&matchMedia('(pointer:coarse)').matches;
 const isIOS=()=>/iPhone|iPad|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
 const isStandalone=()=>(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;
 async function exportData(){
-  const data={habits,checks,tasks,taskRules,perf,receitas,fixos,variaveis,vaMovs,cfg,horas,exportedAt:new Date().toISOString()};
+  // tarefas arquivadas: na nuvem vêm da leitura feita ao abrir o Perfil; sem ela (sem internet), o backup sai sem o arquivo
+  const arq=Sync.on?(arqCache&&arqCache.pid===PID?arqCache.a:null):rawGet(`g_${PID}_arquivo`,{});
+  const data={habits,checks,tasks,taskRules,perf,receitas,fixos,variaveis,vaMovs,cfg,horas,...(arq?{tarefasArquivo:arq}:{}),exportedAt:new Date().toISOString()};
   const slug=(profName(PID)||'perfil').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-');
   const name=`guapos_${slug}_backup_${today()}.json`,json=JSON.stringify(data,null,2);
-  if(await shareOrDownload(name,'application/json',json,'Backup Guapos'))markBackup();
+  if(await shareOrDownload(name,'application/json',json,'Backup Guapos'))markBackup(arq?null:'Backup salvo, sem as tarefas arquivadas (faltou internet)');
 }
 // No celular abre a folha de compartilhar ("Salvar em Arquivos", iCloud, e-mail...); no computador baixa o arquivo.
 // preferDownload: no Safari do iPhone, baixar um .ics abre direto o "Adicionar ao Calendário".
@@ -5750,7 +5813,7 @@ async function shareOrDownload(name,mime,text,title,preferDownload){
   setTimeout(()=>URL.revokeObjectURL(url),1500);
   return true;
 }
-function markBackup(){cfg.lastBackup=today();delete cfg.bkSnooze;ss('e2_cfg',cfg);showToast('Backup salvo','down');go(curPage)}
+function markBackup(msg){cfg.lastBackup=today();delete cfg.bkSnooze;ss('e2_cfg',cfg);showToast(msg||'Backup salvo','down',msg?4000:undefined);go(curPage)}
 function backupSince(){
   if(!cfg.lastBackup)return null;
   return Math.max(0,Math.round((new Date(today()+'T12:00:00')-new Date(cfg.lastBackup+'T12:00:00'))/864e5));
@@ -5813,6 +5876,13 @@ function importData(e){
       if(d.horas){horas=fixHoras(d.horas);ss('e2_horas',horas)}
       // a senha das Financas e definitiva: um backup nunca troca nem remove a senha ja criada
       if(d.cfg){const pin=cfg.finPin;cfg=d.cfg;if(pin)cfg.finPin=pin;ss('e2_cfg',cfg);if(cfg.finPin)finUnlocked=false}
+      // o arquivo do backup se junta ao que já existe; as tarefas antigas restauradas voltam para ele
+      if(d.tarefasArquivo&&typeof d.tarefasArquivo==='object'){
+        const g={};
+        Object.entries(d.tarefasArquivo).forEach(([s,ts])=>{if(/^[0-9]{4}-[12]$/.test(s)&&ts&&typeof ts==='object')g[s]=ts});
+        if(Object.keys(g).length)arqGravar(PID,g).catch(e=>console.warn('arquivo',e));
+      }
+      arquivarTarefas();
       e.target.value='';
       if(needsOnb())openOnb();else{document.getElementById('onb').classList.remove('on');go(curPage)}
       showToast('Dados importados','checkc');
