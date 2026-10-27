@@ -1654,6 +1654,9 @@ html[data-theme^=neon] .pk-av.sm{width:30px;height:30px}
 .tp-n{font-size:12.5px;font-weight:700;color:var(--t1);line-height:1.2;padding:0 2px}
 .tp-s{font-size:11px;font-weight:500;color:var(--t2);line-height:1.25;padding:0 2px;margin-top:-4px}
 
+/* ── PREVISÃO: o valor fica numa linha só; se não couber, a fonte diminui (caberTexto) ── */
+.prev-c b{white-space:nowrap;overflow-wrap:normal}
+
 /* ── PARA ONDE VAI O DINHEIRO: barra do limite ── */
 /* A linha fina é o limite. A parte cheia é o que já foi pago; a listrada, o que está a pagar.
    O que passa da linha fica na cor de alerta. Com o limite a 80% da barra, sobra espaço para mostrar o excesso. */
@@ -4824,6 +4827,19 @@ function projecao(ate){
 // ════════════════════════════════
 let fcM=curMes(),fcY=curAno(),fcSel=null,catFiltro='total';
 const brl=v=>(v<0?'−':'')+fmtShort(Math.abs(v));
+const brlC=v=>(v<0?'−':'')+fmtBRL(Math.abs(v)); // com centavos (Previsão)
+// Valores grandes com centavos podem não caber na largura do celular: diminui a fonte só o necessário
+const PREV_IDS=['f-prev-atual','f-prev-receber','f-prev-fixos','f-prev-saldo'];
+function caberTexto(ids){
+  ids.forEach(id=>{
+    const el=document.getElementById(id);if(!el)return;
+    el.style.fontSize='';let fs=parseFloat(getComputedStyle(el).fontSize);
+    while(el.scrollWidth>el.clientWidth+1&&fs>12){fs-=.5;el.style.fontSize=fs+'px'}
+  });
+}
+// a fonte do título chega depois e muda a largura do texto; a tela também pode mudar de largura
+if(document.fonts)document.fonts.ready.then(()=>{if(curPage==='fin')caberTexto(PREV_IDS)});
+window.addEventListener('resize',()=>{if(curPage==='fin')caberTexto(PREV_IDS)});
 function fcShift(n){fcM+=n;if(fcM<0){fcM=11;fcY--}if(fcM>11){fcM=0;fcY++}buzz(5);renderFin()}
 function finRefresh(){
   if(curPage==='dash')renderDash();else if(curPage==='fin')renderFin();
@@ -4849,11 +4865,12 @@ function renderFin(){
   salEl.textContent=brl(R.agora);
   salEl.style.color=R.agora>=0?'var(--g)':'var(--r)';
 
-  document.getElementById('f-prev-atual').textContent=brl(R.agora);
-  document.getElementById('f-prev-receber').textContent='+'+fmtShort(R.receber);
-  document.getElementById('f-prev-fixos').textContent='−'+fmtShort(R.pagar);
+  document.getElementById('f-prev-atual').textContent=brlC(R.agora);
+  document.getElementById('f-prev-receber').textContent='+'+fmtBRL(R.receber);
+  document.getElementById('f-prev-fixos').textContent='−'+fmtBRL(R.pagar);
   const prevEl=document.getElementById('f-prev-saldo');
-  prevEl.textContent=brl(R.previsto);prevEl.style.color=R.previsto>=0?'var(--g)':'var(--r)';
+  prevEl.textContent=brlC(R.previsto);prevEl.style.color=R.previsto>=0?'var(--g)':'var(--r)';
+  caberTexto(PREV_IDS);
 
   renderLembretes(document.getElementById('f-lembretes'),false);
   renderOrcAlerta(document.getElementById('f-orc-alerta'));
@@ -5310,9 +5327,9 @@ function vaMes(m=curMes(),a=curAno()){return vaMovs.filter(v=>{const d=new Date(
 function renderVA(m=curMes(),a=curAno()){
   const el=document.getElementById('f-va-list');if(!el)return;
   const movs=vaMes(m,a).sort((x,y)=>(y.data||'').localeCompare(x.data||''));
-  document.getElementById('va-saldo').textContent=fmtShort(vaSaldo());
-  document.getElementById('va-gasto-mes').textContent=fmtShort(movs.filter(v=>v.tipo==='gasto').reduce((acc,v)=>acc+parseFloat(v.valor||0),0));
-  document.getElementById('va-conv-mes').textContent=fmtShort(movs.filter(v=>v.tipo==='conversao').reduce((acc,v)=>acc+parseFloat(v.valor||0),0));
+  document.getElementById('va-saldo').textContent=fmtBRL(vaSaldo());
+  document.getElementById('va-gasto-mes').textContent=fmtBRL(movs.filter(v=>v.tipo==='gasto').reduce((acc,v)=>acc+parseFloat(v.valor||0),0));
+  document.getElementById('va-conv-mes').textContent=fmtBRL(movs.filter(v=>v.tipo==='conversao').reduce((acc,v)=>acc+parseFloat(v.valor||0),0));
   el.innerHTML=movs.length?movs.map(v=>{
     const isIn=v.tipo==='recarga',isConv=v.tipo==='conversao';
     const color=isIn?'var(--c)':isConv?'var(--g)':'var(--r)';
