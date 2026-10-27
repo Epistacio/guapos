@@ -22,7 +22,7 @@
   --bg:#05070B;--s1:#0E121A;--s2:#141923;--s3:#1C2330;
   --g:#22C55E;--g2:#4ADE80;--gd:rgba(34,197,94,.1);--gg:rgba(34,197,94,.2);
   --b:#60A5FA;--p:#A78BFA;--y:#FBBF24;--r:#F87171;--c:#34D399;--o:#FB923C;
-  --t1:#F2F5FA;--t2:#8C97AB;--t3:#4A5468;
+  --t1:#F2F5FA;--t2:#8C97AB;--t3:#737F95;
   --br:rgba(255,255,255,.075);--br2:rgba(255,255,255,.05);
   --card:linear-gradient(180deg,rgba(255,255,255,.042),rgba(255,255,255,.012));
   --cardbg:rgba(12,16,23,.74);
@@ -57,7 +57,7 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;opa
 
 /* ── BOTTOM NAV ── */
 .bnav{position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom));z-index:90;display:flex;gap:2px;height:62px;padding:5px;align-items:stretch;background:rgba(11,14,20,.72);backdrop-filter:blur(26px) saturate(170%);-webkit-backdrop-filter:blur(26px) saturate(170%);border:1px solid var(--br);border-radius:24px;box-shadow:0 24px 48px -12px rgba(0,0,0,.8),inset 0 1px 0 rgba(255,255,255,.06);overflow:hidden;max-width:540px;margin:0 auto}
-.bni{position:relative;flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;color:#5C677B;font-size:9.5px;font-weight:600;letter-spacing:.01em;transition:color .2s,background .2s;user-select:none;-webkit-user-select:none;padding:0 2px;text-align:center;overflow:hidden;border-radius:18px}
+.bni{position:relative;flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;color:#7A8599;font-size:9.5px;font-weight:600;letter-spacing:.01em;transition:color .2s,background .2s;user-select:none;-webkit-user-select:none;padding:0 2px;text-align:center;overflow:hidden;border-radius:18px}
 .bni span{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .bni .ic{width:20px;height:20px;transition:color .2s,filter .2s}
 .bni.on{color:var(--t1);background:linear-gradient(180deg,rgba(34,197,94,.17),rgba(34,197,94,.04))}
@@ -611,6 +611,28 @@ button,.bni,.sni,.hi,.tk-row,.wday,.chip,.seg-i{-webkit-touch-callout:none}
 .lemb-i em.late{color:var(--r)}
 @media(min-width:1000px){.lemb{margin-bottom:20px}}
 
+/* ── ORÇAMENTO POR CATEGORIA ── */
+.lemb.bad{border-color:rgba(248,113,113,.32);background:radial-gradient(70% 120% at 0% 0%,rgba(248,113,113,.12),transparent 60%),rgba(12,16,23,.75)}
+.lemb.bad>.ic{color:var(--r)}
+.lemb-i em.perto{color:var(--y)}
+.orc-row{padding:10px 0;border-bottom:1px solid var(--br2)}
+.orc-row:last-child{border-bottom:none}
+.orc-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:7px}
+.orc-v{font-size:12px;font-weight:600;color:var(--t2);flex-shrink:0;text-align:right}
+.orc-v b{font-size:13.5px;font-weight:800;color:var(--t1)}
+.obar{position:relative;display:flex;height:8px;border-radius:99px;background:rgba(255,255,255,.05);overflow:hidden}
+.obar i{display:block;height:100%}
+.obar i.prev{background:repeating-linear-gradient(135deg,currentColor 0 3px,transparent 3px 6px);opacity:.6}
+.obar .olim{position:absolute;top:0;bottom:0;width:2px;margin-left:-1px;background:var(--t1)}
+.orc-s{font-size:11px;font-weight:600;color:var(--t2);margin-top:5px}
+.orc-s.perto{color:var(--y)}
+.orc-s.passou{color:var(--r)}
+.orc-in{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--br2)}
+.orc-in:last-child{border-bottom:none}
+.orc-in .cat-n{flex:1}
+.orc-in small{display:block;font-size:10.5px;font-weight:600;color:var(--t3);margin-top:2px}
+.orc-in input{width:124px;flex-shrink:0;text-align:right;padding:10px 12px}
+
 /* ── PREVISAO ── */
 .prev-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .prev-c{background:rgba(255,255,255,.035);border:1px solid var(--br2);border-radius:12px;padding:11px 12px;min-width:0}
@@ -732,6 +754,21 @@ button,.bni,.sni,.hi,.tk-row,.wday,.chip,.seg-i{-webkit-touch-callout:none}
   .greet{font-size:22px}
   .wday b{font-size:14px}
 }
+/* ── INTERAÇÕES E ACESSIBILIDADE ── */
+@keyframes ckPop{0%{transform:scale(1)}45%{transform:scale(1.25)}100%{transform:scale(1)}}
+.hck.pop{animation:ckPop .34s cubic-bezier(.2,.8,.2,1)}
+.sheet:focus{outline:none}
+.sheet.settle{transition:transform .24s cubic-bezier(.2,.8,.2,1)}
+.f-head-act{display:flex;gap:8px;flex-shrink:0}
+@media(max-width:380px){.radar-pill:last-child:nth-child(odd){grid-column:span 2}}
+/* celular: o que se faz todo dia (Hoje) vem antes dos números */
+@media(max-width:999px){
+  #page-dash .w{display:flex;flex-direction:column}
+  #page-dash .dhead{order:-3}
+  #d-backup,#d-lembretes,#d-orc-alerta{order:-2}
+  #d-today-card{order:-1}
+}
+
 @media(prefers-reduced-motion:reduce){*,body::before{transition-duration:.01ms!important;animation-duration:.01ms!important;animation-iteration-count:1!important}}
 </style>
 </head>
@@ -798,11 +835,11 @@ button,.bni,.sni,.hi,.tk-row,.wday,.chip,.seg-i{-webkit-touch-callout:none}
 <div class="onb-in">
   <div class="onb-logo" id="onb-logo"></div>
   <div class="onb-dots" id="onb-dots"></div>
-  <div class="onb-step" id="onb-step">Passo 1 de 4</div>
+  <div class="onb-step" id="onb-step">Passo 1 de 5</div>
 
   <div class="onb-pane on" data-pane="1">
     <h2>Vamos configurar o seu app</h2>
-    <div class="onb-sub">Leva menos de um minuto. Os dados ficam salvos somente neste aparelho.</div>
+    <div class="onb-sub" id="onb-sub1">Leva menos de um minuto.</div>
     <div class="fgrp">
       <label class="flbl" for="onb-nome">Como quer ser chamado</label>
       <input type="text" id="onb-nome" placeholder="Seu nome" autocomplete="given-name">
@@ -874,7 +911,7 @@ button,.bni,.sni,.hi,.tk-row,.wday,.chip,.seg-i{-webkit-touch-callout:none}
     <div class="side-logo" id="side-logo"></div>
     <div style="min-width:0"><b>Guapos</b><small id="side-sub">Nível 1</small></div>
   </div>
-  <nav class="side-nav">
+  <nav class="side-nav" aria-label="Navegação principal">
     <div class="sni" data-nav="dash" onclick="go('dash')" id="snav-dash"></div>
     <div class="sni" data-nav="habits" onclick="go('habits')" id="snav-habits"></div>
     <div class="sni" data-nav="tasks" onclick="go('tasks')" id="snav-tasks"></div>
@@ -905,6 +942,7 @@ button,.bni,.sni,.hi,.tk-row,.wday,.chip,.seg-i{-webkit-touch-callout:none}
 
   <div class="bk-banner" id="d-backup" style="display:none"></div>
   <div class="lemb" id="d-lembretes" style="display:none" role="button"></div>
+  <div class="lemb bad" id="d-orc-alerta" style="display:none" role="button" tabindex="0" onclick="go('fin')"></div>
 
   <div class="kpi-grid">
     <div class="card card-sm" onclick="go('habits')">
@@ -1142,7 +1180,10 @@ button,.bni,.sni,.hi,.tk-row,.wday,.chip,.seg-i{-webkit-touch-callout:none}
     <div class="ey" id="f-ey">Controle financeiro</div>
     <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
       <h1>Finanças</h1>
-      <button class="btn bg bs" id="f-lock-btn" onclick="finLockBtn()"></button>
+      <div class="f-head-act">
+        <button class="btn bp bs" id="f-add-btn" onclick="openVarSheet(null,today(),true)" aria-label="Lançar gasto"></button>
+        <button class="btn bg bs" id="f-lock-btn" onclick="finLockBtn()"></button>
+      </div>
     </div>
   </div>
 
@@ -1174,6 +1215,7 @@ button,.bni,.sni,.hi,.tk-row,.wday,.chip,.seg-i{-webkit-touch-callout:none}
   </div>
 
   <div class="lemb" id="f-lembretes" style="display:none"></div>
+  <div class="lemb bad" id="f-orc-alerta" style="display:none"></div>
 
   <div class="cols">
     <div class="col">
@@ -1239,6 +1281,11 @@ button,.bni,.sni,.hi,.tk-row,.wday,.chip,.seg-i{-webkit-touch-callout:none}
     </div>
 
     <div class="col">
+      <div class="card" id="f-orc-card">
+        <div class="sh"><span class="sh-title" id="f-orc-t">Orçamento do mês</span><span class="sh-action" onclick="openOrcSheet()">Definir limites</span></div>
+        <div id="f-orc"></div>
+      </div>
+
       <div class="card" id="f-cat-card">
         <div class="sh"><span class="sh-title" id="f-cat-t">Para onde vai o dinheiro</span><span class="sh-count" id="f-cat-mes"></span></div>
         <div class="seg">
@@ -1353,7 +1400,7 @@ button,.bni,.sni,.hi,.tk-row,.wday,.chip,.seg-i{-webkit-touch-callout:none}
       <div class="card">
         <div class="sh">
           <span class="sh-title" id="s-reg-t">Registro mensal</span>
-          <select id="pm-m" style="width:auto;padding:7px 10px;font-size:16px;border-radius:999px" onchange="prefill(parseInt(this.value))"></select>
+          <select id="pm-m" style="width:auto;padding:7px 10px;font-size:16px;border-radius:999px" onchange="prefill(this.value)" aria-label="Mês do registro"></select>
         </div>
         <div class="pfield">
           <span class="pflbl" id="pf-l1">Peso (kg)</span>
@@ -1504,7 +1551,7 @@ button,.bni,.sni,.hi,.tk-row,.wday,.chip,.seg-i{-webkit-touch-callout:none}
 </div>
 
 <!-- ═══ BOTTOM NAV (celular) ═══ -->
-<nav class="bnav" id="bnav">
+<nav class="bnav" id="bnav" aria-label="Navegação principal">
   <div class="bni on" data-nav="dash" onclick="go('dash')" id="nav-dash"><span>Início</span></div>
   <div class="bni" data-nav="habits" onclick="go('habits')" id="nav-habits"><span>Hábitos</span></div>
   <div class="bni" data-nav="tasks" onclick="go('tasks')" id="nav-tasks"><span>Tarefas</span></div>
@@ -1746,6 +1793,20 @@ button,.bni,.sni,.hi,.tk-row,.wday,.chip,.seg-i{-webkit-touch-callout:none}
   </div>
 </div>
 
+<div class="overlay" id="orc-ol" onclick="closeSh(event,'orc-ol')">
+  <div class="sheet">
+    <div class="drag"></div>
+    <div class="sheet-t">Limites por categoria</div>
+    <div class="fhint" style="margin:-8px 0 14px">Quanto você quer gastar por mês em cada categoria. O limite vale para todos os meses. Deixe em branco para não acompanhar.</div>
+    <div id="orc-campos"></div>
+    <div class="onb-err" id="orc-err"></div>
+    <div style="display:flex;gap:8px;margin-top:4px">
+      <button class="btn bg" style="flex:1" onclick="closeSh(null,'orc-ol')">Cancelar</button>
+      <button class="btn bp" style="flex:1" onclick="saveOrc()">Salvar limites</button>
+    </div>
+  </div>
+</div>
+
 <div class="overlay" id="va-rec-ol" onclick="closeSh(event,'va-rec-ol')">
   <div class="sheet">
     <div class="drag"></div>
@@ -1958,6 +2019,19 @@ const fixHoras=v=>{
   o.ajustes=o.ajustes.filter(x=>!(+x.h<0));
   return o;
 };
+// Saúde: cada registro mensal fica em "AAAA-MM". Os antigos usavam só o número do mês (0 a 11) e se misturavam na virada do ano.
+// Conversão com data fixa, para todo aparelho chegar no mesmo resultado: janeiro a outubro são de 2026; novembro e dezembro, de 2025.
+const pkey=(m,a)=>`${a}-${pad(m+1)}`;
+const isPkey=k=>/^[0-9]{4}-[0-9]{2}$/.test(k);
+const fixPerf=v=>{
+  const o=v&&typeof v==='object'&&!Array.isArray(v)?{...v}:{};
+  Object.keys(o).forEach(k=>{
+    if(!/^[0-9]{1,2}$/.test(k)||+k>11)return;
+    const nk=pkey(+k,+k<=9?2026:2025);
+    o[nk]={...o[k],...(o[nk]||{})};delete o[k];
+  });
+  return o;
+};
 const fixTasks=a=>(Array.isArray(a)?a:[]).filter(t=>t&&t.id&&t.name).map(t=>({...t,subs:Array.isArray(t.subs)?t.subs:[]}));
 const fixRules=a=>(Array.isArray(a)?a:[]).filter(r=>r&&r.id&&r.name);
 // Acesso uniforme a cada grupo de dados (usado pela sincronização)
@@ -1966,7 +2040,7 @@ const STATE={
   checks:{g:()=>checks,s:v=>{checks=v||{}}},
   tasks:{g:()=>tasks,s:v=>{tasks=fixTasks(v)}},
   taskRules:{g:()=>taskRules,s:v=>{taskRules=fixRules(v)}},
-  perf:{g:()=>perf,s:v=>{perf=v||{}}},
+  perf:{g:()=>perf,s:v=>{perf=fixPerf(v)}},
   receitas:{g:()=>receitas,s:v=>{receitas=v||[]}},
   fixos:{g:()=>fixos,s:v=>{fixos=v||[]}},
   variaveis:{g:()=>variaveis,s:v=>{variaveis=v||[]}},
@@ -1998,7 +2072,10 @@ function loadState(){
   let fixed=false;
   habits.forEach(h=>{if(ACC[h.name]){h.name=ACC[h.name];fixed=true}});
   if(fixed)ss('e2_habits',habits);
-  perf=ls('e2_perf',{});
+  const perf0=ls('e2_perf',{});
+  perf=fixPerf(perf0);
+  // grava a versão convertida só no aparelho; a nuvem recebe na próxima alteração (a conversão dá o mesmo resultado em todos)
+  if(JSON.stringify(perf)!==JSON.stringify(perf0))rawSet(storeKey('e2_perf'),perf);
   receitas=ls('e2_receitas',[]);
   if(receitas.some(r=>r.origem==='auto-salario'&&r.nome==='Salario')){receitas.forEach(r=>{if(r.origem==='auto-salario'&&r.nome==='Salario')r.nome='Salário'});ss('e2_receitas',receitas)}
   fixos=ls('e2_fixos',[]);
@@ -2265,7 +2342,7 @@ function resetSession(){
   document.querySelectorAll('.overlay.on').forEach(o=>o.classList.remove('on'));
   document.getElementById('onb').classList.remove('on');
   // a aba Saúde preenche os campos com os dados do perfil
-  document.getElementById('pm-m').innerHTML='';document.getElementById('sleep-date').value='';
+  const pm=document.getElementById('pm-m');pm.innerHTML='';delete pm.dataset.sig;document.getElementById('sleep-date').value='';
   curPage='dash';
 }
 async function enterProfile(pid){
@@ -2393,11 +2470,11 @@ function saldoMes(m=curMes(),a=curAno()){return finResumo(m,a).agora}
 
 let _st=null;
 function save(k,v){ss(k,v);showToast()}
-function showToast(msg='Salvo',icon='check'){
+function showToast(msg='Salvo',icon='check',ms=1400){
   const t=document.getElementById('toast');
   document.getElementById('toast-ico').innerHTML=ic(icon);
   document.getElementById('toast-txt').textContent=msg;
-  t.classList.add('on');clearTimeout(_st);_st=setTimeout(()=>t.classList.remove('on'),1400);
+  t.classList.add('on');clearTimeout(_st);_st=setTimeout(()=>t.classList.remove('on'),ms);
 }
 function confetti(){
   const colors=['#22C55E','#60A5FA','#FBBF24','#A78BFA','#34D399'];
@@ -2421,6 +2498,9 @@ function setupLongPress(el,cb){
 function needsOnb(){return !cfg||!cfg.onboarded}
 function openOnb(){
   onbStep=1;
+  document.getElementById('onb-sub1').textContent='Leva menos de um minuto. '+(Sync.on
+    ?'Os dados ficam na conta de vocês e aparecem em qualquer aparelho em que vocês entrarem.'
+    :'Os dados ficam salvos somente neste aparelho.');
   document.getElementById('onb-nome').value=cfg.nome||profName(PID);
   document.getElementById('onb-peso').value=cfg.pesoInicial||latestWeight()||'';
   document.getElementById('onb-meta').value=cfg.metaPeso||'';
@@ -2521,9 +2601,8 @@ function finishOnb(){
   ss('e2_cfg',cfg);
   habits=sugList.filter(s=>s.on).map(s=>({id:s.id,name:s.name}));
   ss('e2_habits',habits);
-  const m=new Date().getMonth();
-  if(!perf[m])perf[m]={};
-  perf[m].weight=peso;ss('e2_perf',perf);
+  const pk=pkey(curMes(),curAno());
+  perf[pk]={...(perf[pk]||{}),weight:peso};ss('e2_perf',perf);
   ensureMonthly();
   document.getElementById('onb').classList.remove('on');
   document.body.classList.remove('lock');
@@ -2557,7 +2636,10 @@ function ensureMonthly(){
   }
   if(changed){ss('e2_receitas',receitas);ss('e2_vaMovs',vaMovs)}
 }
-function latestWeight(){for(let m=11;m>=0;m--){if(perf[m]&&perf[m].weight)return parseFloat(perf[m].weight)}return null}
+const perfKeys=()=>Object.keys(perf).filter(isPkey).sort();
+const perfMes=(m=curMes(),a=curAno())=>perf[pkey(m,a)]||{};
+const pkLabel=k=>{const a=+k.slice(0,4);return MSH[+k.slice(5)-1]+(a!==curAno()?'/'+String(a).slice(2):'')};
+function latestWeight(){const ks=perfKeys().filter(k=>perf[k].weight);return ks.length?parseFloat(perf[ks[ks.length-1]].weight):null}
 
 // ════════════════════════════════
 // NAVIGATION
@@ -2569,7 +2651,7 @@ function go(id){
   curPage=id;
   document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
   document.getElementById('page-'+id).classList.add('on');
-  document.querySelectorAll('[data-nav]').forEach(b=>b.classList.toggle('on',b.dataset.nav===id));
+  document.querySelectorAll('[data-nav]').forEach(b=>{const on=b.dataset.nav===id;b.classList.toggle('on',on);if(on)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')});
   if(changed){buzz(5);window.scrollTo(0,0);hideUndo()}
   renderSide();
   if(changed&&id==='tasks')taskDay=today();
@@ -2581,20 +2663,93 @@ function go(id){
   else if(id==='perfil')renderPerfil();
 }
 function openSheet(id){
-  document.getElementById(id).classList.add('on');
+  const ol=document.getElementById(id);
+  if(!ol.classList.contains('on'))ol._opener=document.activeElement;
+  ol.classList.add('on');
   document.body.classList.add('lock');
   const t=today();
   const map={'rec-ol':'rec-data','var-ol':'var-data','va-rec-ol':'va-rec-data','va-gasto-ol':'va-gasto-data','va-conv-ol':'va-conv-data'};
   if(map[id]){const el=document.getElementById(map[id]);if(el&&!el.value)el.value=t}
+  // leva o foco para dentro da janela (teclado e leitor de tela) sem abrir o teclado do celular
+  const sh=ol.querySelector('.sheet');
+  if(sh&&!sh.contains(document.activeElement))sh.focus({preventScroll:true});
 }
 function closeSh(e,id){
   if(!e||e.target.classList.contains('overlay')){
-    document.getElementById(id).classList.remove('on');
+    const ol=document.getElementById(id),tinhaFoco=ol.contains(document.activeElement);
+    ol.classList.remove('on');
     if(!document.querySelector('.overlay.on'))document.body.classList.remove('lock');
     if(id==='edit-ol')askDelete(false);
     if(id==='task-ol')askDelTask(false);
+    // devolve o foco para quem abriu a janela
+    const op=ol._opener;ol._opener=null;
+    if(tinhaFoco&&op&&op.isConnected&&op!==document.body)op.focus({preventScroll:true});
   }
 }
+// Janelas: anunciadas como diálogo e, no celular, fecham ao arrastar para baixo
+function setupSheets(){
+  document.querySelectorAll('.overlay').forEach(ol=>{
+    const sh=ol.querySelector('.sheet');if(!sh)return;
+    sh.setAttribute('role','dialog');sh.setAttribute('aria-modal','true');sh.tabIndex=-1;
+    const t=sh.querySelector('.sheet-t')||sh.querySelector('#dia-t');
+    if(t){if(!t.id)t.id=ol.id+'-titulo';sh.setAttribute('aria-labelledby',t.id)}
+    setupSheetSwipe(ol,sh);
+  });
+}
+function setupSheetSwipe(ol,sh){
+  let y0=null,dy=0,puxando=false;
+  sh.addEventListener('touchstart',e=>{
+    // só no layout de celular, com um dedo e com a janela rolada até o topo
+    if(e.touches.length!==1||window.innerWidth>=1000||sh.scrollTop>0){y0=null;return}
+    if(e.target.closest('input,select,textarea'))return;
+    y0=e.touches[0].clientY;dy=0;puxando=false;
+  },{passive:true});
+  sh.addEventListener('touchmove',e=>{
+    if(y0===null)return;
+    dy=e.touches[0].clientY-y0;
+    if(!puxando){
+      if(dy<-4){y0=null;return} // subindo: é rolagem do conteúdo
+      if(dy<10)return;
+      puxando=true;sh.classList.remove('settle');
+    }
+    if(e.cancelable)e.preventDefault();
+    sh.style.transform=`translateY(${Math.max(0,dy)}px)`;
+  },{passive:false});
+  const soltar=()=>{
+    if(y0===null)return;
+    y0=null;if(!puxando)return;
+    puxando=false;sh.classList.add('settle');
+    if(dy>Math.min(140,sh.offsetHeight*.28)){
+      sh.style.transform=`translateY(${sh.offsetHeight}px)`;
+      setTimeout(()=>{closeSh(null,ol.id);sh.classList.remove('settle');sh.style.transform=''},230);
+    }else{
+      sh.style.transform='';
+      setTimeout(()=>sh.classList.remove('settle'),260);
+    }
+  };
+  sh.addEventListener('touchend',soltar);
+  sh.addEventListener('touchcancel',soltar);
+}
+// pequeno "pulo" no item que acabou de ser marcado
+function popCk(sel){
+  const el=document.querySelector(`#page-${curPage} ${sel}`);
+  if(el){el.classList.remove('pop');void el.offsetWidth;el.classList.add('pop')}
+}
+
+// ── Acessibilidade: o que é clicável também funciona pelo teclado e é anunciado pelo leitor de tela ──
+const NATIVE_CTRL=/^(BUTTON|A|INPUT|SELECT|TEXTAREA|LABEL)$/;
+function a11yScan(){
+  document.querySelectorAll('[onclick]:not([tabindex])').forEach(el=>{
+    if(NATIVE_CTRL.test(el.tagName)||el.classList.contains('overlay'))return;
+    el.tabIndex=0;
+    if(el.hasAttribute('role'))return;
+    const ck=el.classList.contains('hck')?el:el.querySelector(':scope>.hck');
+    if(ck){el.setAttribute('role','checkbox');el.setAttribute('aria-checked',String(ck.classList.contains('on')))}
+    else el.setAttribute('role','button');
+  });
+}
+let a11yQ=false;
+new MutationObserver(()=>{if(!a11yQ){a11yQ=true;queueMicrotask(()=>{a11yQ=false;a11yScan()})}}).observe(document.body,{childList:true,subtree:true});
 // ════════════════════════════════
 // DASHBOARD
 // ════════════════════════════════
@@ -2651,6 +2806,7 @@ function renderDash(){
     </div>`).join('')||'<div class="empty"><div class="eico">'+ic('checksq')+'</div>Faça check-ins para ver o ranking</div>';
 
   renderLembretes(document.getElementById('d-lembretes'),true);
+  renderOrcAlerta(document.getElementById('d-orc-alerta'));
   if((fixos.length||variaveis.some(v=>!varPago(v)))&&!finLocked()){
     // a conta em aberto mais urgente (atrasadas primeiro): fixos do mês e variáveis a pagar
     const next=contasAbertas()[0];
@@ -2699,11 +2855,11 @@ function sleepAvgMonth(m=curMes(),a=curAno()){
 }
 function weightInfo(){
   let first=null,latest=null;
-  for(let m=0;m<12;m++)if(perf[m]&&perf[m].weight){if(first===null)first=parseFloat(perf[m].weight);latest=parseFloat(perf[m].weight)}
+  perfKeys().forEach(k=>{if(perf[k].weight){if(first===null)first=parseFloat(perf[k].weight);latest=parseFloat(perf[k].weight)}});
   if(first===null&&cfg.pesoInicial)first=parseFloat(cfg.pesoInicial);
   return {first,latest,meta:parseFloat(cfg.metaPeso||0)};
 }
-function latestPace(){let best=null;for(let m=0;m<12;m++)if(perf[m]&&perf[m].pace){if(best===null||p2f(perf[m].pace)<p2f(best))best=perf[m].pace}return best}
+function latestPace(){let best=null;perfKeys().forEach(k=>{const p=perf[k].pace;if(p&&(best===null||p2f(p)<p2f(best)))best=p});return best}
 
 function calcRadarScores(){
   const now=new Date(),m=now.getMonth(),a=now.getFullYear();
@@ -2723,7 +2879,7 @@ function calcRadarScores(){
   const sonoAvg=sleepAvgMonth(m,a);
   const sono=sonoAvg!==null?clampScore(100-Math.abs(7.5-sonoAvg)*18):avgOr([hp('h7',m)],mPct(m));
 
-  const km=parseFloat((perf[m]||{}).km||0);
+  const km=parseFloat(perfMes(m,a).km||0);
   const pace=latestPace();
   const mov=avgOr([hp('h4',m),hp('h5',m)],mPct(m));
   const ritmo=clampScore(clampScore(km/80*100)*.45+(pace?clampScore(100-(p2f(pace)-300)/1.2):50)*.25+mov*.30);
@@ -2906,16 +3062,17 @@ function toggleHabit(id,k){
   checks[k][id]=!checks[k][id];
   const on=checks[k][id];
   buzz(on?12:6);
-  save('e2_checks',checks);
+  ss('e2_checks',checks); // a marcação já é a confirmação; sem aviso de "Salvo" a cada toque
   const n=habitsFor(k).length,all=on&&n>0&&doneIn(k)===n;
   if(curPage==='dash')refreshDash();else renderHabits();
+  if(on)popCk(`.hi[data-hid="${id}"] .hck`);
   if(all)confetti();
 }
 function moveHabit(i,dir){
   const j=i+dir;
   if(j<0||j>=habits.length)return;
   const t=habits[i];habits[i]=habits[j];habits[j]=t;
-  buzz(6);save('e2_habits',habits);renderHabits();
+  buzz(6);ss('e2_habits',habits);renderHabits();
 }
 function openNewHabit(){
   editId=null;editMode=false;
@@ -3064,7 +3221,7 @@ function toggleCalDay(id,day){
   const k=dkey(curCalY,curMonth,day);
   if(!checks[k])checks[k]={};
   checks[k][id]=!checks[k][id];
-  buzz(8);save('e2_checks',checks);
+  buzz(8);ss('e2_checks',checks);
   renderCalContent();
   document.getElementById('cal-pct').textContent=mPct(curMonth,curCalY)+'%';
   if(k===today()||weekStart(k)===weekStart(today()))renderHabits();
@@ -3256,7 +3413,7 @@ function tkCheck(id){
   const t=findTask(id);if(!t)return;
   if(t.subs.length){tkOpen(id);return}
   t.done=!t.done;buzz(t.done?12:6);ss('e2_tasks',tasks);renderAfterTask();
-  if(t.done)celebrateTask(t);else showToast();
+  if(t.done){popCk(`.tk[data-id="${id}"] .tk-row>.hck`);celebrateTask(t)}
 }
 function tkOpen(id){
   const t=findTask(id);if(!t)return;
@@ -3269,7 +3426,8 @@ function tkSub(tid,sid){
   const was=taskDone(t);
   s.done=!s.done;buzz(s.done?12:6);ss('e2_tasks',tasks);
   renderAfterTask();
-  if(!was&&taskDone(t))celebrateTask(t);else showToast();
+  if(s.done)popCk(`.tk[data-id="${tid}"] .hck[onclick="tkSub('${tid}','${sid}')"]`);
+  if(!was&&taskDone(t))celebrateTask(t);
 }
 function tkAddSub(tid){
   const t=findTask(tid),el=document.getElementById('tsi-'+tid);if(!t||!el)return;
@@ -3511,6 +3669,9 @@ function renderFinLock(){
   const locked=finLocked(),btn=document.getElementById('f-lock-btn');
   btn.style.display=locked?'none':'';
   btn.innerHTML=cfg.finPin?ic('lock')+'<span>Bloquear</span>':ic('shield')+'<span>Criar senha</span>';
+  // atalho para o lançamento mais comum: um gasto de hoje
+  const add=document.getElementById('f-add-btn');
+  add.style.display=locked?'none':'';add.innerHTML=ic('plus')+'<span>Gasto</span>';
   document.getElementById('f-lock').style.display=locked?'':'none';
   document.getElementById('f-body').style.display=locked?'none':'';
   document.getElementById('f-lock-ico').innerHTML=ic('lock');
@@ -3700,9 +3861,10 @@ function renderFin(){
   prevEl.textContent=brl(R.previsto);prevEl.style.color=R.previsto>=0?'var(--g)':'var(--r)';
 
   renderLembretes(document.getElementById('f-lembretes'),false);
+  renderOrcAlerta(document.getElementById('f-orc-alerta'));
   renderFinCal();
   renderHoraCard();
-  renderCatPanel();
+  renderCatPanel();renderOrc();
   renderVA(m,a);
 
   // Receitas: as que já caíram neste mês e, separadas, as que ainda vão cair (inclusive no mês que vem)
@@ -3972,6 +4134,77 @@ function renderCatPanel(){
     </div>`}).join('');
 }
 
+// ── Orçamento por categoria ──
+// cfg.orcamento = { categoria: limite por mês }, o mesmo para todos os meses.
+// Uso do mês = o que já foi pago + o que está previsto a pagar (fixos e variáveis), na data que vale para cada conta.
+const ORC_PERTO=.8;
+const orcLim=k=>+((cfg.orcamento||{})[k])||0;
+function orcUso(m,a){
+  const por={};
+  saidasMes(m,a).forEach(x=>{const o=por[x.cat]=por[x.cat]||{pago:0,prev:0};if(x.pago)o.pago+=x.valor;else o.prev+=x.valor});
+  return CATS.filter(c=>orcLim(c.k)>0).map(c=>{
+    const o=por[c.k]||{pago:0,prev:0},lim=orcLim(c.k),usado=o.pago+o.prev,cent=Math.round(usado*100),limC=Math.round(lim*100);
+    return {k:c.k,lim,pago:o.pago,prev:o.prev,usado,estado:cent>limC?'passou':cent>=limC*ORC_PERTO?'perto':'ok'};
+  });
+}
+const ORC_NIVEL={ok:0,perto:1,passou:2};
+const orcEstado=(k,m,a)=>(orcUso(m,a).find(x=>x.k===k)||{}).estado||'ok';
+function renderOrc(){
+  const box=document.getElementById('f-orc');if(!box)return;
+  setIco('f-orc-t','target','Orçamento de '+MS[fcM]+(fcY!==curAno()?' '+fcY:''));
+  const l=orcUso(fcM,fcY);
+  if(!l.length){box.innerHTML=`<div class="empty"><div class="eico">${ic('target')}</div>Defina quanto quer gastar por mês em cada categoria. O app avisa quando chegar perto e quando passar do limite.</div>`;return}
+  l.sort((x,y)=>ORC_NIVEL[y.estado]-ORC_NIVEL[x.estado]||y.usado/y.lim-x.usado/x.lim);
+  box.innerHTML=l.map(o=>{
+    const c=catInfo(o.k),escala=Math.max(o.lim,o.usado),cor=o.estado==='passou'?'var(--r)':c.c;
+    const s=o.estado==='passou'?`Passou ${fmtBRL(o.usado-o.lim)} do limite`
+      :o.estado==='perto'?`${Math.round(o.usado/o.lim*100)}% do limite · sobram ${fmtBRL(o.lim-o.usado)}`
+      :`Sobram ${fmtBRL(o.lim-o.usado)}`;
+    return `<div class="orc-row ${o.estado}">
+      <div class="orc-top"><span class="cat-n" style="color:${c.c}">${ic(c.i)}${c.l}</span><span class="orc-v"><b>${fmtBRL(o.usado)}</b> de ${fmtBRL(o.lim)}</span></div>
+      <div class="obar" role="img" aria-label="${c.l}: ${Math.round(o.usado/o.lim*100)}% do limite"><i style="width:${o.pago/escala*100}%;background:${cor}"></i><i class="prev" style="width:${o.prev/escala*100}%;color:${cor}"></i>${o.usado>o.lim?`<span class="olim" style="left:${o.lim/escala*100}%"></span>`:''}</div>
+      <div class="orc-s ${o.estado}">${s}${o.prev?` · ${fmtBRL(o.prev)} ainda a pagar`:''}</div>
+    </div>`}).join('')+`<div class="hint">Conta o que já foi pago e o que está previsto a pagar no mês. Parte listrada = a pagar. A linha branca marca o limite.</div>`;
+}
+// Aviso no topo de Finanças e do Início: categorias do mês atual perto ou acima do limite
+function renderOrcAlerta(el){
+  if(!el)return;
+  const l=finLocked()?[]:orcUso(curMes(),curAno()).filter(o=>o.estado!=='ok').sort((x,y)=>ORC_NIVEL[y.estado]-ORC_NIVEL[x.estado]);
+  if(!l.length){el.style.display='none';return}
+  const np=l.filter(o=>o.estado==='passou').length;
+  el.style.display='';el.classList.toggle('bad',np>0);
+  el.innerHTML=`${ic('target')}<div class="lemb-t"><b>${np?(np===1?'Orçamento estourado':np+' orçamentos estourados'):'Perto do limite'}</b>${l.map(o=>`<span class="lemb-i"><em class="${o.estado==='passou'?'late':'perto'}">${catInfo(o.k).l}</em> ${o.estado==='passou'?'passou '+fmtBRL(o.usado-o.lim):Math.round(o.usado/o.lim*100)+'% usado'} · ${fmtBRL(o.usado)} de ${fmtBRL(o.lim)}</span>`).join('')}</div>`;
+}
+// Na hora do lançamento: avisa se a categoria acabou de chegar perto ou de passar do limite
+function avisoOrc(k,m,a,antes){
+  const o=orcUso(m,a).find(x=>x.k===k);
+  if(!o||ORC_NIVEL[o.estado]<=ORC_NIVEL[antes])return;
+  const c=catInfo(k).l;
+  showToast(o.estado==='passou'?`${c}: passou do limite em ${fmtBRL(o.usado-o.lim)}`:`${c}: ${Math.round(o.usado/o.lim*100)}% do limite`,o.estado==='passou'?'x':'target',3200);
+  buzz(o.estado==='passou'?[20,60,20]:15);
+}
+function openOrcSheet(){
+  const m=curMes(),a=curAno(),por={};
+  saidasMes(m,a).forEach(x=>{por[x.cat]=(por[x.cat]||0)+x.valor});
+  document.getElementById('orc-campos').innerHTML=CATS.map(c=>`<div class="orc-in">
+    <label class="cat-n" for="orc-${c.k}" style="color:${c.c}">${ic(c.i)}<span>${c.l}<small>${MS[m]}: ${fmtBRL(por[c.k]||0)}</small></span></label>
+    <input type="number" id="orc-${c.k}" min="0" step="1" inputmode="decimal" placeholder="Sem limite" value="${orcLim(c.k)||''}">
+  </div>`).join('');
+  document.getElementById('orc-err').textContent='';
+  openSheet('orc-ol');
+}
+function saveOrc(){
+  const o={},err=document.getElementById('orc-err');
+  for(const c of CATS){
+    const t=String(document.getElementById('orc-'+c.k).value).trim();if(!t)continue;
+    const v=parseFloat(t.replace(',','.'));
+    if(isNaN(v)||v<0||v>1e7){err.textContent=`Limite de ${c.l}: use um valor de 0 a 10.000.000.`;return}
+    if(v>0)o[c.k]=Math.round(v*100)/100;
+  }
+  cfg.orcamento=o;ss('e2_cfg',cfg);closeSh(null,'orc-ol');finRefresh();
+  showToast(Object.keys(o).length?'Limites salvos':'Limites removidos','target');
+}
+
 // ── Lembretes ──
 // Sem servidor de notificações o app não consegue avisar com ele fechado. Mostra os avisos ao abrir e
 // oferece adicionar as contas ao calendário do celular, que dispara os alertas mesmo com o app fechado.
@@ -4038,7 +4271,7 @@ function renderFinChart(m){
     type:'line',
     data:{labels,datasets:[{data,borderColor:'#22C55E',backgroundColor:'rgba(34,197,94,.06)',tension:.4,pointRadius:0,borderWidth:2,fill:true}]},
     options:{responsive:true,maintainAspectRatio:false,animation:{duration:400},plugins:{legend:{display:false}},
-      scales:{x:{grid:{display:false},ticks:{color:'#465166',font:{size:9},maxTicksLimit:10}},y:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#465166',font:{size:9},callback:v=>'R$'+v}}}}
+      scales:{x:{grid:{display:false},ticks:{color:'#737F95',font:{size:9},maxTicksLimit:10}},y:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#737F95',font:{size:9},callback:v=>'R$'+v}}}}
   });
 }
 function vaSaldo(){const td=today();return vaMovs.filter(v=>(v.data||td)<=td).reduce((acc,v)=>acc+(v.tipo==='recarga'?parseFloat(v.valor||0):-parseFloat(v.valor||0)),0)}
@@ -4142,10 +4375,11 @@ function saveFixo(){
   if(!nome){err.textContent='Escreva a descrição.';return}
   if(!(val>0)||val>1e7){err.textContent='Informe um valor maior que zero.';return}
   if(!(dia>=1&&dia<=31)){err.textContent='O dia do vencimento vai de 1 a 31.';return}
-  const f=editFixId&&fixos.find(x=>x.id===editFixId);
+  const f=editFixId&&fixos.find(x=>x.id===editFixId),orcAntes=orcEstado(selectedFixCat,curMes(),curAno());
   if(f)Object.assign(f,{nome,valor:val,dia,cat:selectedFixCat});
   else fixos.push({id:uid('f'),nome,valor:val,dia,cat:selectedFixCat});
   save('e2_fixos',fixos);closeSh(null,'fix-ol');finRefresh();
+  avisoOrc(selectedFixCat,curMes(),curAno(),orcAntes); // o fixo pesa todo mês: confere o mês atual
 }
 function delFixo(id){const u=snap(['fixos']),x=fixos.find(f=>f.id===id);fixos=fixos.filter(f=>f.id!==id);ss('e2_fixos',fixos);finRefresh();offerUndo('Gasto "'+(x?x.nome:'')+'" apagado',u)}
 function delFixoEd(){const id=editFixId;closeSh(null,'fix-ol');if(id)delFixo(id)}
@@ -4154,8 +4388,8 @@ function togglePaid(id,m=curMes(),a=curAno()){
   const f=fixos.find(x=>x.id===id);if(!f)return;
   const k=mkey(m,a);f.pagos=f.pagos||{};
   if(f.pagos[k])delete f.pagos[k];else f.pagos[k]=today();
-  buzz(f.pagos[k]?12:6);save('e2_fixos',fixos);
-  finRefresh();
+  buzz(f.pagos[k]?12:6);ss('e2_fixos',fixos);
+  finRefresh();avisoPago(f.nome,!!f.pagos[k]);
 }
 
 // ── Gastos variáveis: cadastro, edição e pagamento ──
@@ -4190,6 +4424,8 @@ function saveVariavel(){
   if(!(val>0)||val>1e7){err.textContent='Informe um valor maior que zero.';return}
   if(!validDate(k)){err.textContent='Escolha uma data válida.';return}
   if(varPagoSel&&k>today()){err.textContent='Um gasto já pago não pode ter data no futuro. Marque como "A pagar".';return}
+  // a data informada é a que vale no mês (pagamento ou vencimento): é nesse mês que o orçamento é conferido
+  const dk=new Date(k+'T12:00:00'),om=dk.getMonth(),oa=dk.getFullYear(),orcAntes=orcEstado(selectedCat,om,oa);
   let v=editVarId&&variaveis.find(x=>x.id===editVarId);
   // era uma conta com vencimento (estava a pagar ou já tinha data de pagamento separada)?
   const tinhaVenc=!!v&&(v.pago===false||!!v.pagoEm);
@@ -4201,12 +4437,18 @@ function saveVariavel(){
     else{v.data=k+'T12:00:00';delete v.pagoEm}
   }else{v.pago=false;v.data=k+'T12:00:00';delete v.pagoEm}
   save('e2_variaveis',variaveis);closeSh(null,'var-ol');finRefresh();
+  avisoOrc(selectedCat,om,oa,orcAntes);
 }
 function toggleVarPago(id){
   const v=variaveis.find(x=>x.id===id);if(!v)return;
   if(varPago(v)){v.pago=false;delete v.pagoEm}
   else{v.pago=true;v.pagoEm=today()}
-  buzz(varPago(v)?12:6);save('e2_variaveis',variaveis);finRefresh();
+  buzz(varPago(v)?12:6);ss('e2_variaveis',variaveis);finRefresh();avisoPago(v.nome,varPago(v));
+}
+// diz qual conta mudou, em vez de um "Salvo" genérico
+function avisoPago(nome,pago){
+  const n=String(nome||'Conta');
+  showToast((pago?'Pago: ':'De volta para a pagar: ')+(n.length>22?n.slice(0,21)+'…':n),pago?'checkc':'repeat');
 }
 function delVariavel(id){const u=snap(['variaveis']),x=variaveis.find(v=>v.id===id);variaveis=variaveis.filter(v=>v.id!==id);ss('e2_variaveis',variaveis);finRefresh();offerUndo('Gasto "'+(x?x.nome:'')+'" apagado',u)}
 function delVariavelEd(){const id=editVarId;closeSh(null,'var-ol');if(id)delVariavel(id)}
@@ -4273,24 +4515,23 @@ function renderSaude(){
   setIco('pf-l5','moon','Horas');
   const si=document.getElementById('s-sono-ico');if(si)si.innerHTML='<svg class="ic" viewBox="0 0 24 24" style="width:34px;height:34px;stroke-width:1.4">'+ICO.moon+'</svg>';
 
+  // meses do registro: os últimos 12 (do atual para trás) e qualquer mês mais antigo que já tenha dados
+  const curM=curMes(),curY=curAno(),ult12=[];
+  for(let i=0;i<12;i++){const d=new Date(curY,curM-i,1);ult12.push(pkey(d.getMonth(),d.getFullYear()))}
+  const opts=[...new Set([...ult12,...perfKeys()])].sort().reverse();
   const sel=document.getElementById('pm-m');
-  if(sel&&!sel.options.length){
-    MS.forEach((n,i)=>{const o=document.createElement('option');o.value=i;o.textContent=n;sel.appendChild(o)});
-    sel.value=new Date().getMonth();
-    prefill(parseInt(sel.value));
-  }
+  if(sel&&sel.dataset.sig!==opts.join()){
+    const keep=sel.value||pkey(curM,curY);
+    sel.innerHTML=opts.map(k=>`<option value="${k}">${MS[+k.slice(5)-1]} ${k.slice(0,4)}</option>`).join('');
+    sel.dataset.sig=opts.join();
+    sel.value=opts.includes(keep)?keep:pkey(curM,curY);
+    prefill(sel.value);
+  }else if(sel&&!['pm-w','pm-k','pm-p'].includes((document.activeElement||{}).id))prefill(sel.value); // desfazer ou outro aparelho mudou o registro
   const sleepEl=document.getElementById('sleep-date');
   if(sleepEl&&!sleepEl.value){sleepEl.value=today();prefillSleep()}
 
-  const curM=new Date().getMonth(),curY=new Date().getFullYear();
-  let firstW=null,latestW=null,totalKm=0,bestPace=null;
-  for(let m=0;m<12;m++){
-    const d=perf[m];if(!d)continue;
-    if(d.weight){if(firstW===null)firstW=parseFloat(d.weight);latestW=parseFloat(d.weight)}
-    if(d.km&&m===curM)totalKm+=parseFloat(d.km)||0;
-    if(d.pace&&(bestPace===null||p2f(d.pace)<p2f(bestPace)))bestPace=d.pace;
-  }
-  if(firstW===null&&cfg.pesoInicial)firstW=parseFloat(cfg.pesoInicial);
+  const w=weightInfo(),firstW=w.first,latestW=w.latest,bestPace=latestPace();
+  const totalKm=parseFloat(perfMes(curM,curY).km)||0;
 
   const sonoList=Object.entries(perf.sleep||{})
     .filter(([date])=>{const d=new Date(date+'T12:00:00');return d.getMonth()===curM&&d.getFullYear()===curY})
@@ -4322,31 +4563,31 @@ function renderSaude(){
   if(typeof Chart!=='undefined'){
     if(wChart){wChart.destroy();wChart=null}
     const wl=[],wd=[];
-    for(let m=0;m<12;m++)if(perf[m]&&perf[m].weight){wl.push(MSH[m]);wd.push(parseFloat(perf[m].weight))}
+    perfKeys().forEach(k=>{if(perf[k].weight){wl.push(pkLabel(k));wd.push(parseFloat(perf[k].weight))}});
     const wEl=document.getElementById('wChart');
-    if(wEl)wChart=new Chart(wEl.getContext('2d'),{type:'line',data:{labels:wl,datasets:[{data:wd,borderColor:'#60A5FA',backgroundColor:'rgba(96,165,250,.07)',tension:.4,pointRadius:4,borderWidth:2,fill:true}]},options:{responsive:true,maintainAspectRatio:false,animation:{duration:400},plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:'#465166',font:{size:9}}},y:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#465166',font:{size:9},callback:v=>v+'kg'}}}}});
+    if(wEl)wChart=new Chart(wEl.getContext('2d'),{type:'line',data:{labels:wl,datasets:[{data:wd,borderColor:'#60A5FA',backgroundColor:'rgba(96,165,250,.07)',tension:.4,pointRadius:4,borderWidth:2,fill:true}]},options:{responsive:true,maintainAspectRatio:false,animation:{duration:400},plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:'#737F95',font:{size:9}}},y:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#737F95',font:{size:9},callback:v=>v+'kg'}}}}});
 
     if(kChart){kChart.destroy();kChart=null}
-    const kd=MSH.map((_,m)=>perf[m]&&perf[m].km?parseFloat(perf[m].km):0);
+    const kMeses=ult12.slice().reverse(),kd=kMeses.map(k=>parseFloat((perf[k]||{}).km)||0);
     const kEl=document.getElementById('kChart');
-    if(kEl)kChart=new Chart(kEl.getContext('2d'),{type:'bar',data:{labels:MSH,datasets:[{data:kd,backgroundColor:'rgba(34,197,94,.4)',borderColor:'rgba(34,197,94,.7)',borderWidth:1,borderRadius:4,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,animation:{duration:400},plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:'#465166',font:{size:9}}},y:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#465166',font:{size:9},callback:v=>v+'km'}}}}});
+    if(kEl)kChart=new Chart(kEl.getContext('2d'),{type:'bar',data:{labels:kMeses.map(pkLabel),datasets:[{data:kd,backgroundColor:'rgba(34,197,94,.4)',borderColor:'rgba(34,197,94,.7)',borderWidth:1,borderRadius:4,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,animation:{duration:400},plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:'#737F95',font:{size:9}}},y:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#737F95',font:{size:9},callback:v=>v+'km'}}}}});
   }
 
   let rows='';
-  for(let m=0;m<12;m++){
-    const d=perf[m];if(!d||(!d.weight&&!d.km&&!d.pace))continue;
+  perfKeys().reverse().forEach(k=>{
+    const d=perf[k];if(!d.weight&&!d.km&&!d.pace)return;
     rows+=`<div style="display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid var(--br2)">
-      <span style="font-size:11px;font-weight:700;color:var(--g);min-width:28px">${MSH[m]}</span>
+      <span style="font-size:11px;font-weight:700;color:var(--g);min-width:44px">${pkLabel(k)}</span>
       <span style="flex:1;min-width:0;font-size:11px;color:var(--t2)">${d.weight?d.weight+' kg':'—'}</span>
       <span style="flex:1;min-width:0;font-size:11px;color:var(--t2)">${d.km?d.km+' km':'—'}</span>
       <span style="flex:1;min-width:0;font-size:11px;color:var(--t2)">${d.pace||'—'}</span>
-      <button class="tx-del" onclick="delPerf(${m})">${ic('x')}</button>
+      <button class="tx-del" onclick="delPerf('${k}')" aria-label="Apagar registro de ${MS[+k.slice(5)-1]} ${k.slice(0,4)}">${ic('x')}</button>
     </div>`;
-  }
+  });
   document.getElementById('perf-hist').innerHTML=rows||'<div class="empty"><div class="eico">'+ic('activity')+'</div>Nenhum registro ainda</div>';
 }
-function prefill(m){
-  const d=perf[m]||{};
+function prefill(k){
+  const d=perf[k]||{};
   document.getElementById('pm-w').value=d.weight||'';
   document.getElementById('pm-k').value=d.km||'';
   document.getElementById('pm-p').value=d.pace||'';
@@ -4370,7 +4611,7 @@ function autosaveSleep(){
 function autosavePerf(){
   clearTimeout(perfSaveTimer);
   perfSaveTimer=setTimeout(()=>{
-    const m=parseInt(document.getElementById('pm-m').value);
+    const m=document.getElementById('pm-m').value;if(!isPkey(m))return;
     const w=document.getElementById('pm-w').value,k=document.getElementById('pm-k').value,p=document.getElementById('pm-p').value;
     if(!perf[m])perf[m]={};
     if(w)perf[m].weight=parseFloat(w);else delete perf[m].weight;
@@ -4380,15 +4621,17 @@ function autosavePerf(){
     save('e2_perf',perf);renderSaude();
   },800);
 }
-function delPerf(m){const u=snap(['perf']);delete perf[m];ss('e2_perf',perf);renderSaude();offerUndo('Registro de '+MS[m]+' apagado',u)}
+function delPerf(k){
+  const u=snap(['perf']);delete perf[k];ss('e2_perf',perf);renderSaude();
+  offerUndo('Registro de '+MS[+k.slice(5)-1]+' '+k.slice(0,4)+' apagado',u);
+}
 function savePesoRapido(){
   const v=parseFloat(document.getElementById('peso-val').value);
   if(!v){showToast('Informe o peso','x');return}
-  const m=new Date().getMonth();
-  if(!perf[m])perf[m]={};
-  perf[m].weight=v;
+  const pk=pkey(curMes(),curAno());
+  perf[pk]={...(perf[pk]||{}),weight:v};
   save('e2_perf',perf);
-  const pw=document.getElementById('pm-w');if(pw)pw.value=v;
+  const pw=document.getElementById('pm-w');if(pw&&document.getElementById('pm-m').value===pk)pw.value=v;
   document.getElementById('peso-val').value='';
   closeSh(null,'peso-ol');renderSaude();
 }
@@ -4501,9 +4744,11 @@ function saveCfg(){
   cfg.va=parseFloat(document.getElementById('cfg-va').value)||0;
   cfg.diaVA=Math.min(31,Math.max(1,parseInt(document.getElementById('cfg-dia-va').value)||1));
   cfg.onboarded=true;
-  save('e2_cfg',cfg);
+  // salva a cada letra, mas só avisa quando a pessoa para de digitar
+  ss('e2_cfg',cfg);clearTimeout(cfgToastT);cfgToastT=setTimeout(()=>showToast(),700);
   ensureMonthly();
 }
+let cfgToastT=null;
 
 // ════════════════════════════════
 // EXPORT / IMPORT
@@ -4588,7 +4833,7 @@ function importData(e){
       if(d.checks){checks=d.checks;ss('e2_checks',checks)}
       if(Array.isArray(d.tasks)){tasks=d.tasks.filter(t=>t&&t.id&&t.name).map(t=>({...t,subs:Array.isArray(t.subs)?t.subs:[]}));ss('e2_tasks',tasks)}
       if(Array.isArray(d.taskRules)){taskRules=d.taskRules.filter(r=>r&&r.id&&r.name);ss('e2_taskRules',taskRules)}
-      if(d.perf){perf=d.perf;ss('e2_perf',perf)}
+      if(d.perf){perf=fixPerf(d.perf);ss('e2_perf',perf)}
       if(d.receitas){receitas=d.receitas;ss('e2_receitas',receitas)}
       if(d.fixos){fixos=d.fixos;ss('e2_fixos',fixos)}
       if(d.variaveis){variaveis=d.variaveis;ss('e2_variaveis',variaveis)}
@@ -4622,11 +4867,28 @@ setIco('nav-perfil','user','Perfil');
 document.getElementById('side-logo').innerHTML=ic('checkc');
 document.getElementById('snack-btn').textContent='Desfazer';
 renderCatChips();
-// Esc fecha a janela aberta (computador)
+setupSheets();a11yScan();
 document.addEventListener('keydown',e=>{
-  if(e.key!=='Escape')return;
   const o=[...document.querySelectorAll('.overlay.on')].pop();
-  if(o)closeSh(null,o.id);
+  // Esc fecha a janela aberta (computador)
+  if(e.key==='Escape'){if(o)closeSh(null,o.id);return}
+  // Tab fica dentro da janela aberta
+  if(e.key==='Tab'&&o){
+    const f=[...o.querySelectorAll('button,input,select,textarea,[tabindex="0"]')].filter(x=>!x.disabled&&x.offsetParent!==null);
+    if(!f.length)return;
+    const a=document.activeElement,first=f[0],last=f[f.length-1];
+    if(e.shiftKey&&(a===first||!o.contains(a)||a===o.querySelector('.sheet'))){e.preventDefault();last.focus()}
+    else if(!e.shiftKey&&(a===last||!o.contains(a))){e.preventDefault();first.focus()}
+    return;
+  }
+  // Enter e espaço acionam os itens clicáveis que não são botões de verdade
+  const t=e.target;
+  if((e.key==='Enter'||e.key===' ')&&t&&t.tabIndex===0&&t.hasAttribute&&t.hasAttribute('onclick')&&!NATIVE_CTRL.test(t.tagName)){
+    e.preventDefault();
+    const sig=t.getAttribute('onclick');t.click();
+    // a lista costuma ser redesenhada: o foco volta para o mesmo item na versão nova
+    if(!t.isConnected){a11yScan();const n=[...document.querySelectorAll('[onclick]')].find(x=>x.getAttribute('onclick')===sig&&x.offsetParent!==null);if(n)n.focus({preventScroll:true})}
+  }
 });
 // Pede ao navegador para nao apagar os dados sozinho e registra o modo offline
 if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{});
