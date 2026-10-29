@@ -12,10 +12,10 @@
 // Tema antes de desenhar (evita piscar): Automático segue o iPhone; os outros ficam fixos neste aparelho
 (function(){
   var t='auto';try{t=localStorage.getItem('g_tema')||'auto'}catch(e){}
-  if(['light','dark','neon','neon-rosa'].indexOf(t)<0)t='auto';
+  if(['light','dark','neon','neon-rosa','vidro','vidro-escuro'].indexOf(t)<0)t='auto';
   if(t!=='auto')document.documentElement.setAttribute('data-theme',t);
-  var neon=t.indexOf('neon')===0,dark=neon||t==='dark'||(t==='auto'&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches);
-  document.getElementById('meta-tc').setAttribute('content',neon?'#05070B':dark?'#131210':'#F4F0E8');
+  var neon=t.indexOf('neon')===0,dark=neon||t==='dark'||t==='vidro-escuro'||(t==='auto'&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches);
+  document.getElementById('meta-tc').setAttribute('content',neon?'#05070B':t==='vidro-escuro'?'#000000':dark?'#131210':t==='vidro'?'#F2F2F7':'#F4F0E8');
   document.getElementById('meta-sb').setAttribute('content',dark?'black-translucent':'default');
 })();
 </script>
@@ -27,7 +27,7 @@
 <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Instrument+Sans:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Instrument+Sans:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 /* ════ Visual "caderno de bolso": Automático, Claro e Escuro ════ */
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent} /* reset global: vale para todos os temas, sem peso extra */
@@ -1654,6 +1654,9 @@ html[data-theme^=neon] .pk-av.sm{width:30px;height:30px}
 .tp-n{font-size:12.5px;font-weight:700;color:var(--t1);line-height:1.2;padding:0 2px}
 .tp-s{font-size:11px;font-weight:500;color:var(--t2);line-height:1.25;padding:0 2px;margin-top:-4px}
 
+/* ── FINANÇAS: de onde vem o saldo de abertura ── */
+.fin-abre{font-size:12.5px;color:var(--t2);text-align:center;margin:-4px 0 12px;line-height:1.45}
+
 /* ── PREVISÃO: o valor fica numa linha só; se não couber, a fonte diminui (caberTexto) ── */
 .prev-c b{white-space:nowrap;overflow-wrap:normal}
 
@@ -1675,6 +1678,125 @@ html[data-theme^=neon] .pk-av.sm{width:30px;height:30px}
 .lb-nada{font-size:12px;color:var(--t2);margin-top:5px}
 .lemb>.ic:last-child:not(:first-child){width:18px;height:18px;color:var(--t3)}
 
+
+/* ════ Temas Vidro: Vidro (claro) e Vidro escuro, no estilo atual da Apple ════
+   Cores medidas nas imagens de referência:
+   - paleta (claro / escuro): vermelho #F54443/#F54C4B, laranja #F69135/#F7963C, amarelo #F9CE27/#F9D729,
+     verde #4BC65C/#4BD05B, menta #3FC6B2/#45D8C2, azul-petróleo #41C1CF/#47D0DF, ciano #44BEE6/#5ED1FC,
+     azul #3C86FC/#3E8FFC, índigo #6953F2/#767AFD, roxo #C636DE/#D63AF0, rosa #F53C59/#F54362;
+   - superfícies: fundo #F2F2F7 e cartão #FFFFFF (claro); fundo #000000 e cartão #1C1C1E (escuro);
+     trilho #E7E7E7 / #39393D.
+   Superfícies planas e cores sólidas, sem brilho nem degradê. O vidro (translúcido e com desfoque) fica só no que
+   flutua sobre o conteúdo: menu, janelas e avisos. Quando a cor vira texto, usa a variante de alto contraste da
+   própria Apple, para passar de 4,5:1. Tipografia: SF Pro (no iPhone, a fonte do sistema); fora da Apple, Inter. */
+:root[data-theme^=vidro]{
+  --ff:-apple-system,BlinkMacSystemFont,'SF Pro Text','SF Pro Display','Inter','Helvetica Neue',Arial,sans-serif;
+  --fd:-apple-system,BlinkMacSystemFont,'SF Pro Display','SF Pro Text','Inter','Helvetica Neue',Arial,sans-serif;
+  --rad:26px;--rad-s:14px;
+}
+:root[data-theme=vidro]{
+  color-scheme:light;
+  --bg:#F2F2F7;--s1:#FFFFFF;--s2:rgba(118,118,128,.12);--s3:#E7E7E7;--field:#FFFFFF;
+  --t1:#000000;--t2:#5E5E63;--t3:#6C6C70;
+  --br:rgba(60,60,67,.18);--br2:rgba(60,60,67,.12);
+  /* texto em cor: variantes de alto contraste da Apple */
+  --c-hab:#1C7031;--c-task:#0040DD;--c-fin:#C93400;--c-saude:#D70015;--c-perfil:#8944AB;
+  --g:#1C7031;--g2:#1C7031;--b:#0040DD;--p:#8944AB;--y:#A05A00;--r:#D70015;--c:#0071A4;--o:#C93400;
+  --k-alimentacao:#D70015;--k-transporte:#0040DD;--k-lazer:#8944AB;--k-saude:#0A6B66;--k-estudos:#A05A00;--k-casa:#C93400;--k-outros:#6C6C70;
+  /* preenchimentos: cores exatas da referência */
+  --f-hab:#4BC65C;--f-task:#3C86FC;--f-fin:#F69135;--f-saude:#F54443;--f-perfil:#C636DE;
+  --o-hab:#000000;--o-task:#FFFFFF;--o-fin:#000000;--o-saude:#FFFFFF;--o-perfil:#FFFFFF;
+  --on-acc:#FFFFFF;
+  --hm0:#E7E7E7;--scrim:rgba(0,0,0,.2);
+  --glass:rgba(249,249,251,.78);--glass-br:rgba(0,0,0,.07);--glass-hi:rgba(255,255,255,.9);
+  --sel:rgba(118,118,128,.14);--hck-br:#7C7C80;
+  --sh:none;--sh-lg:0 12px 40px rgba(0,0,0,.14);--sh-float:0 8px 28px rgba(0,0,0,.12);
+  --sheet:rgba(242,242,247,.9);
+}
+:root[data-theme=vidro-escuro]{
+  color-scheme:dark;
+  --bg:#000000;--s1:#1C1C1E;--s2:rgba(118,118,128,.24);--s3:#39393D;--field:#1C1C1E;
+  --t1:#FFFFFF;--t2:#AEAEB2;--t3:#98989D;
+  --br:rgba(84,84,88,.65);--br2:rgba(84,84,88,.45);
+  --c-hab:#30DB5B;--c-task:#409CFF;--c-fin:#FFB340;--c-saude:#FF6961;--c-perfil:#DA8FFF;
+  --g:#30DB5B;--g2:#30DB5B;--b:#409CFF;--p:#DA8FFF;--y:#FFD426;--r:#FF6961;--c:#70D7FF;--o:#FFB340;
+  --k-alimentacao:#FF6961;--k-transporte:#409CFF;--k-lazer:#DA8FFF;--k-saude:#66D4CF;--k-estudos:#FFD426;--k-casa:#FFB340;--k-outros:#98989D;
+  --f-hab:#4BD05B;--f-task:#3E8FFC;--f-fin:#F7963C;--f-saude:#F54C4B;--f-perfil:#D63AF0;
+  --o-hab:#000000;--o-task:#FFFFFF;--o-fin:#000000;--o-saude:#FFFFFF;--o-perfil:#FFFFFF;
+  --on-acc:#000000;
+  --hm0:#2C2C2E;--scrim:rgba(0,0,0,.5);
+  --glass:rgba(30,30,32,.74);--glass-br:rgba(255,255,255,.1);--glass-hi:rgba(255,255,255,.08);
+  --sel:rgba(118,118,128,.32);--hck-br:#7C7C80;
+  --sh:none;--sh-lg:0 12px 40px rgba(0,0,0,.6);--sh-float:0 8px 28px rgba(0,0,0,.5);
+  --sheet:rgba(28,28,30,.92);
+}
+/* cor de preenchimento da área aberta (e de cada item do menu) */
+:root[data-theme^=vidro],html[data-theme^=vidro] body{--fill:var(--f-hab);--on-fill:var(--o-hab)}
+html[data-theme^=vidro] body[data-pg=tasks],html[data-theme^=vidro] [data-nav=tasks]{--fill:var(--f-task);--on-fill:var(--o-task)}
+html[data-theme^=vidro] body[data-pg=fin],html[data-theme^=vidro] [data-nav=fin]{--fill:var(--f-fin);--on-fill:var(--o-fin)}
+html[data-theme^=vidro] body[data-pg=saude],html[data-theme^=vidro] [data-nav=saude]{--fill:var(--f-saude);--on-fill:var(--o-saude)}
+html[data-theme^=vidro] body[data-pg=perfil],html[data-theme^=vidro] [data-nav=perfil]{--fill:var(--f-perfil);--on-fill:var(--o-perfil)}
+html[data-theme^=vidro] [data-nav=habits],html[data-theme^=vidro] [data-nav=dash]{--fill:var(--f-hab);--on-fill:var(--o-hab)}
+
+/* tipografia: SF Pro, regular no texto, semibold nos valores, negrito nos títulos grandes */
+html[data-theme^=vidro] body{font-weight:400;letter-spacing:-.01em;background:var(--bg)}
+html[data-theme^=vidro] body::before{display:none}
+html[data-theme^=vidro] .ph h1,html[data-theme^=vidro] .greet,html[data-theme^=vidro] .onb h2,html[data-theme^=vidro] .gate h2,html[data-theme^=vidro] .gate-brand{font-weight:700;letter-spacing:-.025em}
+html[data-theme^=vidro] .sheet-t{font-weight:700;letter-spacing:-.02em}
+html[data-theme^=vidro] .kpi-val,html[data-theme^=vidro] .fin-col-val,html[data-theme^=vidro] .prev-c b,html[data-theme^=vidro] .radar-pill b,html[data-theme^=vidro] .stat-card-val,html[data-theme^=vidro] .wday b{font-weight:600;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+
+/* cartões: planos, sem borda nem sombra, cantos de 26px */
+html[data-theme^=vidro] .card,html[data-theme^=vidro] .fin-summary{border-color:transparent;box-shadow:none}
+html[data-theme^=vidro] .tk{border-color:var(--br2);box-shadow:none}
+html[data-theme^=vidro] .tk.done{background:transparent}
+
+/* vidro de verdade só no que flutua: menu, barra lateral, janelas e avisos */
+html[data-theme^=vidro] .bnav{left:16px;right:16px;bottom:calc(8px + env(safe-area-inset-bottom));padding:5px;border-radius:32px;
+  background:var(--glass);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);
+  border:.5px solid var(--glass-br);box-shadow:inset 0 .5px 0 var(--glass-hi),var(--sh-float)}
+html[data-theme^=vidro] .bni{color:var(--t1)}
+html[data-theme^=vidro] .bni.on{color:var(--acc)}
+html[data-theme^=vidro] .bni.on .ic{background:var(--sel);color:var(--acc)}
+html[data-theme^=vidro] .side{background:var(--glass);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border-right:.5px solid var(--glass-br)}
+html[data-theme^=vidro] .sheet{background:var(--sheet);backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);border-radius:34px 34px 0 0;box-shadow:inset 0 .5px 0 var(--glass-hi),var(--sh-lg)}
+html[data-theme^=vidro] .toast{background:var(--glass);color:var(--t1);border:.5px solid var(--glass-br);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);box-shadow:var(--sh-float)}
+
+/* botões: cápsulas de cor sólida, como na referência */
+html[data-theme^=vidro] .btn{border-radius:999px;font-weight:600}
+html[data-theme^=vidro] .bp{background:var(--fill);color:var(--on-fill);box-shadow:none}
+html[data-theme^=vidro] .bg{background:var(--s2);color:var(--t1);border-color:transparent;box-shadow:none}
+html[data-theme^=vidro] .ibtn{border-radius:50%;background:var(--s2);border-color:transparent;box-shadow:none}
+html[data-theme^=vidro] .ibtn.on{background:var(--acc-soft);color:var(--acc)}
+html[data-theme^=vidro] .chip:not(.on){background:var(--s2);border-color:transparent}
+/* controle segmentado: trilho em cápsula e item escolhido em cápsula branca (cinza no escuro) */
+html[data-theme^=vidro] .seg{border-radius:999px;background:var(--s2);padding:2px}
+html[data-theme^=vidro] .seg-i{border-radius:999px}
+html[data-theme=vidro] .seg-i.on{background:#FFFFFF;box-shadow:0 3px 8px rgba(0,0,0,.12),0 .5px 1px rgba(0,0,0,.08)}
+html[data-theme=vidro-escuro] .seg-i.on{background:#636366;box-shadow:none}
+
+/* marcação redonda, como nos Lembretes: contorno cinza e, marcada, a cor sólida da área */
+html[data-theme^=vidro] .hck,html[data-theme^=vidro] .tk-sub .hck{border-radius:50%;border-color:var(--hck-br);background:transparent}
+html[data-theme^=vidro] .hck.on{background:var(--fill);border-color:var(--fill)}
+html[data-theme^=vidro] .hck.on::after{border-color:var(--on-fill)}
+html[data-theme^=vidro] .wday.on{background:var(--fill)}
+html[data-theme^=vidro] .wday.on b,html[data-theme^=vidro] .wday.on small{color:var(--on-fill)}
+html[data-theme^=vidro] .wday.on i.pend,html[data-theme^=vidro] .wday.on i.ok{background:var(--on-fill)}
+
+/* barras: trilho fino e preenchimento sólido, como o controle deslizante da referência */
+html[data-theme^=vidro] .pb{height:6px;background:var(--s3);box-shadow:none}
+html[data-theme^=vidro] .pbf,html[data-theme^=vidro] .tk-mini span{background:var(--fill)}
+html[data-theme^=vidro] .prev-c.tot{background:var(--acc-soft);box-shadow:none}
+
+/* prévias no seletor de tema */
+.tp-prev.vidro b{background:#3C86FC}
+.tp-prev.vidro-escuro b{background:#3E8FFC}
+
+/* quem pede menos transparência no sistema recebe superfícies sólidas */
+@media(prefers-reduced-transparency:reduce){
+  :root[data-theme=vidro]{--glass:#F9F9FB;--sheet:#F2F2F7}
+  :root[data-theme=vidro-escuro]{--glass:#1E1E20;--sheet:#1C1C1E}
+  html[data-theme^=vidro] .bnav,html[data-theme^=vidro] .side,html[data-theme^=vidro] .sheet,html[data-theme^=vidro] .toast{backdrop-filter:none;-webkit-backdrop-filter:none}
+}
 </style>
 </head>
 <body>
@@ -2118,6 +2240,7 @@ html[data-theme^=neon] .pk-av.sm{width:30px;height:30px}
       <div class="fin-col-val" id="f-saldo">R$ 0</div>
     </div>
   </div>
+  <div class="fin-abre" id="f-abre" hidden></div>
 
   <div class="lemb" id="f-lembretes" style="display:none"></div>
   <div class="lemb bad" id="f-orc-alerta" style="display:none"></div>
@@ -2160,7 +2283,7 @@ html[data-theme^=neon] .pk-av.sm{width:30px;height:30px}
           <div class="prev-c"><span>A pagar</span><b id="f-prev-fixos" style="color:var(--r)">R$ 0</b></div>
           <div class="prev-c tot"><span>Previsto</span><b id="f-prev-saldo">R$ 0</b></div>
         </div>
-        <div class="hint">Previsto = saldo agora + o que ainda vai cair − contas que faltam pagar (fixas do mês e variáveis a pagar).</div>
+        <div class="hint">Previsto = saldo agora (com o que sobrou dos meses anteriores) + o que ainda vai cair − contas que faltam pagar (fixas do mês e variáveis a pagar).</div>
       </div>
 
       <div class="card">
@@ -2419,6 +2542,8 @@ html[data-theme^=neon] .pk-av.sm{width:30px;height:30px}
               <div class="tp" role="radio" data-tema="dark" onclick="setTema('dark')"><span class="tp-prev" style="--pb:#131210;--pc:#1C1A17;--pa:#6CC98E;--pt:#F2EDE4"><i></i><i></i><b></b><em></em></span><span class="tp-n">Escuro</span><span class="tp-s">Carvão</span></div>
               <div class="tp" role="radio" data-tema="neon" onclick="setTema('neon')"><span class="tp-prev" style="--pb:#05070B;--pc:#121722;--pa:#4ADE80;--pt:#F2F5FA;--pg:0 0 8px #4ADE80"><i></i><i></i><b></b><em></em></span><span class="tp-n">Neon verde</span><span class="tp-s">O visual anterior</span></div>
               <div class="tp" role="radio" data-tema="neon-rosa" onclick="setTema('neon-rosa')"><span class="tp-prev" style="--pb:#05070B;--pc:#121722;--pa:#FF6EB4;--pt:#F2F5FA;--pg:0 0 8px #FF6EB4"><i></i><i></i><b></b><em></em></span><span class="tp-n">Neon rosa</span><span class="tp-s">Rosa-choque</span></div>
+              <div class="tp" role="radio" data-tema="vidro" onclick="setTema('vidro')"><span class="tp-prev vidro" style="--pb:#F2F2F7;--pc:#FFFFFF;--pa:#3C86FC;--pt:#6C6C70"><i></i><i></i><b></b><em></em></span><span class="tp-n">Vidro</span><span class="tp-s">Estilo Apple, claro</span></div>
+              <div class="tp" role="radio" data-tema="vidro-escuro" onclick="setTema('vidro-escuro')"><span class="tp-prev vidro vidro-escuro" style="--pb:#000000;--pc:#1C1C1E;--pa:#3E8FFC;--pt:#AEAEB2"><i></i><i></i><b></b><em></em></span><span class="tp-n">Vidro escuro</span><span class="tp-s">Estilo Apple, escuro</span></div>
             </div>
           </div>
           <div class="divider" style="margin:0"></div>
@@ -3369,26 +3494,49 @@ const recData=r=>r.data||dkey(r.ano,r.mes,1);
 // Receita só conta no saldo depois que a data dela chega; antes disso fica em "a receber"
 function recebidasMes(m=curMes(),a=curAno()){const td=today();return receitasMes(m,a).filter(r=>recData(r)<=td)}
 function aReceber(){const td=today();return receitas.filter(r=>recData(r)>td).sort((x,y)=>recData(x).localeCompare(recData(y)))}
-// Saldo agora = recebido no mês − o que foi pago no mês. A pagar = fixos do mês em aberto + variáveis a pagar (qualquer data).
+// Saldo agora = saldo de abertura (o que sobrou dos meses anteriores) + recebido no mês − o que foi pago no mês.
+// A pagar = fixos do mês em aberto + variáveis a pagar (qualquer data).
 function finResumo(m=curMes(),a=curAno()){
   const recebido=somaValor(recebidasMes(m,a));
   const sm=saidasMes(m,a);
   const pagos=somaValor(sm.filter(x=>x.pago));
-  const agora=recebido-pagos;
+  const abertura=saldoAbertura(m,a);
+  const agora=centavos(abertura+recebido-pagos);
   const receber=somaValor(aReceber());
   const pagar=somaValor(sm.filter(x=>x.tipo==='fixo'&&!x.pago))+somaValor(variaveisAPagar());
-  return {recebido,gasto:pagos,agora,receber,pagar,previsto:agora+receber-pagar};
+  return {abertura,recebido,gasto:pagos,agora,receber,pagar,previsto:centavos(agora+receber-pagar)};
+}
+const centavos=v=>Math.round(v*100)/100;
+// Movimento de caixa do mês: cada transação pertence a um mês só (receita pelo mês dela, fixo pelo mês que ele paga,
+// variável pelo dia do pagamento), então somar os meses não conta nada duas vezes.
+const fluxoMes=(m,a)=>somaValor(recebidasMes(m,a))-somaValor(saidasMes(m,a).filter(x=>x.pago));
+// Primeiro mês com algum movimento ("AAAA-MM"); antes dele o saldo é zero
+function primeiroMesFin(){
+  let min=null;
+  const ver=k=>{if(/^[0-9]{4}-[0-9]{2}$/.test(k)&&(!min||k<min))min=k};
+  receitas.forEach(r=>{if(r.mes>=0&&r.ano>0)ver(mkey(r.mes,r.ano))});
+  variaveis.forEach(v=>{if(varPago(v))ver(String(varPagoEm(v)).slice(0,7))});
+  fixos.forEach(f=>Object.keys(f.pagos||{}).forEach(k=>{if(f.pagos[k])ver(k)}));
+  return min;
+}
+// Saldo de abertura do mês = fechamento do mês anterior = soma do movimento de todos os meses antes dele
+function saldoAbertura(m,a){
+  const ini=primeiroMesFin(),alvo=mkey(m,a);
+  if(!ini||ini>=alvo)return 0;
+  let y=+ini.slice(0,4),mm=+ini.slice(5,7)-1,saldo=0;
+  for(let i=0;i<1200&&mkey(mm,y)<alvo;i++){saldo+=fluxoMes(mm,y);if(++mm>11){mm=0;y++}}
+  return centavos(saldo);
 }
 function saldoMes(m=curMes(),a=curAno()){return finResumo(m,a).agora}
 
 // ── Tema: Automático (segue o aparelho), Claro, Escuro, Neon verde ou Neon rosa. A escolha fica guardada neste aparelho ──
-const TEMAS=['auto','light','dark','neon','neon-rosa'];
+const TEMAS=['auto','light','dark','neon','neon-rosa','vidro','vidro-escuro'];
 function temaAtual(){let t='auto';try{t=localStorage.getItem('g_tema')||'auto'}catch(e){}return TEMAS.includes(t)?t:'auto'}
 function aplicarTema(){
   const t=temaAtual(),r=document.documentElement,neon=t.startsWith('neon');
   if(t==='auto')r.removeAttribute('data-theme');else r.setAttribute('data-theme',t);
-  const dark=neon||t==='dark'||(t==='auto'&&matchMedia('(prefers-color-scheme: dark)').matches);
-  document.getElementById('meta-tc').setAttribute('content',neon?'#05070B':dark?'#131210':'#F4F0E8');
+  const dark=neon||t==='dark'||t==='vidro-escuro'||(t==='auto'&&matchMedia('(prefers-color-scheme: dark)').matches);
+  document.getElementById('meta-tc').setAttribute('content',neon?'#05070B':t==='vidro-escuro'?'#000000':dark?'#131210':t==='vidro'?'#F2F2F7':'#F4F0E8');
   document.querySelectorAll('[data-tema]').forEach(e=>e.setAttribute('aria-checked',String(e.dataset.tema===t)));
 }
 function setTema(t){
@@ -3721,7 +3869,7 @@ function renderDash(){
   const fl=finLocked();
   salEl.textContent=fl?'••••':fmtShort(Math.abs(sal));
   salEl.style.color=fl?'var(--t2)':sal>=0?'var(--g)':'var(--r)';
-  document.getElementById('d-saldo-lbl').textContent=fl?'Finanças bloqueadas':sal>=0?'positivo este mês':'negativo este mês';
+  document.getElementById('d-saldo-lbl').textContent=fl?'Finanças bloqueadas':sal>=0?'saldo atual':'saldo negativo';
 
   const lw=latestWeight();
   document.getElementById('d-peso').textContent=lw!==null?lw:'—';
@@ -4864,6 +5012,10 @@ function renderFin(){
   const salEl=document.getElementById('f-saldo');
   salEl.textContent=brl(R.agora);
   salEl.style.color=R.agora>=0?'var(--g)':'var(--r)';
+  // de onde vem o saldo: o que sobrou (ou faltou) no fim do mês anterior
+  const abreEl=document.getElementById('f-abre');
+  abreEl.hidden=!R.abertura;
+  if(R.abertura)abreEl.textContent=`Saldo agora inclui ${brlC(Math.abs(R.abertura))} que ${R.abertura>0?'sobraram':'faltaram'} no fim de ${MS[(m+11)%12].toLowerCase()}.`;
 
   document.getElementById('f-prev-atual').textContent=brlC(R.agora);
   document.getElementById('f-prev-receber').textContent='+'+fmtBRL(R.receber);
@@ -5305,7 +5457,7 @@ function lembreteTodas(){exportarMes(curMes(),curAno())}
 function renderFinChart(m){
   const a=curAno(),days=dim(m,a),labels=[],data=[];
   const recs=receitasMes(m,a),sm=saidasMes(m,a);
-  let acc=0;
+  let acc=saldoAbertura(m,a); // o mês começa com o que sobrou do anterior
   for(let d=1;d<=days;d++){
     const k=dkey(a,m,d);
     labels.push(d);
