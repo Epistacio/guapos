@@ -1969,6 +1969,7 @@ html[data-theme^=vidro] .prev-c.tot{background:var(--acc-soft);box-shadow:none}
 
   <div class="bk-banner" id="d-backup" style="display:none"></div>
   <div class="lemb" id="d-lembretes" style="display:none" role="button"></div>
+  <div class="lemb bad" id="d-falta" style="display:none" role="button" tabindex="0" onclick="go('fin')"></div>
   <div class="lemb bad" id="d-orc-alerta" style="display:none" role="button" tabindex="0" onclick="go('fin')"></div>
 
   <div class="kpi-grid">
@@ -2243,6 +2244,7 @@ html[data-theme^=vidro] .prev-c.tot{background:var(--acc-soft);box-shadow:none}
   <div class="fin-abre" id="f-abre" hidden></div>
 
   <div class="lemb" id="f-lembretes" style="display:none"></div>
+  <div class="lemb bad" id="f-falta" style="display:none" role="button" tabindex="0"></div>
   <div class="lemb bad" id="f-orc-alerta" style="display:none"></div>
 
   <div class="cols">
@@ -2283,7 +2285,7 @@ html[data-theme^=vidro] .prev-c.tot{background:var(--acc-soft);box-shadow:none}
           <div class="prev-c"><span>A pagar</span><b id="f-prev-fixos" style="color:var(--r)">R$ 0</b></div>
           <div class="prev-c tot"><span>Previsto</span><b id="f-prev-saldo">R$ 0</b></div>
         </div>
-        <div class="hint">Previsto = saldo agora (com o que sobrou dos meses anteriores) + o que ainda vai cair − contas que faltam pagar (fixas do mês e variáveis a pagar).</div>
+        <div class="hint">Previsto = saldo agora (com o que sobrou dos meses anteriores) + receitas a receber no mês − contas do mês e atrasadas (fixas e variáveis).</div>
       </div>
 
       <div class="card">
@@ -2560,6 +2562,10 @@ html[data-theme^=vidro] .prev-c.tot{background:var(--acc-soft);box-shadow:none}
           <div class="fhint" id="cfg-fin-lock" style="display:none"></div>
           <div id="cfg-fin" style="display:flex;flex-direction:column;gap:12px">
           <div class="cfg-row">
+            <div style="min-width:0"><div class="cfg-t">Saldo inicial</div><div class="cfg-s">Quanto havia na conta ao começar a usar o app</div></div>
+            <input type="number" id="cfg-saldo-ini" step="0.01" inputmode="decimal" placeholder="0" oninput="saveCfg()">
+          </div>
+          <div class="cfg-row">
             <div style="min-width:0"><div class="cfg-t">Salário</div><div class="cfg-s">Valor líquido mensal</div></div>
             <input type="number" id="cfg-salario" step="0.01" inputmode="decimal" placeholder="0" oninput="saveCfg()">
           </div>
@@ -2733,6 +2739,14 @@ html[data-theme^=vidro] .prev-c.tot{background:var(--acc-soft);box-shadow:none}
       <div class="fhint" style="margin-top:6px">Essas horas somam ao total de horas do mês da receita e entram no valor da hora.</div>
     </div>
     <div class="fgrp"><label class="flbl" for="rec-data">Data</label><input type="date" id="rec-data"></div>
+    <div class="fgrp">
+      <label class="flbl">Situação</label>
+      <div class="seg" style="margin-bottom:0">
+        <div class="seg-i" id="rec-st-sim" onclick="setRecStatus(true)">Já recebi</div>
+        <div class="seg-i" id="rec-st-nao" onclick="setRecStatus(false)">A receber</div>
+      </div>
+    </div>
+    <label class="ackrow"><input type="checkbox" id="rec-fixa"><span>Entra todo mês, no mesmo dia. Os próximos meses são lançados sozinhos, como a receber.</span></label>
     <div class="onb-err" id="rec-err"></div>
     <div style="display:flex;gap:8px">
       <button class="btn br-btn" id="rec-del" style="display:none" onclick="delReceitaEd()" aria-label="Apagar receita"></button>
@@ -2749,6 +2763,8 @@ html[data-theme^=vidro] .prev-c.tot{background:var(--acc-soft);box-shadow:none}
     <div class="fgrp"><label class="flbl" for="fix-nome">Descrição</label><input type="text" id="fix-nome" placeholder="Ex: Faculdade" maxlength="60"></div>
     <div class="fgrp"><label class="flbl" for="fix-val">Valor (R$)</label><input type="number" id="fix-val" step="0.01" min="0.01" inputmode="decimal" placeholder="500"></div>
     <div class="fgrp"><label class="flbl" for="fix-dia">Dia do vencimento</label><input type="number" id="fix-dia" min="1" max="31" inputmode="numeric" placeholder="15"></div>
+    <div class="fgrp"><label class="flbl" for="fix-desde">Desde</label><input type="month" id="fix-desde">
+      <div class="fhint" style="margin-top:6px">Mês da primeira cobrança. Meses sem pagamento depois dele aparecem como atrasados.</div></div>
     <div class="fgrp">
       <label class="flbl">Categoria</label>
       <div class="chips" id="fix-cats"></div>
@@ -2865,6 +2881,7 @@ html[data-theme^=vidro] .prev-c.tot{background:var(--acc-soft);box-shadow:none}
     <div class="fgrp"><label class="flbl">Descrição</label><input type="text" id="va-gasto-nome" placeholder="Ex: Compra do mês"></div>
     <div class="fgrp"><label class="flbl">Valor (R$)</label><input type="number" id="va-gasto-val" step="0.01" inputmode="decimal" placeholder="250"></div>
     <div class="fgrp"><label class="flbl">Data</label><input type="date" id="va-gasto-data"></div>
+    <div class="fhint va-disp" style="margin:-4px 0 14px"></div>
     <div style="display:flex;gap:8px">
       <button class="btn bg" style="flex:1" onclick="closeSh(null,'va-gasto-ol')">Cancelar</button>
       <button class="btn bp" style="flex:1" onclick="addVAMov('gasto')">Salvar</button>
@@ -2880,6 +2897,7 @@ html[data-theme^=vidro] .prev-c.tot{background:var(--acc-soft);box-shadow:none}
     <div class="fgrp"><label class="flbl">Quem / motivo</label><input type="text" id="va-conv-nome" placeholder="Ex: Mercado para família"></div>
     <div class="fgrp"><label class="flbl">Valor (R$)</label><input type="number" id="va-conv-val" step="0.01" inputmode="decimal" placeholder="120"></div>
     <div class="fgrp"><label class="flbl">Data</label><input type="date" id="va-conv-data"></div>
+    <div class="fhint va-disp" style="margin:-4px 0 14px"></div>
     <div style="display:flex;gap:8px">
       <button class="btn bg" style="flex:1" onclick="closeSh(null,'va-conv-ol')">Cancelar</button>
       <button class="btn bp" style="flex:1" onclick="convertVAReceita()">Converter</button>
@@ -3077,7 +3095,7 @@ const STATE={
   tasks:{g:()=>tasks,s:v=>{tasks=fixTasks(v)}},
   taskRules:{g:()=>taskRules,s:v=>{taskRules=fixRules(v)}},
   perf:{g:()=>perf,s:v=>{perf=fixPerf(v)}},
-  receitas:{g:()=>receitas,s:v=>{receitas=v||[]}},
+  receitas:{g:()=>receitas,s:v=>{receitas=v||[];fixReceitas(receitas)}},
   fixos:{g:()=>fixos,s:v=>{fixos=v||[]}},
   variaveis:{g:()=>variaveis,s:v=>{variaveis=v||[]}},
   vaMovs:{g:()=>vaMovs,s:v=>{vaMovs=v||[]}},
@@ -3230,7 +3248,13 @@ function renderSyncStatus(){
 window.addEventListener('online',renderSyncStatus);
 window.addEventListener('offline',renderSyncStatus);
 // garante que a última alteração sobe antes de fechar ou trocar de app
-document.addEventListener('visibilitychange',()=>{if(document.hidden)Sync.flush()});
+let diaVisto=null;
+document.addEventListener('visibilitychange',()=>{
+  if(document.hidden){Sync.flush();return}
+  const td=today();
+  if(PID&&diaVisto&&diaVisto!==td&&!document.getElementById('gate').classList.contains('on')){ensureMonthly();onRemoteChange()}
+  diaVisto=td;
+});
 window.addEventListener('pagehide',()=>Sync.flush());
 
 // Mudança vinda de outro aparelho: redesenha sem atrapalhar quem está digitando ou com uma janela aberta
@@ -3388,6 +3412,7 @@ async function enterProfile(pid){
   resetSession();loadState();
   if(Sync.on&&Sync.uid){showGate('loading','Sincronizando '+profName(pid)+'…');await Sync.listen(pid);checkFinReset()}
   hideGate();buzz(10);
+  migrarFin();
   if(needsOnb()||!habits.length)openOnb();
   else{ensureMonthly();go('dash')}
   arquivarTarefas();
@@ -3411,7 +3436,7 @@ const today=()=>{const d=new Date();return `${d.getFullYear()}-${pad(d.getMonth(
 const fmtBRL=v=>'R$ '+parseFloat(v||0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
 const fmtShort=v=>'R$ '+Math.round(parseFloat(v||0)).toLocaleString('pt-BR');
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-function dim(m,y){const yy=y||Y;if(m===1)return((yy%4===0&&yy%100!==0)||yy%400===0)?29:28;return[31,28,31,30,31,30,31,31,30,31,30,31][m]}
+function dim(m,y){const yy=y||new Date().getFullYear();if(m===1)return((yy%4===0&&yy%100!==0)||yy%400===0)?29:28;return[31,28,31,30,31,30,31,31,30,31,30,31][m]}
 function dkey(y,m,d){return `${y}-${pad(m+1)}-${pad(d)}`}
 // Três tipos de hábito: diário (sem days/perWeek), dias fixos ("days") ou meta semanal ("perWeek" vezes na semana)
 function isWeekly(h){return h.perWeek>0}
@@ -3442,22 +3467,21 @@ function streak(){
   }
   return s;
 }
+// Maior sequência de dias seguidos com alguma marcação, em todo o histórico (não recomeça na virada do ano)
 function bestStreak(){
-  let best=0,cur=0;
-  const st=new Date(Y,0,1);
-  for(let i=0;i<366;i++){
-    const d=new Date(st);d.setDate(i+1);
-    if(anyCheck(dkey(d.getFullYear(),d.getMonth(),d.getDate()))){cur++;best=Math.max(best,cur)}else cur=0;
-  }
+  let best=0,cur=0,prev=null;
+  Object.keys(checks).filter(k=>/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(k)&&anyCheck(k)).sort().forEach(k=>{
+    cur=prev&&shiftKey(prev,1)===k?cur+1:1;best=Math.max(best,cur);prev=k;
+  });
   return best;
 }
 function mPct(m,y){
-  const yy=y||Y,days=dim(m,yy);let tot=0,done=0;
+  const yy=y||new Date().getFullYear(),days=dim(m,yy);let tot=0,done=0;
   for(let d=1;d<=days;d++){const k=dkey(yy,m,d);tot+=habitsFor(k).length;done+=doneIn(k)}
   return tot?Math.round(done/tot*100):0;
 }
 function hMPct(id,m,y){
-  const yy=y||Y,days=dim(m,yy),h=habits.find(x=>x.id===id);let done=0,sched=0;
+  const yy=y||new Date().getFullYear(),days=dim(m,yy),h=habits.find(x=>x.id===id);let done=0,sched=0;
   if(h&&isWeekly(h)){
     for(let d=1;d<=days;d++)if((checks[dkey(yy,m,d)]||{})[id])done++;
     return Math.min(100,Math.round(done/(h.perWeek*days/7)*100));
@@ -3473,7 +3497,7 @@ function hCount(id){let c=0;Object.values(checks).forEach(dc=>{if(dc[id])c++});r
 function hasH(id){return habits.some(h=>h.id===id)}
 function hp(id,m){return hasH(id)?hMPct(id,m):null}
 function avgOr(list,fb){const v=list.filter(x=>x!==null&&x!==undefined);return v.length?v.reduce((a,b)=>a+b,0)/v.length:fb}
-function diasComCheck(m,y){const yy=y||Y,days=dim(m,yy);let c=0;for(let d=1;d<=days;d++)if(anyCheck(dkey(yy,m,d)))c++;return c}
+function diasComCheck(m,y){const yy=y||new Date().getFullYear(),days=dim(m,yy);let c=0;for(let d=1;d<=days;d++)if(anyCheck(dkey(yy,m,d)))c++;return c}
 function buzz(ms){try{navigator.vibrate&&navigator.vibrate(ms)}catch(e){}}
 function xpTotal(){return totalCI()*10+bestStreak()*50}
 function lvl(x){return Math.min(100,Math.floor(x/500)+1)}
@@ -3485,15 +3509,24 @@ function p2f(p){if(!p)return 999;const pp=String(p).split(':');return pp.length=
 const curMes=()=>new Date().getMonth();
 const curAno=()=>new Date().getFullYear();
 function receitasMes(m=curMes(),a=curAno()){return receitas.filter(r=>r.mes===m&&r.ano===a)}
-function fixoTotal(){return fixos.reduce((acc,f)=>acc+parseFloat(f.valor||0),0)}
+function fixoTotal(){const m=curMes(),a=curAno();return fixos.filter(f=>fixoAtivo(f,m,a)).reduce((acc,f)=>acc+fixoValor(f,m,a),0)}
 function varMes(m=curMes(),a=curAno()){
   return variaveis.filter(v=>{const d=new Date(v.data);return d.getMonth()===m&&d.getFullYear()===a});
 }
 const somaValor=l=>l.reduce((acc,x)=>acc+parseFloat(x.valor||0),0);
 const recData=r=>r.data||dkey(r.ano,r.mes,1);
-// Receita só conta no saldo depois que a data dela chega; antes disso fica em "a receber"
-function recebidasMes(m=curMes(),a=curAno()){const td=today();return receitasMes(m,a).filter(r=>recData(r)<=td)}
-function aReceber(){const td=today();return receitas.filter(r=>recData(r)>td).sort((x,y)=>recData(x).localeCompare(recData(y)))}
+// Receita só entra no saldo quando alguém marca como recebida. Antes disso fica "a receber" (e "atrasada" se a data passou).
+const recebida=r=>r.recebida===true;
+function recebidasMes(m=curMes(),a=curAno()){return receitasMes(m,a).filter(recebida)}
+function aReceber(){return receitas.filter(r=>!recebida(r)).sort((x,y)=>recData(x).localeCompare(recData(y)))}
+const receitasAtrasadas=()=>{const td=today();return aReceber().filter(r=>recData(r)<td)};
+// Receitas de antes desta regra não tinham a marcação: as que já tinham caído até a data da mudança
+// (cfg.recMigrEm, igual em todos os aparelhos) contam como recebidas; as futuras ficam a receber.
+function fixReceitas(l){
+  const corte=cfg.recMigrEm||today();let mudou=false;
+  (Array.isArray(l)?l:[]).forEach(r=>{if(r&&typeof r.recebida!=='boolean'){r.recebida=recData(r)<=corte;mudou=true}});
+  return mudou;
+}
 // Saldo agora = saldo de abertura (o que sobrou dos meses anteriores) + recebido no mês − o que foi pago no mês.
 // A pagar = fixos do mês em aberto + variáveis a pagar (qualquer data).
 function finResumo(m=curMes(),a=curAno()){
@@ -3502,8 +3535,10 @@ function finResumo(m=curMes(),a=curAno()){
   const pagos=somaValor(sm.filter(x=>x.pago));
   const abertura=saldoAbertura(m,a);
   const agora=centavos(abertura+recebido-pagos);
-  const receber=somaValor(aReceber());
-  const pagar=somaValor(sm.filter(x=>x.tipo==='fixo'&&!x.pago))+somaValor(variaveisAPagar());
+  // previsto do mês: o que ainda vai entrar e sair até o fim dele, mais o que já está atrasado
+  const fim=dkey(a,m,dim(m,a));
+  const receber=somaValor(aReceber().filter(r=>recData(r)<=fim));
+  const pagar=somaValor(sm.filter(x=>x.tipo==='fixo'&&!x.pago))+somaValor(fixosAtrasados(m,a))+somaValor(variaveisAPagar().filter(v=>varVenc(v)<=fim));
   return {abertura,recebido,gasto:pagos,agora,receber,pagar,previsto:centavos(agora+receber-pagar)};
 }
 const centavos=v=>Math.round(v*100)/100;
@@ -3519,11 +3554,11 @@ function primeiroMesFin(){
   fixos.forEach(f=>Object.keys(f.pagos||{}).forEach(k=>{if(f.pagos[k])ver(k)}));
   return min;
 }
-// Saldo de abertura do mês = fechamento do mês anterior = soma do movimento de todos os meses antes dele
+// Saldo de abertura do mês = fechamento do mês anterior = saldo inicial (Perfil) + movimento de todos os meses antes dele
 function saldoAbertura(m,a){
-  const ini=primeiroMesFin(),alvo=mkey(m,a);
-  if(!ini||ini>=alvo)return 0;
-  let y=+ini.slice(0,4),mm=+ini.slice(5,7)-1,saldo=0;
+  const base=+cfg.saldoInicial||0,ini=primeiroMesFin(),alvo=mkey(m,a);
+  if(!ini||ini>=alvo)return centavos(base);
+  let y=+ini.slice(0,4),mm=+ini.slice(5,7)-1,saldo=base;
   for(let i=0;i<1200&&mkey(mm,y)<alvo;i++){saldo+=fluxoMes(mm,y);if(++mm>11){mm=0;y++}}
   return centavos(saldo);
 }
@@ -3698,30 +3733,67 @@ function finishOnb(){
   go('habits');
   showToast('Tudo pronto, '+cfg.nome,'checkc');
 }
-// Lança salário e vale do mês com a data em que caem; só entram no saldo quando essa data chegar
+// Meses de "de" (AAAA-MM) até o mês atual, no máximo 36
+function mesesAteHoje(de){
+  const out=[],alvo=mkey();if(!/^[0-9]{4}-[0-9]{2}$/.test(de||''))return out;
+  let y=+de.slice(0,4),m=+de.slice(5,7)-1;
+  while(mkey(m,y)<=alvo&&out.length<36){out.push([m,y]);if(++m>11){m=0;y++}}
+  return out;
+}
+// Mês seguinte ao último lançamento automático (ou o mês atual, se nunca houve): cobre os meses em que ninguém abriu o app
+const desdeUltimo=refs=>{const u=refs.sort().pop();if(!u)return mkey();let y=+u.slice(0,4),m=+u.slice(5,7);if(m>11){m=0;y++}return mkey(m,y)};
+// Receitas que entram todo mês (cadastro em cfg.recFixas: nome, valor, dia, tipo, desde, ate, pular)
+const recFixasAtivas=(m,a)=>{const k=mkey(m,a);return (cfg.recFixas||[]).filter(t=>k>=t.desde&&(!t.ate||k<=t.ate)&&!(t.pular||[]).includes(k))};
+// Lança salário, vale e receitas fixas de cada mês com a data em que caem. Receitas entram como "a receber".
 function ensureMonthly(){
-  const now=new Date(),m=now.getMonth(),a=now.getFullYear();
-  const ref=`${a}-${pad(m+1)}`;let changed=false;
+  const td=today();let recMudou=false,vaMudou=false;
   if(cfg.salario>0){
-    const d=Math.min(cfg.diaPag||1,dim(m)),data=`${ref}-${pad(d)}`;
-    const cur=receitas.find(r=>r.origem==='auto-salario'&&r.mes===m&&r.ano===a);
-    if(!cur){
-      receitas.push({id:'sal'+ref,nome:'Salário',valor:cfg.salario,tipo:'salario',mes:m,ano:a,data,origem:'auto-salario'});
-      changed=true;
-    }else if(cur.data>today()&&(cur.valor!==cfg.salario||cur.data!==data)){
-      // ainda não caiu: acompanha o valor e o dia configurados no Perfil
-      cur.valor=cfg.salario;cur.data=data;changed=true;
-    }
+    const refs=receitas.filter(r=>r.origem==='auto-salario').map(r=>mkey(r.mes,r.ano));
+    mesesAteHoje(desdeUltimo(refs)).forEach(([m,a])=>{
+      const ref=mkey(m,a);
+      if(receitas.some(r=>r.origem==='auto-salario'&&r.mes===m&&r.ano===a))return;
+      receitas.push({id:'sal'+ref,nome:'Salário',valor:cfg.salario,tipo:'salario',mes:m,ano:a,data:`${ref}-${pad(Math.min(cfg.diaPag||1,dim(m,a)))}`,origem:'auto-salario',recebida:false});
+      recMudou=true;
+    });
+    // o do mês atual acompanha o valor e o dia do Perfil até ser marcado como recebido
+    const m=curMes(),a=curAno(),cur=receitas.find(r=>r.origem==='auto-salario'&&r.mes===m&&r.ano===a),data=`${mkey(m,a)}-${pad(Math.min(cfg.diaPag||1,dim(m,a)))}`;
+    if(cur&&!recebida(cur)&&(cur.valor!==cfg.salario||cur.data!==data)){cur.valor=cfg.salario;cur.data=data;recMudou=true}
   }
+  (cfg.recFixas||[]).forEach(t=>{
+    mesesAteHoje(t.desde).forEach(([m,a])=>{
+      if(!recFixasAtivas(m,a).includes(t))return;
+      const ref=mkey(m,a),data=`${ref}-${pad(Math.min(t.dia||1,dim(m,a)))}`,r=receitas.find(x=>x.fixaId===t.id&&x.mes===m&&x.ano===a);
+      if(!r){
+        receitas.push({id:'rf'+t.id+ref,nome:t.nome,valor:+t.valor,tipo:t.tipo||'extra',mes:m,ano:a,data,origem:'rec-fixa',fixaId:t.id,recebida:false,...(+t.horas>0?{horas:+t.horas}:{})});
+        recMudou=true;
+      }else if(!recebida(r)&&data>=td.slice(0,8)+'01'&&(r.valor!==+t.valor||r.nome!==t.nome||r.data!==data)){
+        // ainda não recebida no mês atual: acompanha o cadastro (mudanças valem daqui para a frente)
+        Object.assign(r,{valor:+t.valor,nome:t.nome,data});recMudou=true;
+      }
+    });
+  });
   if(cfg.va>0){
-    const has=vaMovs.some(v=>v.origem==='auto-va'&&v.ref===ref);
-    if(!has){
-      const d=Math.min(cfg.diaVA||1,dim(m));
-      vaMovs.push({id:'va'+ref,tipo:'recarga',nome:'Recarga do vale',valor:cfg.va,data:`${ref}-${pad(d)}`,origem:'auto-va',ref});
-      changed=true;
-    }
+    const refs=vaMovs.filter(v=>v.origem==='auto-va').map(v=>v.ref);
+    mesesAteHoje(desdeUltimo(refs)).forEach(([m,a])=>{
+      const ref=mkey(m,a);
+      if(vaMovs.some(v=>v.origem==='auto-va'&&v.ref===ref))return;
+      vaMovs.push({id:'va'+ref,tipo:'recarga',nome:'Recarga do vale',valor:cfg.va,data:`${ref}-${pad(Math.min(cfg.diaVA||1,dim(m,a)))}`,origem:'auto-va',ref});
+      vaMudou=true;
+    });
   }
-  if(changed){ss('e2_receitas',receitas);ss('e2_vaMovs',vaMovs)}
+  if(recMudou)ss('e2_receitas',receitas);
+  if(vaMudou)ss('e2_vaMovs',vaMovs);
+}
+// Ajustes únicos dos dados antigos para as regras novas. Roda depois da primeira leitura da nuvem, com os dados em dia.
+function migrarFin(){
+  let c=false,f=false;
+  if(!cfg.recMigrEm){cfg.recMigrEm=today();c=true}
+  const r=fixReceitas(receitas);
+  // fixo antigo: começa no primeiro mês pago (ou neste mês, se nunca foi pago)
+  fixos.forEach(x=>{if(!x.desde){x.desde=Object.keys(x.pagos||{}).filter(k=>x.pagos[k]).sort()[0]||mkey();f=true}});
+  if(c)ss('e2_cfg',cfg);
+  if(r)ss('e2_receitas',receitas);
+  if(f)ss('e2_fixos',fixos);
 }
 const perfKeys=()=>Object.keys(perf).filter(isPkey).sort();
 const perfMes=(m=curMes(),a=curAno())=>perf[pkey(m,a)]||{};
@@ -3894,6 +3966,7 @@ function renderDash(){
       <span style="font-size:12px;font-weight:800;color:var(--g);flex-shrink:0">${s.pct}%</span>
     </div>`).join('')||'<div class="empty"><div class="eico">'+ic('checksq')+'</div>Faça check-ins para ver o ranking</div>';
 
+  renderFalta(document.getElementById('d-falta'),true);
   renderLembretes(document.getElementById('d-lembretes'),true);
   renderOrcAlerta(document.getElementById('d-orc-alerta'),true);
   if((fixos.length||variaveis.some(v=>!varPago(v)))&&!finLocked()){
@@ -3904,7 +3977,7 @@ function renderDash(){
     if(next){const d=diasAte(next.venc);quando=d<0?`<span class="tx-late">Venceu ${fmtDia(next.venc)}</span>`:d===0?'<span class="tx-warn">Vence hoje</span>':`Vence ${fmtDia(next.venc)} · ${d===1?'amanhã':'em '+d+' dias'}`}
     document.getElementById('d-proxima').innerHTML=next?`
       <div style="display:flex;align-items:center;gap:10px">
-        <div class="hck" onclick="${next.tipo==='fixo'?`togglePaid('${next.id}')`:`toggleVarPago('${next.id}')`}" role="checkbox" aria-checked="false" aria-label="Marcar como paga"></div>
+        <div class="hck" onclick="${next.tipo==='fixo'?`togglePaid('${next.id}',${next.m},${next.a})`:`toggleVarPago('${next.id}')`}" role="checkbox" aria-checked="false" aria-label="Marcar como paga"></div>
         <div style="flex:1;min-width:0"><div class="tx-name">${esc(next.nome)}</div><div class="tx-cat">${quando}</div></div>
         <div style="font-size:15px;font-weight:800;color:var(--r);flex-shrink:0">${fmtBRL(next.valor)}</div>
       </div>`:`<div class="dtk ok">${ic('checkc')}<span>Nenhuma conta em aberto</span></div>`;
@@ -4035,7 +4108,9 @@ const STORE={
   variaveis:{get:()=>variaveis,set:v=>{variaveis=v;ss('e2_variaveis',v)}},
   vaMovs:{get:()=>vaMovs,set:v=>{vaMovs=v;ss('e2_vaMovs',v)}},
   perf:{get:()=>perf,set:v=>{perf=v;ss('e2_perf',v)}},
-  horas:{get:()=>horas,set:v=>{horas=fixHoras(v);ss('e2_horas',horas)}}
+  horas:{get:()=>horas,set:v=>{horas=fixHoras(v);ss('e2_horas',horas)}},
+  // desfazer nunca troca a senha de Finanças
+  cfg:{get:()=>cfg,set:v=>{const pin=cfg.finPin;cfg=v;if(pin)cfg.finPin=pin;else delete cfg.finPin;ss('e2_cfg',cfg)}}
 };
 let undoFn=null,_ut=null;
 function snap(keys){
@@ -4358,7 +4433,7 @@ function refreshAfterDia(){
 }
 function renderHeatmap(){
   const hm=document.getElementById('heatmap');if(!hm)return;
-  const start=new Date(Y,0,1),cells=[];
+  const start=new Date(new Date().getFullYear(),0,1),cells=[];
   for(let i=0;i<365;i++){
     const d=new Date(start);d.setDate(i+1);
     const k=`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
@@ -4884,14 +4959,31 @@ function isPaid(f,m,a){return !!(f.pagos||{})[mkey(m,a)]}
 function fixoVenc(f,m,a){return dkey(a,m,Math.min(parseInt(f.dia)||1,dim(m,a)))}
 function fixoPagoEm(f,m,a){const p=(f.pagos||{})[mkey(m,a)];return typeof p==='string'?p:(p?fixoVenc(f,m,a):null)}
 const mesAntes=(m,a)=>a<curAno()||(a===curAno()&&m<curMes());
+// O fixo vale de "desde" até "ate" (quando encerrado). O valor de um mês pago fica guardado em valPago:
+// mudar o valor do cadastro só vale daqui para a frente.
+const fixoAtivo=(f,m,a)=>{const k=mkey(m,a);return k>=(f.desde||mkey())&&(!f.ate||k<=f.ate)};
+const fixoValor=(f,m,a)=>{const v=(f.valPago||{})[mkey(m,a)];return v!=null?+v:+f.valor||0};
+// Meses antes de m/a (desde o início do fixo) que ficaram sem pagamento
+function fixosAtrasados(m=curMes(),a=curAno()){
+  const out=[],alvo=mkey(m,a);
+  fixos.forEach(f=>{
+    if(!f.desde)return;
+    let y=+f.desde.slice(0,4),mm=+f.desde.slice(5,7)-1;
+    for(let i=0;i<240&&mkey(mm,y)<alvo;i++){
+      if(fixoAtivo(f,mm,y)&&!fixoPagoEm(f,mm,y))out.push({tipo:'fixo',id:f.id,nome:f.nome,valor:fixoValor(f,mm,y),cat:catOf(f),venc:fixoVenc(f,mm,y),pago:false,quando:fixoVenc(f,mm,y),m:mm,a:y,dia:parseInt(f.dia)||1});
+      if(++mm>11){mm=0;y++}
+    }
+  });
+  return out.sort((x,y)=>x.venc.localeCompare(y.venc));
+}
 // Todas as saídas de um mês com a data que vale para elas: dia do pagamento (pagas) ou vencimento (a pagar)
 function saidasMes(m,a){
   const ini=dkey(a,m,1),fim=dkey(a,m,dim(m,a)),out=[];
   fixos.forEach(f=>{
     const pe=fixoPagoEm(f,m,a);
-    // meses passados: o app não sabe desde quando o fixo existe, então só mostra o que foi marcado como pago
-    if(!pe&&mesAntes(m,a))return;
-    out.push({tipo:'fixo',id:f.id,nome:f.nome,valor:+f.valor||0,cat:catOf(f),venc:fixoVenc(f,m,a),pago:!!pe,quando:pe||fixoVenc(f,m,a),m,a,dia:parseInt(f.dia)||1});
+    // fora do período do fixo (antes de "desde" ou depois de encerrado) só aparece o que foi pago
+    if(!pe&&!fixoAtivo(f,m,a))return;
+    out.push({tipo:'fixo',id:f.id,nome:f.nome,valor:fixoValor(f,m,a),cat:catOf(f),venc:fixoVenc(f,m,a),pago:!!pe,quando:pe||fixoVenc(f,m,a),m,a,dia:parseInt(f.dia)||1});
   });
   variaveis.forEach(v=>{
     const pg=varPago(v),q=pg?varPagoEm(v):varVenc(v);
@@ -4900,10 +4992,10 @@ function saidasMes(m,a){
   return out;
 }
 const variaveisAPagar=()=>variaveis.filter(v=>!varPago(v)).sort((x,y)=>varVenc(x).localeCompare(varVenc(y)));
-// Contas em aberto: fixos do mês atual + variáveis a pagar (qualquer data), da mais urgente para a menos
+// Contas em aberto: fixos atrasados de meses anteriores + fixos do mês atual + variáveis a pagar (qualquer data), da mais urgente para a menos
 function contasAbertas(){
   const m=curMes(),a=curAno();
-  const fx=saidasMes(m,a).filter(x=>x.tipo==='fixo'&&!x.pago);
+  const fx=[...fixosAtrasados(m,a),...saidasMes(m,a).filter(x=>x.tipo==='fixo'&&!x.pago)];
   const vr=variaveisAPagar().map(v=>({tipo:'var',id:v.id,nome:v.nome,valor:+v.valor||0,cat:catOf(v),venc:varVenc(v),pago:false,quando:varVenc(v)}));
   return [...fx,...vr].sort((x,y)=>x.venc.localeCompare(y.venc));
 }
@@ -4951,21 +5043,26 @@ const fmtH=h=>(Math.round(h*10)/10).toLocaleString('pt-BR')+' h';
 function projecao(ate){
   const td=today(),res={};
   if(!validDate(ate)||ate<td)return res;
-  const ent={},sai={};
+  const ent={},sai={},contas={};
   const add=(o,k,v)=>{o[k]=(o[k]||0)+v};
-  aReceber().forEach(r=>add(ent,recData(r),+r.valor||0));
+  const conta=(x,k)=>{add(sai,k,x.valor);(contas[k]=contas[k]||[]).push(x)};
+  // receitas a receber (as atrasadas contam como se chegassem hoje)
+  aReceber().forEach(r=>{const k=recData(r);add(ent,k<td?td:k,+r.valor||0)});
+  fixosAtrasados().forEach(x=>conta(x,td));
   let m=curMes(),a=curAno();
   const am=+ate.slice(5,7)-1,ay=+ate.slice(0,4);
   for(let i=0;i<24&&(a<ay||(a===ay&&m<=am));i++){
-    saidasMes(m,a).forEach(x=>{if(x.tipo==='fixo'&&!x.pago)add(sai,x.venc<td?td:x.venc,x.valor)});
+    saidasMes(m,a).forEach(x=>{if(x.tipo==='fixo'&&!x.pago)conta(x,x.venc<td?td:x.venc)});
+    // meses que ainda não começaram: salário e receitas fixas previstos (os lançamentos só são criados no mês)
     if(i>0&&cfg.salario>0&&!receitas.some(r=>r.origem==='auto-salario'&&r.mes===m&&r.ano===a))add(ent,dkey(a,m,Math.min(cfg.diaPag||1,dim(m,a))),+cfg.salario);
+    if(i>0)recFixasAtivas(m,a).forEach(t=>{if(!receitas.some(r=>r.fixaId===t.id&&r.mes===m&&r.ano===a))add(ent,dkey(a,m,Math.min(t.dia||1,dim(m,a))),+t.valor||0)});
     if(++m>11){m=0;a++}
   }
-  variaveisAPagar().forEach(v=>{const k=varVenc(v);add(sai,k<td?td:k,+v.valor||0)});
+  variaveisAPagar().forEach(v=>{const k=varVenc(v);conta({tipo:'var',id:v.id,nome:v.nome,valor:+v.valor||0,venc:k},k<td?td:k)});
   let saldo=finResumo().agora;
   for(let k=td,n=0;k<=ate&&n<800;k=shiftKey(k,1),n++){
-    saldo+=(ent[k]||0)-(sai[k]||0);
-    res[k]={saldo,saidas:sai[k]||0,falta:(sai[k]||0)>0&&saldo<0};
+    saldo=centavos(saldo+(ent[k]||0)-(sai[k]||0));
+    res[k]={saldo,saidas:sai[k]||0,falta:(sai[k]||0)>0&&saldo<0,contas:contas[k]||[]};
   }
   return res;
 }
@@ -5024,6 +5121,7 @@ function renderFin(){
   prevEl.textContent=brlC(R.previsto);prevEl.style.color=R.previsto>=0?'var(--g)':'var(--r)';
   caberTexto(PREV_IDS);
 
+  renderFalta(document.getElementById('f-falta'),false);
   renderLembretes(document.getElementById('f-lembretes'),false);
   renderOrcAlerta(document.getElementById('f-orc-alerta'));
   renderFinCal();
@@ -5031,33 +5129,39 @@ function renderFin(){
   renderCatPanel();
   renderVA(m,a);
 
-  // Receitas: as que já caíram neste mês e, separadas, as que ainda vão cair (inclusive no mês que vem)
+  // Receitas: as recebidas neste mês e, separadas, as que faltam receber (atrasadas primeiro). O quadrado marca como recebida.
   const recRow=r=>{
-    const k=recData(r),fut=k>today(),dias=diasAte(k);
-    const quando=fut?`<span class="tx-soon">cai ${dias===1?'amanhã':'em '+dias+' dias'}</span> · ${fmtDia(k)}`:fmtDia(k);
-    const auto=r.origem==='auto-salario'?' · automático':'';
-    return`<div class="tx-row">
-      <div class="tx-ico" style="background:color-mix(in srgb,var(--g) 12%,transparent);color:var(--g)">${ic(CAT_ICO[r.tipo]||'dollar')}</div>
+    const k=recData(r),rc=recebida(r),dias=diasAte(k);
+    const quando=rc?fmtDia(k)+(r.recebidaEm&&r.recebidaEm!==k?` · recebida ${fmtDia(r.recebidaEm)}`:'')
+      :dias<0?`<span class="tx-late">Atrasada · ${fmtDia(k)}</span>`
+      :dias===0?'<span class="tx-warn">Cai hoje</span>'
+      :`<span class="tx-soon">cai ${dias===1?'amanhã':'em '+dias+' dias'}</span> · ${fmtDia(k)}`;
+    const auto=r.origem==='auto-salario'?' · automático':r.origem==='rec-fixa'?' · todo mês':'';
+    return`<div class="tx-row${rc?' paid':' due'}">
+      <div class="hck${rc?' on':''}" onclick="toggleRecebida('${r.id}')" role="checkbox" aria-checked="${rc}" aria-label="Marcar ${esc(r.nome)} como recebida"></div>
       <div class="tx-info" onclick="openRecSheet('${r.id}')" style="cursor:pointer"><div class="tx-name">${esc(r.nome)}</div><div class="tx-cat">${CAT_LBL[r.tipo]||r.tipo}${r.tipo==='extra'&&+r.horas>0?' · '+fmtH(+r.horas):''} · ${quando}${auto}</div></div>
-      <div class="tx-val" style="color:${fut?'var(--t2)':'var(--g)'}">${fmtBRL(r.valor)}</div>
+      <div class="tx-val" style="color:${rc?'var(--g)':'var(--t2)'}">${fmtBRL(r.valor)}</div>
       <button class="tx-del" onclick="delReceita('${r.id}')" aria-label="Apagar receita">${ic('x')}</button>
     </div>`;
   };
   const recebidas=recebidasMes(m,a),futuras=aReceber();
   document.getElementById('f-rec-list').innerHTML=(recebidas.length||futuras.length)
-    ?recebidas.map(recRow).join('')+(futuras.length?secHTML('clock','A receber','+'+fmtShort(R.receber))+futuras.map(recRow).join(''):'')
+    ?recebidas.map(recRow).join('')+(futuras.length?secHTML('clock','A receber','+'+fmtShort(somaValor(futuras)))+futuras.map(recRow).join(''):'')
     :'<div class="empty"><div class="eico">'+ic('dollar')+'</div>Nenhuma receita</div>';
 
   // Gastos fixos do mês atual
   const hoje=today();
-  document.getElementById('f-fix-list').innerHTML=fixos.length?[...fixos].sort((x,y)=>isPaid(x,m,a)-isPaid(y,m,a)||(parseInt(x.dia)||1)-(parseInt(y.dia)||1)).map(f=>{
+  const fixosMes=fixos.filter(f=>fixoAtivo(f,m,a)||fixoPagoEm(f,m,a)),atraso=fixosAtrasados(m,a);
+  document.getElementById('f-fix-list').innerHTML=fixosMes.length?[...fixosMes].sort((x,y)=>isPaid(x,m,a)-isPaid(y,m,a)||(parseInt(x.dia)||1)-(parseInt(y.dia)||1)).map(f=>{
     const pe=fixoPagoEm(f,m,a),venc=fixoVenc(f,m,a),c=catInfo(catOf(f));
-    const st=pe?`Pago ${pe===venc&&f.pagos[mkey(m,a)]===true?'este mês':'em '+fmtDia(pe)}`:venc<hoje?`<span class="tx-late">Venceu dia ${parseInt(venc.slice(8))}</span>`:`Vence dia ${parseInt(venc.slice(8))} · ${diasPara(f.dia)}`;
+    const na=atraso.filter(x=>x.id===f.id).length;
+    const st=(pe?`Pago ${pe===venc&&f.pagos[mkey(m,a)]===true?'este mês':'em '+fmtDia(pe)}`:venc<hoje?`<span class="tx-late">Venceu dia ${parseInt(venc.slice(8))}</span>`:`Vence dia ${parseInt(venc.slice(8))} · ${diasPara(f.dia)}`)
+      +(na?` · <span class="tx-late">${na} ${na>1?'meses':'mês'} em atraso</span>`:'');
     return `<div class="tx-row${pe?' paid':''}">
       <div class="hck${pe?' on':''}" onclick="togglePaid('${f.id}')" role="checkbox" aria-checked="${!!pe}" aria-label="Marcar ${esc(f.nome)} como paga"></div>
       <div class="tx-info" onclick="openFixoSheet('${f.id}')" style="cursor:pointer"><div class="tx-name">${esc(f.nome)}</div><div class="tx-cat"><span style="color:${c.c}">${c.l}</span> · ${st}</div></div>
-      <div class="tx-val" style="color:var(--r)">${fmtBRL(f.valor)}</div>
-      <button class="tx-del" onclick="delFixo('${f.id}')" aria-label="Apagar gasto fixo">${ic('x')}</button>
+      <div class="tx-val" style="color:var(--r)">${fmtBRL(fixoValor(f,m,a))}</div>
+      <button class="tx-del" onclick="delFixo('${f.id}')" aria-label="Encerrar gasto fixo">${ic('x')}</button>
     </div>`}).join(''):'<div class="empty"><div class="eico">'+ic('clipboard')+'</div>Nenhum gasto fixo</div>';
 
   // Gastos variáveis: contas a pagar (qualquer data) e o que foi pago neste mês
@@ -5147,7 +5251,7 @@ function renderFinDia(){
   const sub=k===td?'Hoje':k===shiftKey(td,1)?'Amanhã':k<td?'Passado':'Futuro';
   document.getElementById('fdia-body').innerHTML=`
     <div class="fd-head"><div><div class="fd-sub">${WD[d.getDay()]} · ${sub}</div><div class="sheet-t" style="margin:0">${d.toLocaleDateString('pt-BR',{day:'numeric',month:'long',year:'numeric'})}</div></div></div>
-    ${proj&&proj.falta?`<div class="warn fd-risk">${ic('zap')}<span><b>Previsão de saldo insuficiente.</b> Somando o saldo agora com o que entra e sai até este dia, o saldo ficaria em <b>${brl(proj.saldo)}</b>. É uma estimativa: muda conforme você lança ou paga.</span></div>`:''}
+    ${proj&&proj.falta?`<div class="warn fd-risk">${ic('zap')}<span><b>Pode faltar ${fmtBRL(-proj.saldo)} neste dia.</b> Somando o saldo agora com o que entra e sai até aqui, ${proj.contas.length?'pagar '+proj.contas.map(x=>esc(x.nome)+' ('+fmtBRL(x.valor)+')').join(', ')+' deixaria':'o saldo ficaria'} o saldo em <b>${brlC(proj.saldo)}</b>, mesmo que uma receita depois cubra. É uma estimativa: muda conforme você lança, recebe ou paga.</span></div>`:''}
     <div class="fd-box">
       <div class="fd-row">
         <label class="fd-h"><span>Horas trabalhadas</span><input type="number" id="fd-horas" min="0" max="24" step="0.5" inputmode="decimal" value="${hd.padrao?'':hd.h}" placeholder="${hd.h}" onchange="setHorasDia(this.value)" aria-label="Horas trabalhadas neste dia"></label>
@@ -5160,7 +5264,7 @@ function renderFinDia(){
     ${atrasadas.length?secHTML('clock','Atrasadas','−'+fmtShort(somaValor(atrasadas)))+atrasadas.map(row).join(''):''}
     ${secHTML('clock','A pagar neste dia',pend.length?'−'+fmtShort(gf):'')}${pend.length?pend.map(row).join(''):'<div class="fd-empty">Nada vence neste dia.</div>'}
     ${secHTML('checkc','Pago neste dia',pagos.length?fmtShort(gp):'')}${pagos.length?pagos.map(row).join(''):'<div class="fd-empty">Nenhum pagamento neste dia.</div>'}
-    ${recs.length?secHTML('dollar','Receitas',fmtShort(somaValor(recs)))+recs.map(r=>`<div class="tx-row"><div class="tx-ico" style="background:color-mix(in srgb,var(--g) 12%,transparent);color:var(--g)">${ic(CAT_ICO[r.tipo]||'dollar')}</div><div class="tx-info"><div class="tx-name">${esc(r.nome)}</div><div class="tx-cat">${recData(r)>td?'A receber':'Recebido'}</div></div><div class="tx-val" style="color:var(--g)">${fmtBRL(r.valor)}</div></div>`).join(''):''}
+    ${recs.length?secHTML('dollar','Receitas',fmtShort(somaValor(recs)))+recs.map(r=>`<div class="tx-row"><div class="hck${recebida(r)?' on':''}" onclick="toggleRecebida('${r.id}')" role="checkbox" aria-checked="${recebida(r)}" aria-label="Marcar ${esc(r.nome)} como recebida"></div><div class="tx-info"><div class="tx-name">${esc(r.nome)}</div><div class="tx-cat">${recebida(r)?'Recebida':recData(r)<td?'<span class="tx-late">Atrasada</span>':'A receber'}</div></div><div class="tx-val" style="color:var(--g)">${fmtBRL(r.valor)}</div></div>`).join(''):''}
     <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap">
       <button class="btn bg" style="flex:1;min-width:140px" onclick="openVarSheet(null,'${k}',${k<=td})">${ic('plus')}<span>Gasto neste dia</span></button>
       <button class="btn bp" style="flex:1;min-width:140px" onclick="closeSh(null,'fdia-ol')">Fechar</button>
@@ -5412,14 +5516,29 @@ function contasLembrete(){
   const td=today(),am=shiftKey(td,1);
   return contasAbertas().filter(x=>x.venc<=am).map(x=>({...x,quando:x.venc<td?'atrasada':x.venc===td?'hoje':'amanhã'}));
 }
+// Primeiro dia (nos próximos 30) em que o saldo projetado fica negativo ao pagar uma conta, mesmo que uma receita depois cubra
+function riscoFalta(){
+  const p=projecao(shiftKey(today(),30)),k=Object.keys(p).sort().find(k=>p[k].falta);
+  return k?{k,...p[k]}:null;
+}
+function renderFalta(el,dash){
+  if(!el)return;
+  const r=finLocked()?null:riscoFalta();
+  if(!r){el.style.display='none';return}
+  el.style.display='';
+  el.onclick=dash?()=>go('fin'):()=>openFinDia(r.k);
+  const quando=r.k===today()?'hoje':fmtDia(r.k);
+  el.innerHTML=`${ic('zap')}<div class="lemb-t"><b>Pode faltar ${fmtBRL(-r.saldo)} ${r.k===today()?'hoje':'em '+quando}</b>${r.contas.map(x=>`<span class="lemb-i"><em class="late">${quando}</em> ${esc(x.nome)} · ${fmtBRL(x.valor)}</span>`).join('')}<span class="lemb-i">Com o que entra e sai até esse dia, o saldo ficaria em ${brlC(r.saldo)}.</span></div>${dash?ic('right'):''}`;
+}
 function renderLembretes(el,dash){
   if(!el)return;
-  const l=contasLembrete();
-  if(!l.length){el.style.display='none';return}
+  const l=contasLembrete(),ra=receitasAtrasadas();
+  if(!l.length&&!ra.length){el.style.display='none';return}
   el.style.display='';
-  if(finLocked()){el.innerHTML=`${ic('clock')}<div class="lemb-t"><b>${l.length} conta${l.length>1?'s':''} vencendo</b>Desbloqueie Finanças para ver.</div>`;el.onclick=()=>go('fin');return}
+  if(finLocked()){el.innerHTML=`${ic('clock')}<div class="lemb-t"><b>${l.length+ra.length} aviso${l.length+ra.length>1?'s':''} em Finanças</b>Desbloqueie Finanças para ver.</div>`;el.onclick=()=>go('fin');return}
   el.onclick=dash?()=>go('fin'):null;
-  el.innerHTML=`${ic('clock')}<div class="lemb-t"><b>Contas para pagar</b>${l.map(x=>`<span class="lemb-i"><em class="${x.quando==='atrasada'?'late':x.quando==='hoje'?'hoje':''}">${x.quando==='atrasada'?'Atrasada':'Vence '+x.quando}</em> ${esc(x.nome)} · ${fmtBRL(x.valor)}</span>`).join('')}</div>`+
+  const tit=l.length&&ra.length?'Contas e receitas':l.length?'Contas para pagar':'Receitas atrasadas';
+  el.innerHTML=`${ic('clock')}<div class="lemb-t"><b>${tit}</b>${l.map(x=>`<span class="lemb-i"><em class="${x.quando==='atrasada'?'late':x.quando==='hoje'?'hoje':''}">${x.quando==='atrasada'?'Atrasada':'Vence '+x.quando}</em> ${esc(x.nome)} · ${fmtBRL(x.valor)}</span>`).join('')}${ra.map(r=>`<span class="lemb-i"><em class="late">A receber, atrasada</em> ${esc(r.nome)} · ${fmtBRL(r.valor)} · era para ${fmtDia(recData(r))}</span>`).join('')}</div>`+
     (dash?'':`<button class="btn bg bs" onclick="lembreteTodas()">${ic('calendar')}<span>Exportar lembretes do mês</span></button>`);
 }
 function icsEsc(s){return String(s).replace(/[\\;,]/g,m=>'\\'+m).replace(/\n/g,'\\n')}
@@ -5474,12 +5593,27 @@ function renderFinChart(m){
       scales:{x:{grid:{display:false},ticks:{color:tok('--t2'),font:{size:9},maxTicksLimit:10}},y:{grid:{color:tok('--br2')},ticks:{color:tok('--t2'),font:{size:9},callback:v=>'R$'+v}}}}
   });
 }
-function vaSaldo(){const td=today();return vaMovs.filter(v=>(v.data||td)<=td).reduce((acc,v)=>acc+(v.tipo==='recarga'?parseFloat(v.valor||0):-parseFloat(v.valor||0)),0)}
+function vaSaldo(){return vaSaldoEm(today())}
+const vaSinal=v=>v.tipo==='recarga'?+v.valor||0:-(+v.valor||0);
+function vaSaldoEm(k){return centavos(vaMovs.filter(v=>(v.data||today())<=k).reduce((acc,v)=>acc+vaSinal(v),0))}
+// Menor saldo do vale em qualquer data (recargas primeiro no mesmo dia): não pode ficar abaixo de zero
+function vaMinimo(movs){
+  let s=0,min=0;
+  [...movs].sort((x,y)=>(x.data||'').localeCompare(y.data||'')||(x.tipo==='recarga'?-1:1)-(y.tipo==='recarga'?-1:1)).forEach(v=>{s=centavos(s+vaSinal(v));min=Math.min(min,s)});
+  return min;
+}
+// Recusa um movimento que deixaria o vale negativo e diz quanto há
+function vaPermite(novo){
+  if(vaMinimo([...vaMovs,novo])>=0)return true;
+  showToast(`Não cabe no vale: há ${fmtBRL(Math.max(0,vaSaldoEm(novo.data)))} em ${fmtDia(novo.data)}`,'x',3600);buzz([20,60,20]);
+  return false;
+}
 function vaMes(m=curMes(),a=curAno()){return vaMovs.filter(v=>{const d=new Date((v.data||today())+'T12:00:00');return d.getMonth()===m&&d.getFullYear()===a})}
 function renderVA(m=curMes(),a=curAno()){
   const el=document.getElementById('f-va-list');if(!el)return;
   const movs=vaMes(m,a).sort((x,y)=>(y.data||'').localeCompare(x.data||''));
   document.getElementById('va-saldo').textContent=fmtBRL(vaSaldo());
+  document.querySelectorAll('.va-disp').forEach(e=>{e.textContent='Disponível no vale hoje: '+fmtBRL(Math.max(0,vaSaldo()))});
   document.getElementById('va-gasto-mes').textContent=fmtBRL(movs.filter(v=>v.tipo==='gasto').reduce((acc,v)=>acc+parseFloat(v.valor||0),0));
   document.getElementById('va-conv-mes').textContent=fmtBRL(movs.filter(v=>v.tipo==='conversao').reduce((acc,v)=>acc+parseFloat(v.valor||0),0));
   el.innerHTML=movs.length?movs.map(v=>{
@@ -5498,7 +5632,22 @@ function renderVA(m=curMes(),a=curAno()){
 
 // ── Receitas: cadastro, edição e remoção ──
 // Receita Extra guarda "horas": o tempo de trabalho para ganhar aquele valor, somado às horas do mês dela.
-let editRecId=null;
+let editRecId=null,recRecebidaSel=true,recDupOk=null;
+function setRecStatus(v){
+  recRecebidaSel=v;
+  document.getElementById('rec-st-sim').classList.toggle('on',v);
+  document.getElementById('rec-st-nao').classList.toggle('on',!v);
+}
+// Marca ou desmarca como recebida: só muda a situação do lançamento, nunca cria outro
+function toggleRecebida(id){
+  const r=receitas.find(x=>x.id===id);if(!r)return;
+  r.recebida=!recebida(r);
+  if(r.recebida)r.recebidaEm=today();else delete r.recebidaEm;
+  buzz(r.recebida?12:6);ss('e2_receitas',receitas);finRefresh();
+  const n=String(r.nome||'Receita');
+  showToast((r.recebida?'Recebida: ':'De volta para a receber: ')+(n.length>22?n.slice(0,21)+'…':n),r.recebida?'checkc':'repeat');
+}
+const recTpl=r=>r&&r.fixaId&&(cfg.recFixas||[]).find(t=>t.id===r.fixaId);
 function openRecSheet(id){
   const r=id&&receitas.find(x=>x.id===id);editRecId=r?r.id:null;
   document.getElementById('rec-t').textContent=r?'Editar receita':'Nova receita';
@@ -5507,6 +5656,10 @@ function openRecSheet(id){
   document.getElementById('rec-tipo').value=r?(CAT_LBL[r.tipo]?r.tipo:'extra'):'extra';
   document.getElementById('rec-horas').value=r&&+r.horas>0?r.horas:'';
   document.getElementById('rec-data').value=r?recData(r):today();
+  setRecStatus(r?recebida(r):true);
+  const t=recTpl(r),fx=document.getElementById('rec-fixa');
+  fx.checked=!!(t&&!t.ate);fx.disabled=!!(r&&r.origem==='auto-salario'||r&&r.origem==='va');
+  recDupOk=null;
   document.getElementById('rec-err').textContent='';
   document.getElementById('rec-save').textContent=r?'Salvar':'Adicionar';
   const del=document.getElementById('rec-del');del.style.display=r?'':'none';del.innerHTML=ic('trash');
@@ -5537,9 +5690,32 @@ function saveReceita(){
     const antes=horasCalc(r.mes,r.ano,{semReceita:r.id,maisExtra:(r.mes===m&&r.ano===a)?horasNovas:0}).total;
     if(antes<=0){err.textContent=`Sem essas horas, ${MS[r.mes]} ficaria com ${fmtH(antes)}. Ajuste as folgas antes.`;return}
   }
-  const novo={nome,valor:val,tipo,mes:m,ano:a,data:k};
-  if(r){Object.assign(r,novo);if(horasNovas>0)r.horas=horasNovas;else delete r.horas}
-  else receitas.push({id:uid('r'),...novo,...(horasNovas>0?{horas:horasNovas}:{})});
+  // evita lançar duas vezes: avisa se já existe uma receita com o mesmo nome no mesmo mês (salário automático, fixa ou outra)
+  const norm=s=>String(s).normalize('NFD').replace(/[̀-ͯ]/g,'').trim().toLowerCase();
+  const dup=receitas.find(x=>x!==r&&x.mes===m&&x.ano===a&&norm(x.nome)===norm(nome));
+  const sig=nome+'|'+m+'|'+a;
+  if(dup&&recDupOk!==sig){recDupOk=sig;err.textContent=`Já existe "${dup.nome}" em ${MS[m]} (${fmtBRL(dup.valor)}). Toque de novo para lançar mesmo assim.`;return}
+  const fixa=document.getElementById('rec-fixa').checked&&!document.getElementById('rec-fixa').disabled;
+  const novo={nome,valor:val,tipo,mes:m,ano:a,data:k,recebida:recRecebidaSel};
+  if(r){
+    Object.assign(r,novo);if(horasNovas>0)r.horas=horasNovas;else delete r.horas;
+    if(r.recebida&&!r.recebidaEm)r.recebidaEm=today();if(!r.recebida)delete r.recebidaEm;
+  }
+  let t=recTpl(r);
+  if(fixa){
+    // cadastro da receita fixa: o valor, o nome e o dia novos valem deste mês em diante
+    if(!t){t={id:uid('rf'),desde:mkey(m,a)};cfg.recFixas=[...(cfg.recFixas||[]),t]}
+    Object.assign(t,{nome,valor:val,tipo,dia:d.getDate()});delete t.ate;
+    if(horasNovas>0)t.horas=horasNovas;else delete t.horas;
+    if(!r)receitas.push({id:'rf'+t.id+mkey(m,a),...novo,origem:'rec-fixa',fixaId:t.id,...(horasNovas>0?{horas:horasNovas}:{}),...(recRecebidaSel?{recebidaEm:today()}:{})});
+    else{r.origem='rec-fixa';r.fixaId=t.id}
+    ss('e2_cfg',cfg);
+  }else{
+    // deixou de ser fixa: para de lançar a partir do mês seguinte
+    if(t&&!t.ate){t.ate=mkey(m,a);ss('e2_cfg',cfg)}
+    if(!r)receitas.push({id:uid('r'),...novo,...(horasNovas>0?{horas:horasNovas}:{}),...(recRecebidaSel?{recebidaEm:today()}:{})});
+  }
+  ensureMonthly();
   save('e2_receitas',receitas);closeSh(null,'rec-ol');finRefresh();
 }
 function delReceita(id){
@@ -5548,9 +5724,11 @@ function delReceita(id){
     const depois=horasCalc(x.mes,x.ano,{semReceita:x.id}).total;
     if(depois<=0){showToast(`Sem essas horas, ${MS[x.mes]} ficaria sem horas. Ajuste as folgas antes.`,'x');return}
   }
-  const u=snap(['receitas']);
+  const u=snap(['receitas','cfg']);
+  // receita fixa: apaga só este mês e não lança de novo
+  const t=recTpl(x);if(t){t.pular=[...(t.pular||[]),mkey(x.mes,x.ano)];ss('e2_cfg',cfg)}
   receitas=receitas.filter(r=>r.id!==id);ss('e2_receitas',receitas);finRefresh();
-  offerUndo('Receita "'+x.nome+'" apagada',u);
+  offerUndo('Receita "'+x.nome+'" apagada'+(t?' (só neste mês)':''),u);
 }
 function delReceitaEd(){const id=editRecId;closeSh(null,'rec-ol');if(id)delReceita(id)}
 
@@ -5562,6 +5740,7 @@ function openFixoSheet(id){
   document.getElementById('fix-nome').value=f?f.nome:'';
   document.getElementById('fix-val').value=f?f.valor:'';
   document.getElementById('fix-dia').value=f?(parseInt(f.dia)||''):'';
+  document.getElementById('fix-desde').value=f?(f.desde||mkey()):mkey();
   document.getElementById('fix-err').textContent='';
   const del=document.getElementById('fix-del');del.style.display=f?'':'none';del.innerHTML=ic('trash');
   selectedFixCat=f?catOf(f):'casa';renderCatChips();
@@ -5575,19 +5754,36 @@ function saveFixo(){
   if(!nome){err.textContent='Escreva a descrição.';return}
   if(!(val>0)||val>1e7){err.textContent='Informe um valor maior que zero.';return}
   if(!(dia>=1&&dia<=31)){err.textContent='O dia do vencimento vai de 1 a 31.';return}
+  const desde=document.getElementById('fix-desde').value;
+  if(!/^[0-9]{4}-[0-9]{2}$/.test(desde)||desde<'2000-01'||desde>mkey(curMes(),curAno()+1)){err.textContent='Escolha o mês da primeira cobrança.';return}
   const f=editFixId&&fixos.find(x=>x.id===editFixId),orcAntes=orcEstado(selectedFixCat,curMes(),curAno());
-  if(f)Object.assign(f,{nome,valor:val,dia,cat:selectedFixCat});
-  else fixos.push({id:uid('f'),nome,valor:val,dia,cat:selectedFixCat});
+  if(f){
+    // valor novo vale daqui para a frente: os meses já pagos guardam o valor antigo
+    if(+f.valor!==val)Object.keys(f.pagos||{}).forEach(k=>{if(f.pagos[k]&&(f.valPago||{})[k]==null)(f.valPago=f.valPago||{})[k]=+f.valor});
+    Object.assign(f,{nome,valor:val,dia,cat:selectedFixCat,desde});
+  }
+  else fixos.push({id:uid('f'),nome,valor:val,dia,cat:selectedFixCat,desde});
   save('e2_fixos',fixos);closeSh(null,'fix-ol');finRefresh();
   avisoOrc(selectedFixCat,curMes(),curAno(),orcAntes); // o fixo pesa todo mês: confere o mês atual
 }
-function delFixo(id){const u=snap(['fixos']),x=fixos.find(f=>f.id===id);fixos=fixos.filter(f=>f.id!==id);ss('e2_fixos',fixos);finRefresh();offerUndo('Gasto "'+(x?x.nome:'')+'" apagado',u)}
+// Sem pagamentos, apaga. Com pagamentos, encerra: para de cobrar daqui para a frente e o histórico (e o saldo) fica igual.
+function delFixo(id){
+  const u=snap(['fixos']),x=fixos.find(f=>f.id===id);if(!x)return;
+  const pagos=Object.keys(x.pagos||{}).filter(k=>x.pagos[k]);
+  if(!pagos.length){fixos=fixos.filter(f=>f.id!==id);ss('e2_fixos',fixos);finRefresh();offerUndo('Gasto "'+x.nome+'" apagado',u);return}
+  const m=curMes(),a=curAno(),ant=m?mkey(m-1,a):mkey(11,a-1);
+  x.ate=fixoPagoEm(x,m,a)?mkey(m,a):ant;
+  if(x.ate<(x.desde||x.ate))x.desde=x.ate;
+  ss('e2_fixos',fixos);finRefresh();offerUndo('Gasto "'+x.nome+'" encerrado. Os pagamentos antigos continuam no saldo.',u);
+}
 function delFixoEd(){const id=editFixId;closeSh(null,'fix-ol');if(id)delFixo(id)}
 // marca ou desmarca o pagamento do fixo no mês (padrão: mês atual) guardando a data do pagamento
 function togglePaid(id,m=curMes(),a=curAno()){
   const f=fixos.find(x=>x.id===id);if(!f)return;
   const k=mkey(m,a);f.pagos=f.pagos||{};
-  if(f.pagos[k])delete f.pagos[k];else f.pagos[k]=today();
+  // o pagamento guarda a data e o valor daquele mês
+  if(f.pagos[k]){delete f.pagos[k];if(f.valPago)delete f.valPago[k]}
+  else{f.pagos[k]=today();(f.valPago=f.valPago||{})[k]=+f.valor||0}
   buzz(f.pagos[k]?12:6);ss('e2_fixos',fixos);
   finRefresh();avisoPago(f.nome,!!f.pagos[k]);
 }
@@ -5665,29 +5861,34 @@ function renderCatChips(){
 }
 function addVAMov(tipo){
   const p=tipo==='recarga'?'va-rec':'va-gasto';
-  const val=parseFloat(document.getElementById(p+'-val').value);
-  if(!val){showToast('Informe o valor','x');return}
+  const val=parseFloat(String(document.getElementById(p+'-val').value).replace(',','.'));
+  if(!(val>0)||val>1e7){showToast('Informe um valor maior que zero','x');return}
   const nome=document.getElementById(p+'-nome').value.trim()||(tipo==='recarga'?'Recarga VA':'Gasto VA');
-  vaMovs.push({id:Date.now().toString(36),tipo,nome,valor:val,data:document.getElementById(p+'-data').value||today()});
+  const novo={id:Date.now().toString(36),tipo,nome,valor:Math.round(val*100)/100,data:document.getElementById(p+'-data').value||today()};
+  if(tipo!=='recarga'&&!vaPermite(novo))return;
+  vaMovs.push(novo);
   save('e2_vaMovs',vaMovs);
   document.getElementById(p+'-nome').value='';document.getElementById(p+'-val').value='';
   closeSh(null,tipo==='recarga'?'va-rec-ol':'va-gasto-ol');renderFin();
 }
 function convertVAReceita(){
-  const val=parseFloat(document.getElementById('va-conv-val').value);
-  if(!val){showToast('Informe o valor','x');return}
+  const val=Math.round(parseFloat(String(document.getElementById('va-conv-val').value).replace(',','.'))*100)/100;
+  if(!(val>0)||val>1e7){showToast('Informe um valor maior que zero','x');return}
   const nome=document.getElementById('va-conv-nome').value.trim()||'Conversão VA';
   const dataStr=document.getElementById('va-conv-data').value||today();
   const id=Date.now().toString(36),receitaId=id+'r';
-  const d=new Date(dataStr+'T12:00:00');
-  vaMovs.push({id,tipo:'conversao',nome,valor:val,data:dataStr,receitaId});
-  receitas.push({id:receitaId,nome:'VA recebido - '+nome,valor:val,tipo:'extra',mes:d.getMonth(),ano:d.getFullYear(),data:dataStr,origem:'va'});
+  const d=new Date(dataStr+'T12:00:00'),mov={id,tipo:'conversao',nome,valor:val,data:dataStr,receitaId};
+  if(!vaPermite(mov))return;
+  vaMovs.push(mov);
+  // o dinheiro já veio para você: entra como recebida
+  receitas.push({id:receitaId,nome:'VA recebido - '+nome,valor:val,tipo:'extra',mes:d.getMonth(),ano:d.getFullYear(),data:dataStr,origem:'va',recebida:true,recebidaEm:today()});
   save('e2_vaMovs',vaMovs);ss('e2_receitas',receitas);
   document.getElementById('va-conv-nome').value='';document.getElementById('va-conv-val').value='';
   closeSh(null,'va-conv-ol');renderFin();
 }
 function delVAMov(id){
   const u=snap(['vaMovs','receitas']),mov=vaMovs.find(v=>v.id===id);
+  if(mov&&mov.tipo==='recarga'&&vaMinimo(vaMovs.filter(v=>v.id!==id))<0){showToast('Apagar essa recarga deixaria o vale negativo','x',3200);return}
   vaMovs=vaMovs.filter(v=>v.id!==id);
   if(mov&&mov.receitaId)receitas=receitas.filter(r=>r.id!==mov.receitaId);
   ss('e2_vaMovs',vaMovs);ss('e2_receitas',receitas);renderFin();
@@ -5933,6 +6134,7 @@ function renderPerfil(){
   fln.innerHTML=ic('lock','ic-in')+' Salário e vale ficam escondidos enquanto Finanças estiver bloqueada.';
   document.getElementById('cfg-nome').value=cfg.nome||'';
   document.getElementById('cfg-meta-peso').value=cfg.metaPeso||'';
+  document.getElementById('cfg-saldo-ini').value=cfg.saldoInicial||'';
   document.getElementById('cfg-salario').value=cfg.salario||'';
   document.getElementById('cfg-dia-pag').value=cfg.diaPag||'';
   document.getElementById('cfg-va').value=cfg.va!=null?cfg.va:'';
@@ -5941,6 +6143,8 @@ function renderPerfil(){
 function saveCfg(){
   cfg.nome=document.getElementById('cfg-nome').value.trim()||cfg.nome||'você';
   cfg.metaPeso=parseFloat(document.getElementById('cfg-meta-peso').value)||cfg.metaPeso||0;
+  const si=parseFloat(String(document.getElementById('cfg-saldo-ini').value).replace(',','.'));
+  if(isFinite(si)&&si!==0&&Math.abs(si)<=1e8)cfg.saldoInicial=Math.round(si*100)/100;else delete cfg.saldoInicial;
   cfg.salario=parseFloat(document.getElementById('cfg-salario').value)||0;
   cfg.diaPag=Math.min(31,Math.max(1,parseInt(document.getElementById('cfg-dia-pag').value)||1));
   cfg.va=parseFloat(document.getElementById('cfg-va').value)||0;
@@ -6051,6 +6255,7 @@ function importData(e){
         Object.entries(d.tarefasArquivo).forEach(([s,ts])=>{if(/^[0-9]{4}-[12]$/.test(s)&&ts&&typeof ts==='object')g[s]=ts});
         if(Object.keys(g).length)arqGravar(PID,g).catch(e=>console.warn('arquivo',e));
       }
+      migrarFin();ensureMonthly();
       arquivarTarefas();
       e.target.value='';
       if(needsOnb())openOnb();else{document.getElementById('onb').classList.remove('on');go(curPage)}
