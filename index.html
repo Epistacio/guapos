@@ -12,10 +12,10 @@
 // Tema antes de desenhar (evita piscar): Automático segue o iPhone; os outros ficam fixos neste aparelho
 (function(){
   var t='auto';try{t=localStorage.getItem('g_tema')||'auto'}catch(e){}
-  if(['light','dark','neon','neon-rosa','vidro','vidro-escuro'].indexOf(t)<0)t='auto';
+  if(['light','dark','neon','neon-rosa','vidro','vidro-escuro','liquid','liquid-escuro'].indexOf(t)<0)t='auto';
   if(t!=='auto')document.documentElement.setAttribute('data-theme',t);
-  var neon=t.indexOf('neon')===0,dark=neon||t==='dark'||t==='vidro-escuro'||(t==='auto'&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches);
-  document.getElementById('meta-tc').setAttribute('content',neon?'#05070B':t==='vidro-escuro'?'#000000':dark?'#131210':t==='vidro'?'#F2F2F7':'#F4F0E8');
+  var neon=t.indexOf('neon')===0,dark=neon||t==='dark'||t==='vidro-escuro'||t==='liquid-escuro'||(t==='auto'&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches);
+  document.getElementById('meta-tc').setAttribute('content',neon?'#05070B':t==='vidro-escuro'?'#000000':t==='liquid-escuro'?'#1B1D21':dark?'#131210':t==='vidro'?'#F2F2F7':t==='liquid'?'#D5D5DE':'#F4F0E8');
   document.getElementById('meta-sb').setAttribute('content',dark?'black-translucent':'default');
 })();
 </script>
@@ -1689,7 +1689,7 @@ html[data-theme^=neon] .pk-av.sm{width:30px;height:30px}
    Superfícies planas e cores sólidas, sem brilho nem degradê. O vidro (translúcido e com desfoque) fica só no que
    flutua sobre o conteúdo: menu, janelas e avisos. Quando a cor vira texto, usa a variante de alto contraste da
    própria Apple, para passar de 4,5:1. Tipografia: SF Pro (no iPhone, a fonte do sistema); fora da Apple, Inter. */
-:root[data-theme^=vidro]{
+:root:is([data-theme^=vidro],[data-theme^=liquid]){
   --ff:-apple-system,BlinkMacSystemFont,'SF Pro Text','SF Pro Display','Inter','Helvetica Neue',Arial,sans-serif;
   --fd:-apple-system,BlinkMacSystemFont,'SF Pro Display','SF Pro Text','Inter','Helvetica Neue',Arial,sans-serif;
   --rad:26px;--rad-s:14px;
@@ -1731,61 +1731,61 @@ html[data-theme^=neon] .pk-av.sm{width:30px;height:30px}
   --sheet:rgba(28,28,30,.92);
 }
 /* cor de preenchimento da área aberta (e de cada item do menu) */
-:root[data-theme^=vidro],html[data-theme^=vidro] body{--fill:var(--f-hab);--on-fill:var(--o-hab)}
-html[data-theme^=vidro] body[data-pg=tasks],html[data-theme^=vidro] [data-nav=tasks]{--fill:var(--f-task);--on-fill:var(--o-task)}
-html[data-theme^=vidro] body[data-pg=fin],html[data-theme^=vidro] [data-nav=fin]{--fill:var(--f-fin);--on-fill:var(--o-fin)}
-html[data-theme^=vidro] body[data-pg=saude],html[data-theme^=vidro] [data-nav=saude]{--fill:var(--f-saude);--on-fill:var(--o-saude)}
-html[data-theme^=vidro] body[data-pg=perfil],html[data-theme^=vidro] [data-nav=perfil]{--fill:var(--f-perfil);--on-fill:var(--o-perfil)}
-html[data-theme^=vidro] [data-nav=habits],html[data-theme^=vidro] [data-nav=dash]{--fill:var(--f-hab);--on-fill:var(--o-hab)}
+:root:is([data-theme^=vidro],[data-theme^=liquid]),html:is([data-theme^=vidro],[data-theme^=liquid]) body{--fill:var(--f-hab);--on-fill:var(--o-hab)}
+html:is([data-theme^=vidro],[data-theme^=liquid]) body[data-pg=tasks],html:is([data-theme^=vidro],[data-theme^=liquid]) [data-nav=tasks]{--fill:var(--f-task);--on-fill:var(--o-task)}
+html:is([data-theme^=vidro],[data-theme^=liquid]) body[data-pg=fin],html:is([data-theme^=vidro],[data-theme^=liquid]) [data-nav=fin]{--fill:var(--f-fin);--on-fill:var(--o-fin)}
+html:is([data-theme^=vidro],[data-theme^=liquid]) body[data-pg=saude],html:is([data-theme^=vidro],[data-theme^=liquid]) [data-nav=saude]{--fill:var(--f-saude);--on-fill:var(--o-saude)}
+html:is([data-theme^=vidro],[data-theme^=liquid]) body[data-pg=perfil],html:is([data-theme^=vidro],[data-theme^=liquid]) [data-nav=perfil]{--fill:var(--f-perfil);--on-fill:var(--o-perfil)}
+html:is([data-theme^=vidro],[data-theme^=liquid]) [data-nav=habits],html:is([data-theme^=vidro],[data-theme^=liquid]) [data-nav=dash]{--fill:var(--f-hab);--on-fill:var(--o-hab)}
 
 /* tipografia: SF Pro, regular no texto, semibold nos valores, negrito nos títulos grandes */
-html[data-theme^=vidro] body{font-weight:400;letter-spacing:-.01em;background:var(--bg)}
-html[data-theme^=vidro] body::before{display:none}
-html[data-theme^=vidro] .ph h1,html[data-theme^=vidro] .greet,html[data-theme^=vidro] .onb h2,html[data-theme^=vidro] .gate h2,html[data-theme^=vidro] .gate-brand{font-weight:700;letter-spacing:-.025em}
-html[data-theme^=vidro] .sheet-t{font-weight:700;letter-spacing:-.02em}
-html[data-theme^=vidro] .kpi-val,html[data-theme^=vidro] .fin-col-val,html[data-theme^=vidro] .prev-c b,html[data-theme^=vidro] .radar-pill b,html[data-theme^=vidro] .stat-card-val,html[data-theme^=vidro] .wday b{font-weight:600;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+html:is([data-theme^=vidro],[data-theme^=liquid]) body{font-weight:400;letter-spacing:-.01em;background:var(--bg)}
+html:is([data-theme^=vidro],[data-theme^=liquid]) body::before{display:none}
+html:is([data-theme^=vidro],[data-theme^=liquid]) .ph h1,html:is([data-theme^=vidro],[data-theme^=liquid]) .greet,html:is([data-theme^=vidro],[data-theme^=liquid]) .onb h2,html:is([data-theme^=vidro],[data-theme^=liquid]) .gate h2,html:is([data-theme^=vidro],[data-theme^=liquid]) .gate-brand{font-weight:700;letter-spacing:-.025em}
+html:is([data-theme^=vidro],[data-theme^=liquid]) .sheet-t{font-weight:700;letter-spacing:-.02em}
+html:is([data-theme^=vidro],[data-theme^=liquid]) .kpi-val,html:is([data-theme^=vidro],[data-theme^=liquid]) .fin-col-val,html:is([data-theme^=vidro],[data-theme^=liquid]) .prev-c b,html:is([data-theme^=vidro],[data-theme^=liquid]) .radar-pill b,html:is([data-theme^=vidro],[data-theme^=liquid]) .stat-card-val,html:is([data-theme^=vidro],[data-theme^=liquid]) .wday b{font-weight:600;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
 
 /* cartões: planos, sem borda nem sombra, cantos de 26px */
-html[data-theme^=vidro] .card,html[data-theme^=vidro] .fin-summary{border-color:transparent;box-shadow:none}
-html[data-theme^=vidro] .tk{border-color:var(--br2);box-shadow:none}
-html[data-theme^=vidro] .tk.done{background:transparent}
+html:is([data-theme^=vidro],[data-theme^=liquid]) .card,html:is([data-theme^=vidro],[data-theme^=liquid]) .fin-summary{border-color:transparent;box-shadow:none}
+html:is([data-theme^=vidro],[data-theme^=liquid]) .tk{border-color:var(--br2);box-shadow:none}
+html:is([data-theme^=vidro],[data-theme^=liquid]) .tk.done{background:transparent}
 
 /* vidro de verdade só no que flutua: menu, barra lateral, janelas e avisos */
-html[data-theme^=vidro] .bnav{left:16px;right:16px;bottom:calc(8px + env(safe-area-inset-bottom));padding:5px;border-radius:32px;
+html:is([data-theme^=vidro],[data-theme^=liquid]) .bnav{left:16px;right:16px;bottom:calc(8px + env(safe-area-inset-bottom));padding:5px;border-radius:32px;
   background:var(--glass);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);
   border:.5px solid var(--glass-br);box-shadow:inset 0 .5px 0 var(--glass-hi),var(--sh-float)}
-html[data-theme^=vidro] .bni{color:var(--t1)}
-html[data-theme^=vidro] .bni.on{color:var(--acc)}
-html[data-theme^=vidro] .bni.on .ic{background:var(--sel);color:var(--acc)}
-html[data-theme^=vidro] .side{background:var(--glass);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border-right:.5px solid var(--glass-br)}
-html[data-theme^=vidro] .sheet{background:var(--sheet);backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);border-radius:34px 34px 0 0;box-shadow:inset 0 .5px 0 var(--glass-hi),var(--sh-lg)}
-html[data-theme^=vidro] .toast{background:var(--glass);color:var(--t1);border:.5px solid var(--glass-br);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);box-shadow:var(--sh-float)}
+html:is([data-theme^=vidro],[data-theme^=liquid]) .bni{color:var(--t1)}
+html:is([data-theme^=vidro],[data-theme^=liquid]) .bni.on{color:var(--acc)}
+html:is([data-theme^=vidro],[data-theme^=liquid]) .bni.on .ic{background:var(--sel);color:var(--acc)}
+html:is([data-theme^=vidro],[data-theme^=liquid]) .side{background:var(--glass);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border-right:.5px solid var(--glass-br)}
+html:is([data-theme^=vidro],[data-theme^=liquid]) .sheet{background:var(--sheet);backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);border-radius:34px 34px 0 0;box-shadow:inset 0 .5px 0 var(--glass-hi),var(--sh-lg)}
+html:is([data-theme^=vidro],[data-theme^=liquid]) .toast{background:var(--glass);color:var(--t1);border:.5px solid var(--glass-br);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);box-shadow:var(--sh-float)}
 
 /* botões: cápsulas de cor sólida, como na referência */
-html[data-theme^=vidro] .btn{border-radius:999px;font-weight:600}
-html[data-theme^=vidro] .bp{background:var(--fill);color:var(--on-fill);box-shadow:none}
-html[data-theme^=vidro] .bg{background:var(--s2);color:var(--t1);border-color:transparent;box-shadow:none}
-html[data-theme^=vidro] .ibtn{border-radius:50%;background:var(--s2);border-color:transparent;box-shadow:none}
-html[data-theme^=vidro] .ibtn.on{background:var(--acc-soft);color:var(--acc)}
-html[data-theme^=vidro] .chip:not(.on){background:var(--s2);border-color:transparent}
+html:is([data-theme^=vidro],[data-theme^=liquid]) .btn{border-radius:999px;font-weight:600}
+html:is([data-theme^=vidro],[data-theme^=liquid]) .bp{background:var(--fill);color:var(--on-fill);box-shadow:none}
+html:is([data-theme^=vidro],[data-theme^=liquid]) .bg{background:var(--s2);color:var(--t1);border-color:transparent;box-shadow:none}
+html:is([data-theme^=vidro],[data-theme^=liquid]) .ibtn{border-radius:50%;background:var(--s2);border-color:transparent;box-shadow:none}
+html:is([data-theme^=vidro],[data-theme^=liquid]) .ibtn.on{background:var(--acc-soft);color:var(--acc)}
+html:is([data-theme^=vidro],[data-theme^=liquid]) .chip:not(.on){background:var(--s2);border-color:transparent}
 /* controle segmentado: trilho em cápsula e item escolhido em cápsula branca (cinza no escuro) */
-html[data-theme^=vidro] .seg{border-radius:999px;background:var(--s2);padding:2px}
-html[data-theme^=vidro] .seg-i{border-radius:999px}
+html:is([data-theme^=vidro],[data-theme^=liquid]) .seg{border-radius:999px;background:var(--s2);padding:2px}
+html:is([data-theme^=vidro],[data-theme^=liquid]) .seg-i{border-radius:999px}
 html[data-theme=vidro] .seg-i.on{background:#FFFFFF;box-shadow:0 3px 8px rgba(0,0,0,.12),0 .5px 1px rgba(0,0,0,.08)}
 html[data-theme=vidro-escuro] .seg-i.on{background:#636366;box-shadow:none}
 
 /* marcação redonda, como nos Lembretes: contorno cinza e, marcada, a cor sólida da área */
-html[data-theme^=vidro] .hck,html[data-theme^=vidro] .tk-sub .hck{border-radius:50%;border-color:var(--hck-br);background:transparent}
-html[data-theme^=vidro] .hck.on{background:var(--fill);border-color:var(--fill)}
-html[data-theme^=vidro] .hck.on::after{border-color:var(--on-fill)}
-html[data-theme^=vidro] .wday.on{background:var(--fill)}
-html[data-theme^=vidro] .wday.on b,html[data-theme^=vidro] .wday.on small{color:var(--on-fill)}
-html[data-theme^=vidro] .wday.on i.pend,html[data-theme^=vidro] .wday.on i.ok{background:var(--on-fill)}
+html:is([data-theme^=vidro],[data-theme^=liquid]) .hck,html:is([data-theme^=vidro],[data-theme^=liquid]) .tk-sub .hck{border-radius:50%;border-color:var(--hck-br);background:transparent}
+html:is([data-theme^=vidro],[data-theme^=liquid]) .hck.on{background:var(--fill);border-color:var(--fill)}
+html:is([data-theme^=vidro],[data-theme^=liquid]) .hck.on::after{border-color:var(--on-fill)}
+html:is([data-theme^=vidro],[data-theme^=liquid]) .wday.on{background:var(--fill)}
+html:is([data-theme^=vidro],[data-theme^=liquid]) .wday.on b,html:is([data-theme^=vidro],[data-theme^=liquid]) .wday.on small{color:var(--on-fill)}
+html:is([data-theme^=vidro],[data-theme^=liquid]) .wday.on i.pend,html:is([data-theme^=vidro],[data-theme^=liquid]) .wday.on i.ok{background:var(--on-fill)}
 
 /* barras: trilho fino e preenchimento sólido, como o controle deslizante da referência */
-html[data-theme^=vidro] .pb{height:6px;background:var(--s3);box-shadow:none}
-html[data-theme^=vidro] .pbf,html[data-theme^=vidro] .tk-mini span{background:var(--fill)}
-html[data-theme^=vidro] .prev-c.tot{background:var(--acc-soft);box-shadow:none}
+html:is([data-theme^=vidro],[data-theme^=liquid]) .pb{height:6px;background:var(--s3);box-shadow:none}
+html:is([data-theme^=vidro],[data-theme^=liquid]) .pbf,html:is([data-theme^=vidro],[data-theme^=liquid]) .tk-mini span{background:var(--fill)}
+html:is([data-theme^=vidro],[data-theme^=liquid]) .prev-c.tot{background:var(--acc-soft);box-shadow:none}
 
 /* prévias no seletor de tema */
 .tp-prev.vidro b{background:#3C86FC}
@@ -1795,9 +1795,108 @@ html[data-theme^=vidro] .prev-c.tot{background:var(--acc-soft);box-shadow:none}
 @media(prefers-reduced-transparency:reduce){
   :root[data-theme=vidro]{--glass:#F9F9FB;--sheet:#F2F2F7}
   :root[data-theme=vidro-escuro]{--glass:#1E1E20;--sheet:#1C1C1E}
-  html[data-theme^=vidro] .bnav,html[data-theme^=vidro] .side,html[data-theme^=vidro] .sheet,html[data-theme^=vidro] .toast{backdrop-filter:none;-webkit-backdrop-filter:none}
+  html:is([data-theme^=vidro],[data-theme^=liquid]) .bnav,html:is([data-theme^=vidro],[data-theme^=liquid]) .side,html:is([data-theme^=vidro],[data-theme^=liquid]) .sheet,html:is([data-theme^=vidro],[data-theme^=liquid]) .toast{backdrop-filter:none;-webkit-backdrop-filter:none}
+}
+
+/* ════ Temas Liquid Glass: claro e escuro ════
+   Usam a mesma estrutura dos Minimalistas (tipografia SF Pro / Inter, menu em cápsula, controles redondos),
+   mas todo o conteúdo é vidro: translúcido, com desfoque, aro de luz de 1px e sombra suave.
+   Sem brilho em degradê nem chanfro: o efeito vem só da transparência real.
+   Cores medidas nas referências:
+   - claro (1ª imagem): fundo #D5D5DE, trilho #C6C9D1, texto #131519, verde #5EB35C, azul #4A7CD4,
+     arco-íris #449BD2 → #4E469F → #C73A99 → #E1416C → #DE554B → #E3AF4A → #E5E951 → #9CDC5B, laranja #E1654B;
+   - escuro (2ª imagem): fundo #2A2C33 → #13171B, controles #2B2C30, vidro #3D4047, azul #4266D3,
+     vermelho #D32F4F, verde #4DCA68, rosa #E0328A, laranja #E78B3D, amarelo #EDEA4E.
+   Botão principal: o azul #4266D3 do "Continue" (texto branco, 5,2:1). Textos em cor: o mesmo tom ajustado até 4,5:1.
+   Sem desfoque no navegador, ou com menos transparência pedida no sistema, o vidro vira superfície sólida. */
+:root[data-theme=liquid]{
+  color-scheme:light;
+  --bg:#D5D5DE;--s1:rgba(255,255,255,.5);--s2:rgba(198,201,209,.5);--s3:#C6C9D1;--field:rgba(255,255,255,.72);
+  --t1:#131519;--t2:#464A53;--t3:#52565F;
+  --br:rgba(19,21,25,.14);--br2:rgba(19,21,25,.08);
+  --c-hab:#2A6328;--c-task:#2A54A3;--c-fin:#9A3A22;--c-saude:#A8262E;--c-perfil:#6E2F84;
+  --g:#2A6328;--g2:#2A6328;--b:#2A54A3;--p:#6E2F84;--y:#7A5200;--r:#A8262E;--c:#22597A;--o:#9A3A22;
+  --k-alimentacao:#A8262E;--k-transporte:#2A54A3;--k-lazer:#6E2F84;--k-saude:#22597A;--k-estudos:#7A5200;--k-casa:#9A3A22;--k-outros:#52565F;
+  --f-hab:#5EB35C;--f-task:#4266D3;--f-fin:#E1654B;--f-saude:#D83C87;--f-perfil:#813A9A;
+  --o-hab:#131519;--o-task:#FFFFFF;--o-fin:#131519;--o-saude:#FFFFFF;--o-perfil:#FFFFFF;
+  --on-acc:#FFFFFF;
+  --hm0:#C6C9D1;--scrim:rgba(19,21,25,.22);
+  --glass:rgba(255,255,255,.62);--glass-br:rgba(255,255,255,.85);--glass-hi:rgba(255,255,255,.9);
+  --sel:rgba(255,255,255,.75);--hck-br:#6B6F78;
+  --lg-solido:#E9E9EE;--lg-blur:20px;
+  --sh:0 12px 32px rgba(19,21,25,.12),0 2px 6px rgba(19,21,25,.06);
+  --sh-lg:0 30px 70px -20px rgba(19,21,25,.35);--sh-float:0 14px 36px rgba(19,21,25,.16);
+  --sheet:rgba(233,233,238,.86);
+}
+:root[data-theme=liquid-escuro]{
+  color-scheme:dark;
+  --bg:#1B1D21;--s1:rgba(61,64,71,.55);--s2:rgba(43,44,48,.72);--s3:#3D4047;--field:rgba(38,39,43,.88);
+  --t1:#FFFFFF;--t2:#B9BCC3;--t3:#A3A7AF;
+  --br:rgba(255,255,255,.14);--br2:rgba(255,255,255,.08);
+  --c-hab:#4DCA67;--c-task:#8EA6F0;--c-fin:#E78B3D;--c-saude:#FF7AB8;--c-perfil:#F27CCB;
+  --g:#4DCA67;--g2:#4DCA67;--b:#8EA6F0;--p:#F27CCB;--y:#EDEA4E;--r:#FF7A90;--c:#6FD3E8;--o:#E78B3D;
+  --k-alimentacao:#FF7A90;--k-transporte:#8EA6F0;--k-lazer:#F27CCB;--k-saude:#6FD3E8;--k-estudos:#EDEA4E;--k-casa:#E78B3D;--k-outros:#A3A7AF;
+  --f-hab:#4DCA68;--f-task:#4266D3;--f-fin:#E78B3D;--f-saude:#D32F4F;--f-perfil:#E0328A;
+  --o-hab:#131519;--o-task:#FFFFFF;--o-fin:#131519;--o-saude:#FFFFFF;--o-perfil:#FFFFFF;
+  --on-acc:#131519;
+  --hm0:#2B2C30;--scrim:rgba(0,0,0,.5);
+  --glass:rgba(48,50,56,.7);--glass-br:rgba(255,255,255,.12);--glass-hi:rgba(255,255,255,.14);
+  --sel:#E0328A;--hck-br:#8A8E96;
+  --lg-solido:#2B2C30;--lg-blur:20px;
+  --sh:0 18px 40px rgba(0,0,0,.55),0 2px 6px rgba(0,0,0,.3);
+  --sh-lg:0 30px 70px -20px rgba(0,0,0,.85);--sh-float:0 14px 36px rgba(0,0,0,.6);
+  --sheet:rgba(38,39,43,.9);
+}
+/* fundo: o cinza-lavanda da referência com luz vinda de cima (claro) ou o grafite em degradê (escuro), parados */
+html[data-theme^=liquid] body{background:transparent}
+html[data-theme^=liquid] body::before{display:block;content:'';position:fixed;inset:0;height:auto;z-index:-1;pointer-events:none;transition:none}
+html[data-theme=liquid] body::before{background:radial-gradient(90% 55% at 50% -12%,rgba(255,255,255,.6),transparent 70%)}
+html[data-theme=liquid-escuro] body::before{background:radial-gradient(80% 50% at 15% 0%,#2A2C33,transparent 70%),linear-gradient(160deg,#25262A,#13171B 70%)}
+/* placas de conteúdo: vidro com aro de luz e sombra suave */
+html[data-theme^=liquid] .card,html[data-theme^=liquid] .fin-summary{background:var(--s1);border:1px solid var(--glass-br);
+  backdrop-filter:blur(var(--lg-blur)) saturate(170%);-webkit-backdrop-filter:blur(var(--lg-blur)) saturate(170%);
+  box-shadow:inset 0 1px 0 var(--glass-hi),var(--sh)}
+html[data-theme^=liquid] .tk{background:var(--s2);border-color:var(--glass-br);box-shadow:inset 0 1px 0 var(--glass-hi)}
+html[data-theme^=liquid] .tk.done{background:transparent}
+/* menu: vidro mais denso; aba escolhida em lente branca (claro) ou pílula rosa da referência (escuro) */
+html[data-theme^=liquid] .bnav{border:1px solid var(--glass-br)}
+html[data-theme=liquid] .bni.on .ic{background:var(--sel);color:var(--acc);box-shadow:inset 0 0 0 1px var(--glass-br),0 4px 12px rgba(19,21,25,.14)}
+html[data-theme=liquid-escuro] .bni.on{color:#FFFFFF}
+html[data-theme=liquid-escuro] .bni.on .ic{background:var(--sel);color:#FFFFFF}
+/* botões: o principal é sempre o azul "Continue"; o secundário e os redondos são vidro */
+html[data-theme^=liquid] .bp{background:#4266D3;color:#FFFFFF}
+html[data-theme^=liquid] .bg,html[data-theme^=liquid] .chip:not(.on),html[data-theme^=liquid] .ibtn{background:var(--glass);border:1px solid var(--glass-br);box-shadow:inset 0 1px 0 var(--glass-hi),0 4px 12px -6px rgba(0,0,0,.3)}
+html[data-theme^=liquid] .ibtn.on{background:var(--acc-soft);color:var(--acc)}
+html[data-theme^=liquid] .seg{background:var(--s2);border:1px solid var(--br2)}
+html[data-theme=liquid] .seg-i.on{background:rgba(255,255,255,.85);box-shadow:inset 0 0 0 1px var(--glass-br),0 3px 10px rgba(19,21,25,.14)}
+html[data-theme=liquid-escuro] .seg-i.on{background:#45474E;box-shadow:inset 0 1px 0 var(--glass-hi)}
+/* marcação: lente vazia com aro; marcada, a cor exata da área */
+html[data-theme^=liquid] .hck:not(.on){background:var(--glass);border-color:var(--hck-br)}
+/* campos: vidro claro, texto de 16px herdado (sem zoom no iPhone) */
+html[data-theme^=liquid] input:not([type=checkbox]):not([type=radio]),html[data-theme^=liquid] select,html[data-theme^=liquid] textarea{background:var(--field);border-color:var(--br)}
+/* a barra do dia no Início usa o arco-íris da referência */
+html[data-theme^=liquid] #d-today-pb{background:linear-gradient(90deg,#449BD2,#4E469F 16%,#C73A99 34%,#E1416C 50%,#DE554B 64%,#E3AF4A 78%,#E5E951 89%,#9CDC5B)}
+/* prévias no seletor de tema */
+.tp-prev.liquid i{box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 0 0 1px rgba(255,255,255,.7),0 3px 8px rgba(19,21,25,.12)}
+.tp-prev.liquid b{background:linear-gradient(90deg,#449BD2,#C73A99,#E1416C,#E3AF4A,#9CDC5B)}
+.tp-prev.liquid-escuro i{box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 0 0 1px rgba(255,255,255,.1)}
+.tp-prev.liquid-escuro b{background:#E0328A}
+/* sem desfoque no navegador, ou com menos transparência pedida no sistema: superfícies sólidas e legíveis */
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  :root[data-theme^=liquid]{--s1:var(--lg-solido);--glass:var(--lg-solido);--sheet:var(--lg-solido)}
+}
+@media(prefers-reduced-transparency:reduce){
+  :root[data-theme^=liquid]{--s1:var(--lg-solido);--glass:var(--lg-solido);--sheet:var(--lg-solido)}
+  html[data-theme^=liquid] .card,html[data-theme^=liquid] .fin-summary,html[data-theme^=liquid] .bnav,html[data-theme^=liquid] .sheet,html[data-theme^=liquid] .toast,html[data-theme^=liquid] .side{backdrop-filter:none;-webkit-backdrop-filter:none}
+}
+@media(prefers-contrast:more){
+  :root[data-theme^=liquid]{--s1:var(--lg-solido);--glass:var(--lg-solido)}
+  :root[data-theme=liquid]{--glass-br:rgba(19,21,25,.45)}
+  :root[data-theme=liquid-escuro]{--glass-br:rgba(255,255,255,.45)}
 }
 </style>
+  <script type="module" crossorigin src="./assets/index-es9dIc7o.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-CjlNt6MZ.css">
 </head>
 <body>
 
@@ -1950,7 +2049,7 @@ html[data-theme^=vidro] .prev-c.tot{background:var(--acc-soft);box-shadow:none}
 </aside>
 
 <!-- ═══════════════════ DASHBOARD ═══════════════════ -->
-<div class="pg on" id="page-dash">
+<div class="pg on" id="page-dash"><div id="inicio-react">
 <div class="w">
 
   <div class="dhead">
@@ -2040,10 +2139,10 @@ html[data-theme^=vidro] .prev-c.tot{background:var(--acc-soft);box-shadow:none}
   </div>
 
 </div>
-</div>
+</div></div>
 
 <!-- ═══════════════════ HABITOS ═══════════════════ -->
-<div class="pg" id="page-habits">
+<div class="pg" id="page-habits"><div id="habitos-react">
 <div class="w">
 
   <div class="ph">
@@ -2138,10 +2237,10 @@ html[data-theme^=vidro] .prev-c.tot{background:var(--acc-soft);box-shadow:none}
   </div>
 
 </div>
-</div>
+</div></div>
 
 <!-- ═══════════════════ TAREFAS ═══════════════════ -->
-<div class="pg" id="page-tasks">
+<div class="pg" id="page-tasks"><div id="tarefas-react">
 <div class="w">
 
   <div class="ph">
@@ -2198,10 +2297,10 @@ html[data-theme^=vidro] .prev-c.tot{background:var(--acc-soft);box-shadow:none}
   </div>
 
 </div>
-</div>
+</div></div>
 
 <!-- ═══════════════════ FINANCAS ═══════════════════ -->
-<div class="pg" id="page-fin">
+<div class="pg" id="page-fin"><div id="financas-react">
 <div class="w">
 
   <div class="ph">
@@ -2351,10 +2450,10 @@ html[data-theme^=vidro] .prev-c.tot{background:var(--acc-soft);box-shadow:none}
   </div>
 
 </div>
-</div>
+</div></div>
 
 <!-- ═══════════════════ SAUDE ═══════════════════ -->
-<div class="pg" id="page-saude">
+<div class="pg" id="page-saude"><div id="saude-react">
 <div class="w">
 
   <div class="ph">
@@ -2461,10 +2560,10 @@ html[data-theme^=vidro] .prev-c.tot{background:var(--acc-soft);box-shadow:none}
   </div>
 
 </div>
-</div>
+</div></div>
 
 <!-- ═══════════════════ PERFIL ═══════════════════ -->
-<div class="pg" id="page-perfil">
+<div class="pg" id="page-perfil"><div id="perfil-react">
 <div class="w">
 
   <div class="ph">
@@ -2538,15 +2637,17 @@ html[data-theme^=vidro] .prev-c.tot{background:var(--acc-soft);box-shadow:none}
           <div>
             <div class="cfg-t" style="font-size:14.5px;font-weight:600">Aparência</div>
             <div class="cfg-s" style="font-size:12px;color:var(--t2);margin-bottom:10px">Fica guardada neste aparelho. Automático alterna entre Claro e Escuro conforme o modo do celular.</div>
-            <div class="tp-grid" role="radiogroup" aria-label="Aparência">
+            <div id="tema-picker"><div class="tp-grid" role="radiogroup" aria-label="Aparência">
               <div class="tp" role="radio" data-tema="auto" onclick="setTema('auto')"><span class="tp-prev auto" style="--pb:#F4F0E8;--pc:#FFFDF9;--pa:#29724A;--pt:#1F1C17"><i></i><i></i><b></b><em></em></span><span class="tp-n">Automático</span><span class="tp-s">Segue o celular</span></div>
               <div class="tp" role="radio" data-tema="light" onclick="setTema('light')"><span class="tp-prev" style="--pb:#F4F0E8;--pc:#FFFDF9;--pa:#29724A;--pt:#1F1C17"><i></i><i></i><b></b><em></em></span><span class="tp-n">Claro</span><span class="tp-s">Papel quente</span></div>
               <div class="tp" role="radio" data-tema="dark" onclick="setTema('dark')"><span class="tp-prev" style="--pb:#131210;--pc:#1C1A17;--pa:#6CC98E;--pt:#F2EDE4"><i></i><i></i><b></b><em></em></span><span class="tp-n">Escuro</span><span class="tp-s">Carvão</span></div>
               <div class="tp" role="radio" data-tema="neon" onclick="setTema('neon')"><span class="tp-prev" style="--pb:#05070B;--pc:#121722;--pa:#4ADE80;--pt:#F2F5FA;--pg:0 0 8px #4ADE80"><i></i><i></i><b></b><em></em></span><span class="tp-n">Neon verde</span><span class="tp-s">O visual anterior</span></div>
               <div class="tp" role="radio" data-tema="neon-rosa" onclick="setTema('neon-rosa')"><span class="tp-prev" style="--pb:#05070B;--pc:#121722;--pa:#FF6EB4;--pt:#F2F5FA;--pg:0 0 8px #FF6EB4"><i></i><i></i><b></b><em></em></span><span class="tp-n">Neon rosa</span><span class="tp-s">Rosa-choque</span></div>
-              <div class="tp" role="radio" data-tema="vidro" onclick="setTema('vidro')"><span class="tp-prev vidro" style="--pb:#F2F2F7;--pc:#FFFFFF;--pa:#3C86FC;--pt:#6C6C70"><i></i><i></i><b></b><em></em></span><span class="tp-n">Vidro</span><span class="tp-s">Estilo Apple, claro</span></div>
-              <div class="tp" role="radio" data-tema="vidro-escuro" onclick="setTema('vidro-escuro')"><span class="tp-prev vidro vidro-escuro" style="--pb:#000000;--pc:#1C1C1E;--pa:#3E8FFC;--pt:#AEAEB2"><i></i><i></i><b></b><em></em></span><span class="tp-n">Vidro escuro</span><span class="tp-s">Estilo Apple, escuro</span></div>
-            </div>
+              <div class="tp" role="radio" data-tema="vidro" onclick="setTema('vidro')"><span class="tp-prev vidro" style="--pb:#F2F2F7;--pc:#FFFFFF;--pa:#3C86FC;--pt:#6C6C70"><i></i><i></i><b></b><em></em></span><span class="tp-n">Minimalista claro</span><span class="tp-s">Estilo Apple, plano</span></div>
+              <div class="tp" role="radio" data-tema="vidro-escuro" onclick="setTema('vidro-escuro')"><span class="tp-prev vidro vidro-escuro" style="--pb:#000000;--pc:#1C1C1E;--pa:#3E8FFC;--pt:#AEAEB2"><i></i><i></i><b></b><em></em></span><span class="tp-n">Minimalista escuro</span><span class="tp-s">Estilo Apple, plano</span></div>
+              <div class="tp" role="radio" data-tema="liquid" onclick="setTema('liquid')"><span class="tp-prev liquid" style="--pb:#D5D5DE;--pc:rgba(255,255,255,.6);--pa:#4A7CD4;--pt:#464A53"><i></i><i></i><b></b><em></em></span><span class="tp-n">Liquid Glass claro</span><span class="tp-s">Vidro translúcido</span></div>
+              <div class="tp" role="radio" data-tema="liquid-escuro" onclick="setTema('liquid-escuro')"><span class="tp-prev liquid-escuro" style="--pb:linear-gradient(160deg,#2A2C33,#13171B);--pc:rgba(61,64,71,.75);--pa:#E0328A;--pt:#B9BCC3"><i></i><i></i><b></b><em></em></span><span class="tp-n">Liquid Glass escuro</span><span class="tp-s">Vidro translúcido</span></div>
+            </div></div>
           </div>
           <div class="divider" style="margin:0"></div>
           <div class="cfg-row">
@@ -2591,7 +2692,7 @@ html[data-theme^=vidro] .prev-c.tot{background:var(--acc-soft);box-shadow:none}
   </div>
 
 </div>
-</div>
+</div></div>
 
 <!-- ═══ BOTTOM NAV (celular) ═══ -->
 <nav class="bnav" id="bnav" aria-label="Navegação principal">
@@ -2937,6 +3038,7 @@ html[data-theme^=vidro] .prev-c.tot{background:var(--acc-soft);box-shadow:none}
   },1000);
 })();
 </script>
+<script src="dominio.js"></script>
 <script src="firebase-config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
@@ -3075,17 +3177,9 @@ const fixHoras=v=>{
 };
 // Saúde: cada registro mensal fica em "AAAA-MM". Os antigos usavam só o número do mês (0 a 11) e se misturavam na virada do ano.
 // Conversão com data fixa, para todo aparelho chegar no mesmo resultado: janeiro a outubro são de 2026; novembro e dezembro, de 2025.
-const pkey=(m,a)=>`${a}-${pad(m+1)}`;
-const isPkey=k=>/^[0-9]{4}-[0-9]{2}$/.test(k);
-const fixPerf=v=>{
-  const o=v&&typeof v==='object'&&!Array.isArray(v)?{...v}:{};
-  Object.keys(o).forEach(k=>{
-    if(!/^[0-9]{1,2}$/.test(k)||+k>11)return;
-    const nk=pkey(+k,+k<=9?2026:2025);
-    o[nk]={...o[k],...(o[nk]||{})};delete o[k];
-  });
-  return o;
-};
+const pkey=GuaposDominio.saude.pkey;
+const isPkey=GuaposDominio.saude.isPkey;
+const fixPerf=GuaposDominio.saude.fixPerf;
 const fixTasks=a=>(Array.isArray(a)?a:[]).filter(t=>t&&t.id&&t.name).map(t=>({...t,subs:Array.isArray(t.subs)?t.subs:[]}));
 const fixRules=a=>(Array.isArray(a)?a:[]).filter(r=>r&&r.id&&r.name);
 // Acesso uniforme a cada grupo de dados (usado pela sincronização)
@@ -3397,13 +3491,17 @@ function renderPicker(){
 function resetSession(){
   finUnlocked=false;finTries=0;taskDay=null;taskOpen={};editMode=false;editId=null;editTaskId=null;
   curMonth=new Date().getMonth();curCalY=new Date().getFullYear();calView='mes';
-  document.getElementById('seg-mes').classList.add('on');document.getElementById('seg-hab').classList.remove('on');
-  document.getElementById('cal-mes').style.display='';document.getElementById('cal-hab').style.display='none';
+  if(!window.__habitosReact){
+    document.getElementById('seg-mes').classList.add('on');document.getElementById('seg-hab').classList.remove('on');
+    document.getElementById('cal-mes').style.display='';document.getElementById('cal-hab').style.display='none';
+  }
   hideUndo();
   document.querySelectorAll('.overlay.on').forEach(o=>o.classList.remove('on'));
   document.getElementById('onb').classList.remove('on');
   // a aba Saúde preenche os campos com os dados do perfil
-  const pm=document.getElementById('pm-m');pm.innerHTML='';delete pm.dataset.sig;document.getElementById('sleep-date').value='';
+  const pm=document.getElementById('pm-m'),sd=document.getElementById('sleep-date');
+  if(pm&&!window.__saudeReact){pm.innerHTML='';delete pm.dataset.sig}
+  if(sd&&!window.__saudeReact)sd.value='';
   curPage='dash';
 }
 async function enterProfile(pid){
@@ -3439,87 +3537,53 @@ const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;'
 function dim(m,y){const yy=y||new Date().getFullYear();if(m===1)return((yy%4===0&&yy%100!==0)||yy%400===0)?29:28;return[31,28,31,30,31,30,31,31,30,31,30,31][m]}
 function dkey(y,m,d){return `${y}-${pad(m+1)}-${pad(d)}`}
 // Três tipos de hábito: diário (sem days/perWeek), dias fixos ("days") ou meta semanal ("perWeek" vezes na semana)
-function isWeekly(h){return h.perWeek>0}
-function isDaily(h){return !isWeekly(h)&&(!h.days||!h.days.length||h.days.length===7)}
-function onDay(h,k){return isWeekly(h)||isDaily(h)||h.days.includes(new Date(k+'T12:00:00').getDay())}
+// Regras de hábitos, nível e tarefas: src/dominio/habitos.ts e tarefas.ts (em dominio.js, como GuaposDominio).
+// As funções abaixo mantêm os nomes de antes e só passam os dados do perfil aberto e o dia de hoje.
+function habCtx(){return {habits,checks,hoje:today()}}
+function tarCtx(){return {tasks,hoje:today()}}
+function isWeekly(h){return GuaposDominio.habitos.isWeekly(h)}
+function isDaily(h){return GuaposDominio.habitos.isDaily(h)}
+function onDay(h,k){return GuaposDominio.habitos.onDay(h,k)}
 // Só os hábitos fixos contam na porcentagem do dia; a meta semanal é flexível
-function habitsFor(k){return habits.filter(h=>!isWeekly(h)&&onDay(h,k))}
-function weeklyHabits(){return habits.filter(isWeekly)}
-function weekStart(k){return shiftKey(k,-new Date(k+'T12:00:00').getDay())}
-function weekCount(h,k){const s=weekStart(k);let c=0;for(let i=0;i<7;i++)if((checks[shiftKey(s,i)]||{})[h.id])c++;return c}
-function daysLabel(h){
-  if(isWeekly(h))return h.perWeek+(h.perWeek===1?' vez':' vezes')+' por semana';
-  if(isDaily(h))return'Todo dia';
-  const d=[1,2,3,4,5,6,0].filter(i=>h.days.includes(i)),j=d.join();
-  if(j==='1,2,3,4,5')return'Seg a Sex';
-  if(j==='6,0')return'Fim de semana';
-  return d.map(i=>WD[i]).join(' · ');
-}
-function doneIn(k){const dc=checks[k]||{};return habitsFor(k).filter(h=>dc[h.id]).length}
-function anyCheck(k){const dc=checks[k];return !!dc&&habits.some(h=>dc[h.id])}
-function dayPct(k){const n=habitsFor(k).length;return n?doneIn(k)/n:0}
-function totalCI(){let t=0;Object.values(checks).forEach(dc=>t+=Object.values(dc).filter(Boolean).length);return t}
-function streak(){
-  const n=new Date();let s=0;
-  for(let i=0;i<730;i++){
-    const d=new Date(n);d.setDate(n.getDate()-i);
-    if(anyCheck(dkey(d.getFullYear(),d.getMonth(),d.getDate())))s++;else if(i>0)break;
-  }
-  return s;
-}
+function habitsFor(k){return GuaposDominio.habitos.habitsFor(habCtx(),k)}
+function weeklyHabits(){return GuaposDominio.habitos.weeklyHabits(habCtx())}
+function weekStart(k){return GuaposDominio.habitos.weekStart(k)}
+function weekCount(h,k){return GuaposDominio.habitos.weekCount(habCtx(),h,k)}
+function daysLabel(h){return GuaposDominio.habitos.daysLabel(h)}
+function doneIn(k){return GuaposDominio.habitos.doneIn(habCtx(),k)}
+function anyCheck(k){return GuaposDominio.habitos.anyCheck(habCtx(),k)}
+function dayPct(k){return GuaposDominio.habitos.dayPct(habCtx(),k)}
+function totalCI(){return GuaposDominio.habitos.totalCI(habCtx())}
+function streak(){return GuaposDominio.habitos.streak(habCtx())}
 // Maior sequência de dias seguidos com alguma marcação, em todo o histórico (não recomeça na virada do ano)
-function bestStreak(){
-  let best=0,cur=0,prev=null;
-  Object.keys(checks).filter(k=>/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(k)&&anyCheck(k)).sort().forEach(k=>{
-    cur=prev&&shiftKey(prev,1)===k?cur+1:1;best=Math.max(best,cur);prev=k;
-  });
-  return best;
-}
-function mPct(m,y){
-  const yy=y||new Date().getFullYear(),days=dim(m,yy);let tot=0,done=0;
-  for(let d=1;d<=days;d++){const k=dkey(yy,m,d);tot+=habitsFor(k).length;done+=doneIn(k)}
-  return tot?Math.round(done/tot*100):0;
-}
-function hMPct(id,m,y){
-  const yy=y||new Date().getFullYear(),days=dim(m,yy),h=habits.find(x=>x.id===id);let done=0,sched=0;
-  if(h&&isWeekly(h)){
-    for(let d=1;d<=days;d++)if((checks[dkey(yy,m,d)]||{})[id])done++;
-    return Math.min(100,Math.round(done/(h.perWeek*days/7)*100));
-  }
-  for(let d=1;d<=days;d++){
-    const k=dkey(yy,m,d);
-    if(h&&!onDay(h,k))continue;
-    sched++;if((checks[k]||{})[id])done++;
-  }
-  return sched?Math.round(done/sched*100):0;
-}
-function hCount(id){let c=0;Object.values(checks).forEach(dc=>{if(dc[id])c++});return c}
-function hasH(id){return habits.some(h=>h.id===id)}
+function bestStreak(){return GuaposDominio.habitos.bestStreak(habCtx())}
+function mPct(m,y){return GuaposDominio.habitos.mPct(habCtx(),m,y||new Date().getFullYear())}
+function hMPct(id,m,y){return GuaposDominio.habitos.hMPct(habCtx(),id,m,y||new Date().getFullYear())}
+function hCount(id){return GuaposDominio.habitos.hCount(habCtx(),id)}
+function hasH(id){return GuaposDominio.habitos.hasH(habCtx(),id)}
 function hp(id,m){return hasH(id)?hMPct(id,m):null}
-function avgOr(list,fb){const v=list.filter(x=>x!==null&&x!==undefined);return v.length?v.reduce((a,b)=>a+b,0)/v.length:fb}
-function diasComCheck(m,y){const yy=y||new Date().getFullYear(),days=dim(m,yy);let c=0;for(let d=1;d<=days;d++)if(anyCheck(dkey(yy,m,d)))c++;return c}
+function avgOr(list,fb){return GuaposDominio.habitos.avgOr(list,fb)}
+function diasComCheck(m,y){return GuaposDominio.habitos.diasComCheck(habCtx(),m,y||new Date().getFullYear())}
 function buzz(ms){try{navigator.vibrate&&navigator.vibrate(ms)}catch(e){}}
-function xpTotal(){return totalCI()*10+bestStreak()*50}
-function lvl(x){return Math.min(100,Math.floor(x/500)+1)}
-function lvName(l){if(l<5)return'Iniciante';if(l<15)return'Aprendiz';if(l<30)return'Consistente';if(l<50)return'Dedicado';if(l<70)return'Mestre';if(l<90)return'Lendário';return'Supremo'}
-function rnk(l){if(l<10)return'Bronze';if(l<25)return'Prata';if(l<50)return'Ouro';if(l<75)return'Platina';if(l<90)return'Diamante';return'Supremo'}
+function xpTotal(){return GuaposDominio.habitos.xpTotal(habCtx())}
+function lvl(x){return GuaposDominio.habitos.lvl(x)}
+function lvName(l){return GuaposDominio.habitos.lvName(l)}
+function rnk(l){return GuaposDominio.habitos.rnk(l)}
 function greeting(){const h=new Date().getHours();return h<12?'Bom dia':h<18?'Boa tarde':'Boa noite'}
-function p2f(p){if(!p)return 999;const pp=String(p).split(':');return pp.length===2?parseInt(pp[0])*60+parseFloat(pp[1]):999}
+function p2f(p){return GuaposDominio.saude.p2f(p)}
 
 const curMes=()=>new Date().getMonth();
 const curAno=()=>new Date().getFullYear();
-function receitasMes(m=curMes(),a=curAno()){return receitas.filter(r=>r.mes===m&&r.ano===a)}
-function fixoTotal(){const m=curMes(),a=curAno();return fixos.filter(f=>fixoAtivo(f,m,a)).reduce((acc,f)=>acc+fixoValor(f,m,a),0)}
-function varMes(m=curMes(),a=curAno()){
-  return variaveis.filter(v=>{const d=new Date(v.data);return d.getMonth()===m&&d.getFullYear()===a});
-}
-const somaValor=l=>l.reduce((acc,x)=>acc+parseFloat(x.valor||0),0);
-const recData=r=>r.data||dkey(r.ano,r.mes,1);
+function receitasMes(m=curMes(),a=curAno()){return GuaposDominio.financas.receitasMes(finCtx(),m,a)}
+function fixoTotal(){return GuaposDominio.financas.fixoTotal(finCtx())}
+function varMes(m=curMes(),a=curAno()){return GuaposDominio.financas.varMes(finCtx(),m,a)}
+const somaValor=GuaposDominio.financas.somaValor;
+const recData=GuaposDominio.financas.recData;
 // Receita só entra no saldo quando alguém marca como recebida. Antes disso fica "a receber" (e "atrasada" se a data passou).
-const recebida=r=>r.recebida===true;
-function recebidasMes(m=curMes(),a=curAno()){return receitasMes(m,a).filter(recebida)}
-function aReceber(){return receitas.filter(r=>!recebida(r)).sort((x,y)=>recData(x).localeCompare(recData(y)))}
-const receitasAtrasadas=()=>{const td=today();return aReceber().filter(r=>recData(r)<td)};
+const recebida=GuaposDominio.financas.recebida;
+function recebidasMes(m=curMes(),a=curAno()){return GuaposDominio.financas.recebidasMes(finCtx(),m,a)}
+function aReceber(){return GuaposDominio.financas.aReceber(finCtx())}
+const receitasAtrasadas=()=>GuaposDominio.financas.receitasAtrasadas(finCtx());
 // Receitas de antes desta regra não tinham a marcação: as que já tinham caído até a data da mudança
 // (cfg.recMigrEm, igual em todos os aparelhos) contam como recebidas; as futuras ficam a receber.
 function fixReceitas(l){
@@ -3529,50 +3593,29 @@ function fixReceitas(l){
 }
 // Saldo agora = saldo de abertura (o que sobrou dos meses anteriores) + recebido no mês − o que foi pago no mês.
 // A pagar = fixos do mês em aberto + variáveis a pagar (qualquer data).
-function finResumo(m=curMes(),a=curAno()){
-  const recebido=somaValor(recebidasMes(m,a));
-  const sm=saidasMes(m,a);
-  const pagos=somaValor(sm.filter(x=>x.pago));
-  const abertura=saldoAbertura(m,a);
-  const agora=centavos(abertura+recebido-pagos);
-  // previsto do mês: o que ainda vai entrar e sair até o fim dele, mais o que já está atrasado
-  const fim=dkey(a,m,dim(m,a));
-  const receber=somaValor(aReceber().filter(r=>recData(r)<=fim));
-  const pagar=somaValor(sm.filter(x=>x.tipo==='fixo'&&!x.pago))+somaValor(fixosAtrasados(m,a))+somaValor(variaveisAPagar().filter(v=>varVenc(v)<=fim));
-  return {abertura,recebido,gasto:pagos,agora,receber,pagar,previsto:centavos(agora+receber-pagar)};
-}
-const centavos=v=>Math.round(v*100)/100;
+function finResumo(m=curMes(),a=curAno()){return GuaposDominio.financas.finResumo(finCtx(),m,a)}
+const centavos=GuaposDominio.financas.centavos;
 // Movimento de caixa do mês: cada transação pertence a um mês só (receita pelo mês dela, fixo pelo mês que ele paga,
 // variável pelo dia do pagamento), então somar os meses não conta nada duas vezes.
-const fluxoMes=(m,a)=>somaValor(recebidasMes(m,a))-somaValor(saidasMes(m,a).filter(x=>x.pago));
+const fluxoMes=(m,a)=>GuaposDominio.financas.fluxoMes(finCtx(),m,a);
 // Primeiro mês com algum movimento ("AAAA-MM"); antes dele o saldo é zero
-function primeiroMesFin(){
-  let min=null;
-  const ver=k=>{if(/^[0-9]{4}-[0-9]{2}$/.test(k)&&(!min||k<min))min=k};
-  receitas.forEach(r=>{if(r.mes>=0&&r.ano>0)ver(mkey(r.mes,r.ano))});
-  variaveis.forEach(v=>{if(varPago(v))ver(String(varPagoEm(v)).slice(0,7))});
-  fixos.forEach(f=>Object.keys(f.pagos||{}).forEach(k=>{if(f.pagos[k])ver(k)}));
-  return min;
-}
+function primeiroMesFin(){return GuaposDominio.financas.primeiroMesFin(finCtx())}
 // Saldo de abertura do mês = fechamento do mês anterior = saldo inicial (Perfil) + movimento de todos os meses antes dele
-function saldoAbertura(m,a){
-  const base=+cfg.saldoInicial||0,ini=primeiroMesFin(),alvo=mkey(m,a);
-  if(!ini||ini>=alvo)return centavos(base);
-  let y=+ini.slice(0,4),mm=+ini.slice(5,7)-1,saldo=base;
-  for(let i=0;i<1200&&mkey(mm,y)<alvo;i++){saldo+=fluxoMes(mm,y);if(++mm>11){mm=0;y++}}
-  return centavos(saldo);
-}
-function saldoMes(m=curMes(),a=curAno()){return finResumo(m,a).agora}
+function saldoAbertura(m,a){return GuaposDominio.financas.saldoAbertura(finCtx(),m,a)}
+function saldoMes(m=curMes(),a=curAno()){return GuaposDominio.financas.saldoMes(finCtx(),m,a)}
 
 // ── Tema: Automático (segue o aparelho), Claro, Escuro, Neon verde ou Neon rosa. A escolha fica guardada neste aparelho ──
-const TEMAS=['auto','light','dark','neon','neon-rosa','vidro','vidro-escuro'];
+// ids salvos em 'g_tema' (os antigos não mudam: 'vidro' e 'vidro-escuro' agora se chamam Minimalista claro/escuro)
+const TEMAS=['auto','light','dark','neon','neon-rosa','vidro','vidro-escuro','liquid','liquid-escuro'];
 function temaAtual(){let t='auto';try{t=localStorage.getItem('g_tema')||'auto'}catch(e){}return TEMAS.includes(t)?t:'auto'}
 function aplicarTema(){
   const t=temaAtual(),r=document.documentElement,neon=t.startsWith('neon');
   if(t==='auto')r.removeAttribute('data-theme');else r.setAttribute('data-theme',t);
-  const dark=neon||t==='dark'||t==='vidro-escuro'||(t==='auto'&&matchMedia('(prefers-color-scheme: dark)').matches);
-  document.getElementById('meta-tc').setAttribute('content',neon?'#05070B':t==='vidro-escuro'?'#000000':dark?'#131210':t==='vidro'?'#F2F2F7':'#F4F0E8');
+  const dark=neon||t==='dark'||t==='vidro-escuro'||t==='liquid-escuro'||(t==='auto'&&matchMedia('(prefers-color-scheme: dark)').matches);
+  document.getElementById('meta-tc').setAttribute('content',neon?'#05070B':t==='vidro-escuro'?'#000000':t==='liquid-escuro'?'#1B1D21':dark?'#131210':t==='vidro'?'#F2F2F7':t==='liquid'?'#D5D5DE':'#F4F0E8');
   document.querySelectorAll('[data-tema]').forEach(e=>e.setAttribute('aria-checked',String(e.dataset.tema===t)));
+  // avisa as partes em React (seletor de temas) que o tema mudou
+  window.dispatchEvent(new CustomEvent('guapos:tema',{detail:t}));
 }
 function setTema(t){
   if(!TEMAS.includes(t))return;
@@ -3734,16 +3777,11 @@ function finishOnb(){
   showToast('Tudo pronto, '+cfg.nome,'checkc');
 }
 // Meses de "de" (AAAA-MM) até o mês atual, no máximo 36
-function mesesAteHoje(de){
-  const out=[],alvo=mkey();if(!/^[0-9]{4}-[0-9]{2}$/.test(de||''))return out;
-  let y=+de.slice(0,4),m=+de.slice(5,7)-1;
-  while(mkey(m,y)<=alvo&&out.length<36){out.push([m,y]);if(++m>11){m=0;y++}}
-  return out;
-}
+function mesesAteHoje(de){return GuaposDominio.financas.mesesAteHoje(finCtx(),de)}
 // Mês seguinte ao último lançamento automático (ou o mês atual, se nunca houve): cobre os meses em que ninguém abriu o app
-const desdeUltimo=refs=>{const u=refs.sort().pop();if(!u)return mkey();let y=+u.slice(0,4),m=+u.slice(5,7);if(m>11){m=0;y++}return mkey(m,y)};
+const desdeUltimo=refs=>GuaposDominio.financas.desdeUltimo(finCtx(),refs);
 // Receitas que entram todo mês (cadastro em cfg.recFixas: nome, valor, dia, tipo, desde, ate, pular)
-const recFixasAtivas=(m,a)=>{const k=mkey(m,a);return (cfg.recFixas||[]).filter(t=>k>=t.desde&&(!t.ate||k<=t.ate)&&!(t.pular||[]).includes(k))};
+const recFixasAtivas=(m,a)=>GuaposDominio.financas.recFixasAtivas(finCtx(),m,a);
 // Lança salário, vale e receitas fixas de cada mês com a data em que caem. Receitas entram como "a receber".
 function ensureMonthly(){
   const td=today();let recMudou=false,vaMudou=false;
@@ -3795,10 +3833,10 @@ function migrarFin(){
   if(r)ss('e2_receitas',receitas);
   if(f)ss('e2_fixos',fixos);
 }
-const perfKeys=()=>Object.keys(perf).filter(isPkey).sort();
-const perfMes=(m=curMes(),a=curAno())=>perf[pkey(m,a)]||{};
-const pkLabel=k=>{const a=+k.slice(0,4);return MSH[+k.slice(5)-1]+(a!==curAno()?'/'+String(a).slice(2):'')};
-function latestWeight(){const ks=perfKeys().filter(k=>perf[k].weight);return ks.length?parseFloat(perf[ks[ks.length-1]].weight):null}
+const perfKeys=()=>GuaposDominio.saude.perfKeys(perf);
+const perfMes=(m=curMes(),a=curAno())=>GuaposDominio.saude.perfMes(perf,m,a);
+const pkLabel=k=>GuaposDominio.saude.pkLabel(k,curAno());
+function latestWeight(){return GuaposDominio.saude.latestWeight(perf)}
 
 // ════════════════════════════════
 // NAVIGATION
@@ -3915,6 +3953,18 @@ new MutationObserver(()=>{if(!a11yQ){a11yQ=true;queueMicrotask(()=>{a11yQ=false;
 // DASHBOARD
 // ════════════════════════════════
 function renderDash(){
+  if(window.__inicioReact){
+    ensureRecurring(today());window.dispatchEvent(new CustomEvent('guapos:inicio',{detail:{completo:true}}));
+    renderBackupBanner();
+    renderFalta(document.getElementById('d-falta'),true);
+    renderLembretes(document.getElementById('d-lembretes'),true);
+    renderOrcAlerta(document.getElementById('d-orc-alerta'),true);
+    desenharRadar(calcRadarScores());
+    return;
+  }
+  renderDashLegado();
+}
+function renderDashLegado(){
   const now=new Date();
   const nome=cfg.nome||'você';
   document.getElementById('d-date').innerHTML=ic('calendar')+'<span>'+now.toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long'})+'</span>';
@@ -4009,51 +4059,10 @@ function renderEntradas(){
 }
 
 function clampScore(v){return Math.max(0,Math.min(100,Math.round(v||0)))}
-function sleepAvgMonth(m=curMes(),a=curAno()){
-  const vals=Object.entries(perf.sleep||{})
-    .filter(([date])=>{const d=new Date(date+'T12:00:00');return d.getMonth()===m&&d.getFullYear()===a})
-    .map(([,v])=>parseFloat(v)).filter(v=>!Number.isNaN(v));
-  return vals.length?vals.reduce((x,y)=>x+y,0)/vals.length:null;
-}
-function weightInfo(){
-  let first=null,latest=null;
-  perfKeys().forEach(k=>{if(perf[k].weight){if(first===null)first=parseFloat(perf[k].weight);latest=parseFloat(perf[k].weight)}});
-  if(first===null&&cfg.pesoInicial)first=parseFloat(cfg.pesoInicial);
-  return {first,latest,meta:parseFloat(cfg.metaPeso||0)};
-}
-function latestPace(){let best=null;perfKeys().forEach(k=>{const p=perf[k].pace;if(p&&(best===null||p2f(p)<p2f(best)))best=p});return best}
+function weightInfo(){return GuaposDominio.saude.weightInfo(perf,cfg)}
+function latestPace(){return GuaposDominio.saude.latestPace(perf)}
 
-function calcRadarScores(){
-  const now=new Date(),m=now.getMonth(),a=now.getFullYear();
-  const habit=clampScore(mPct(m)*.55+dayPct(today())*100*.35+Math.min(100,streak()/30*100)*.10);
-
-  const rec=receitasMes(m,a).reduce((acc,r)=>acc+parseFloat(r.valor||0),0);
-  const desp=fixoTotal()+varMes(m,a).reduce((acc,v)=>acc+parseFloat(v.valor||0),0);
-  const financas=rec>0?clampScore(60+((rec-desp)/rec)*200):(desp>0?0:50);
-
-  const w=weightInfo();
-  const pesoScore=(w.first&&w.latest&&w.meta&&w.first!==w.meta)
-    ? clampScore((w.first-w.latest)/(w.first-w.meta)*100)
-    : (w.latest?60:50);
-  const treino=avgOr([hp('h5',m),hp('h8',m)],mPct(m));
-  const corpo=clampScore(pesoScore*.6+treino*.4);
-
-  const sonoAvg=sleepAvgMonth(m,a);
-  const sono=sonoAvg!==null?clampScore(100-Math.abs(7.5-sonoAvg)*18):avgOr([hp('h7',m)],mPct(m));
-
-  const km=parseFloat(perfMes(m,a).km||0);
-  const pace=latestPace();
-  const mov=avgOr([hp('h4',m),hp('h5',m)],mPct(m));
-  const ritmo=clampScore(clampScore(km/80*100)*.45+(pace?clampScore(100-(p2f(pace)-300)/1.2):50)*.25+mov*.30);
-
-  return [
-    {k:'habito',l:'Hábito',v:habit,c:'var(--c-hab)',rule:'Bom: 80+ com check-ins de hoje, mês forte e sequência crescendo.'},
-    {k:'financas',l:'Finanças',v:financas,c:'var(--y)',rule:'Bom: saldo previsto positivo; 20% da renda sobrando vira nota elite.'},
-    {k:'corpo',l:'Corpo',v:corpo,c:'var(--b)',rule:'Bom: peso andando rumo à meta junto de academia e alimentação limpa.'},
-    {k:'sono',l:'Sono',v:sono,c:'var(--c)',rule:'Bom: média perto de 7h30 por noite no mês atual.'},
-    {k:'ritmo',l:'Ritmo',v:ritmo,c:'var(--o)',rule:'Bom: km do mês, pace, corrida e academia consistentes.'}
-  ];
-}
+function calcRadarScores(){return GuaposDominio.telaInicio.radar(habCtx(),finCtx(),perf,cfg)}
 function drawRadarFallback(ctx,scores){
   const canvas=ctx.canvas,rect=canvas.parentNode.getBoundingClientRect(),dpr=window.devicePixelRatio||1;
   if(rect.width<10||rect.height<10)return;
@@ -4074,8 +4083,7 @@ function drawRadarFallback(ctx,scores){
   scores.forEach((s,i)=>{const a=-Math.PI/2+i*step,rr=r*s.v/100;ctx.beginPath();ctx.arc(cx+Math.cos(a)*rr,cy+Math.sin(a)*rr,4,0,Math.PI*2);ctx.fillStyle=corDe(s.c);ctx.fill();ctx.strokeStyle=tok('--s1');ctx.lineWidth=2;ctx.stroke()});
 }
 function renderRadar(){
-  const el=document.getElementById('radarChart');if(!el)return;
-  const ctx=el.getContext('2d');
+  if(!document.getElementById('radarChart'))return;
   const scores=calcRadarScores();
   const overall=clampScore(scores.reduce((acc,s)=>acc+s.v,0)/scores.length);
   document.getElementById('d-radar-overall').textContent=overall+' OVR';
@@ -4084,6 +4092,11 @@ function renderRadar(){
   const rb=document.getElementById('d-radar-toggle');
   const open=document.getElementById('d-radar-rules').style.display!=='none';
   rb.innerHTML=ic(open?'up2':'down2')+'<span>'+(open?'Esconder explicação':'Como é calculado')+'</span>';
+  desenharRadar(scores);
+}
+function desenharRadar(scores){
+  const el=document.getElementById('radarChart');if(!el)return;
+  const ctx=el.getContext('2d');
   if(radarChart){radarChart.destroy();radarChart=null}
   if(typeof Chart==='undefined'){drawRadarFallback(ctx,scores);return}
   radarChart=new Chart(ctx,{
@@ -4133,24 +4146,7 @@ function doUndo(){
 // ════════════════════════════════
 // HABITOS
 // ════════════════════════════════
-function habitStreak(h){
-  const td=today();let s=0;
-  if(isWeekly(h)){
-    // semanas seguidas batendo a meta; a semana atual so conta se ja bateu
-    let ws=weekStart(td);
-    if(weekCount(h,ws)>=h.perWeek)s++;
-    for(let i=0;i<104;i++){ws=shiftKey(ws,-7);if(weekCount(h,ws)>=h.perWeek)s++;else break}
-    return s;
-  }
-  // dias programados seguidos; hoje ainda sem marcar nao quebra a sequencia
-  let k=td;
-  for(let i=0;i<730;i++,k=shiftKey(k,-1)){
-    if(!onDay(h,k))continue;
-    if((checks[k]||{})[h.id])s++;
-    else if(k!==td)break;
-  }
-  return s;
-}
+function habitStreak(h){return GuaposDominio.habitos.habitStreak(habCtx(),h)}
 function habitRow(h,k,showPct){
   const on=!!(checks[k]||{})[h.id],st=habitStreak(h),meta=[];
   let right='';
@@ -4169,6 +4165,10 @@ function secHTML(icon,txt,extra){return `<div class="tk-sec">${ic(icon)}<span>${
 function bindHabitPress(box){box.querySelectorAll('.hi[data-hid]').forEach(r=>setupLongPress(r,()=>openEditHabit(r.dataset.hid)))}
 
 function renderHabits(){
+  if(window.__habitosReact){window.dispatchEvent(new Event('guapos:habitos'));return}
+  renderHabitsLegado();
+}
+function renderHabitsLegado(){
   const td=today(),now=new Date();
   setIco('h-ey','checksq','Rastreador diário');
   setIco('h-list-t','checksq','Lista de hoje');
@@ -4220,7 +4220,7 @@ function toggleRules(){
   const open=el.style.display!=='none';
   document.getElementById('d-radar-toggle').innerHTML=ic(open?'up2':'down2')+'<span>'+(open?'Esconder explicação':'Como é calculado')+'</span>';
 }
-function hideTip(){cfg.tipSeen=true;ss('e2_cfg',cfg);document.getElementById('h-tip').style.display='none'}
+function hideTip(){cfg.tipSeen=true;ss('e2_cfg',cfg);if(window.__habitosReact)renderHabits();else document.getElementById('h-tip').style.display='none'}
 function toggleHabit(id,k){
   if(!checks[k])checks[k]={};
   checks[k][id]=!checks[k][id];
@@ -4324,6 +4324,7 @@ function delHabit(){
 // ════════════════════════════════
 function setCalView(v){
   calView=v;
+  if(window.__habitosReact){renderCal();return}
   document.getElementById('seg-mes').classList.toggle('on',v==='mes');
   document.getElementById('seg-hab').classList.toggle('on',v==='hab');
   document.getElementById('cal-mes').style.display=v==='mes'?'':'none';
@@ -4337,6 +4338,7 @@ function shiftMonth(d){
   buzz(5);renderCal();
 }
 function renderCal(){
+  if(window.__habitosReact){window.dispatchEvent(new Event('guapos:habitos'));return}
   const seg=document.getElementById('seg-mes');if(!seg)return;
   document.getElementById('seg-mes').innerHTML=ic('calendar')+'<span>Mês</span>';
   document.getElementById('seg-hab').innerHTML=ic('grid')+'<span>Por hábito</span>';
@@ -4348,6 +4350,7 @@ function renderCal(){
   if(calView==='mes')renderMesGrid();else renderCalContent();
 }
 function renderMesGrid(){
+  if(window.__habitosReact){window.dispatchEvent(new Event('guapos:habitos'));return}
   const box=document.getElementById('dgrid');if(!box)return;
   const days=dim(curMonth,curCalY);
   const first=new Date(curCalY,curMonth,1).getDay();
@@ -4367,6 +4370,7 @@ function renderMesGrid(){
   box.innerHTML=html;
 }
 function renderCalContent(){
+  if(window.__habitosReact){window.dispatchEvent(new Event('guapos:habitos'));return}
   const days=dim(curMonth,curCalY),n=new Date();
   const el=document.getElementById('cal-content');if(!el)return;
   if(!habits.length){el.innerHTML='<div class="empty">Nenhum hábito na lista</div>';return}
@@ -4386,8 +4390,8 @@ function toggleCalDay(id,day){
   if(!checks[k])checks[k]={};
   checks[k][id]=!checks[k][id];
   buzz(8);ss('e2_checks',checks);
-  renderCalContent();
-  document.getElementById('cal-pct').textContent=mPct(curMonth,curCalY)+'%';
+  if(window.__habitosReact)renderCal();
+  else{renderCalContent();document.getElementById('cal-pct').textContent=mPct(curMonth,curCalY)+'%'}
   if(k===today()||weekStart(k)===weekStart(today()))renderHabits();
 }
 
@@ -4432,6 +4436,7 @@ function refreshAfterDia(){
   if(weekStart(diaKey)===weekStart(today()))renderHabits();
 }
 function renderHeatmap(){
+  if(window.__habitosReact){window.dispatchEvent(new Event('guapos:habitos'));return}
   const hm=document.getElementById('heatmap');if(!hm)return;
   const start=new Date(new Date().getFullYear(),0,1),cells=[];
   for(let i=0;i<365;i++){
@@ -4448,11 +4453,11 @@ function renderHeatmap(){
 // TAREFAS
 // ════════════════════════════════
 // Tarefa com subtarefas só conta como concluída quando todas as subtarefas estão feitas
-function taskDone(t){return t.subs.length?t.subs.every(s=>s.done):!!t.done}
-function untouched(t){return !t.done&&t.subs.every(s=>!s.done)}
-function tasksOn(k){return tasks.filter(t=>t.date===k)}
+function taskDone(t){return GuaposDominio.tarefas.taskDone(t)}
+function untouched(t){return GuaposDominio.tarefas.untouched(t)}
+function tasksOn(k){return GuaposDominio.tarefas.tasksOn(tarCtx(),k)}
 // Tarefas repetidas nao entram em "pendentes": elas voltam sozinhas no proximo dia previsto
-function overdueTasks(){const td=today();return tasks.filter(t=>t.date<td&&!t.ruleId&&!taskDone(t)).sort((a,b)=>a.date.localeCompare(b.date))}
+function overdueTasks(){return GuaposDominio.tarefas.overdueTasks(tarCtx())}
 function findTask(id){return tasks.find(t=>t.id===id)}
 function findRule(id){return id&&taskRules.find(r=>r.id===id)}
 function isTkOpen(t){return taskOpen[t.id]!==undefined?taskOpen[t.id]:(t.subs.length>0&&!taskDone(t))}
@@ -4461,20 +4466,8 @@ function fmtDayShort(k){return new Date(k+'T12:00:00').toLocaleDateString('pt-BR
 function uid(p){return p+Date.now().toString(36)+Math.floor(Math.random()*46656).toString(36)}
 
 // ── Repeticao ──
-function ruleHits(r,k){
-  if(k<r.start||(r.skip||[]).includes(k))return false;
-  const d=new Date(k+'T12:00:00');
-  if(r.type==='d')return true;
-  if(r.type==='w')return (r.days||[]).includes(d.getDay());
-  if(r.type==='m')return d.getDate()===Math.min(r.dom,dim(d.getMonth(),d.getFullYear()));
-  return false;
-}
-function repLabel(r){
-  if(!r)return'';
-  if(r.type==='d')return'Todo dia';
-  if(r.type==='w')return daysLabel({days:r.days||[]});
-  return'Todo dia '+r.dom;
-}
+function ruleHits(r,k){return GuaposDominio.tarefas.ruleHits(r,k)}
+function repLabel(r){return GuaposDominio.tarefas.repLabel(r)}
 // Cria as ocorrencias das tarefas repetidas no dia k (no maximo 60 dias a frente)
 function ensureRecurring(k){
   if(!taskRules.length||k>shiftKey(today(),60)||k<arqCorte())return;
@@ -4498,10 +4491,10 @@ function dropRule(rid,fromDate){
 // Cada tipo de dado fica num documento só, e o Firestore aceita até 1 MB por documento.
 // Para a lista de tarefas não crescer para sempre, as de mais de 6 meses vão para o arquivo, um documento por semestre.
 // Ficam na lista as pendentes sem repetição, que ainda aparecem em "Pendentes de antes".
-const ARQ_MESES=6;
+const ARQ_MESES=GuaposDominio.tarefas.ARQ_MESES;
 // Primeiro dia do mês de 6 meses atrás: o que for de antes dele vai para o arquivo
-function arqCorte(){const d=new Date();d.setDate(1);d.setMonth(d.getMonth()-ARQ_MESES);return dkey(d.getFullYear(),d.getMonth(),1)}
-const arqSem=k=>k.slice(0,4)+'-'+(+k.slice(5,7)<=6?1:2); // "2026-1" = janeiro a junho
+function arqCorte(){return GuaposDominio.tarefas.arqCorte(today())}
+const arqSem=GuaposDominio.tarefas.arqSem; // "2026-1" = janeiro a junho
 let arquivando=false,arqCache=null;
 // grupos = {semestre:{id:tarefa}}. Na nuvem, cada tarefa é um campo do documento do semestre,
 // então gravar de novo a mesma tarefa (ou dois aparelhos arquivando juntos) não duplica nada.
@@ -4553,6 +4546,13 @@ async function arquivarTarefas(){
 
 function renderTasks(){
   if(!taskDay)taskDay=today();
+  if(window.__tarefasReact){
+    GuaposDominio.telaTarefas.diasDaSemana(taskDay).forEach(k=>ensureRecurring(k));
+    window.dispatchEvent(new Event('guapos:tarefas'));return;
+  }
+  renderTasksLegado();
+}
+function renderTasksLegado(){
   setIco('t-ey','list','Tarefas diárias');
   setIco('t-list-t','checkc','Lista do dia');
   setIco('t-over-t','clock','Pendentes de antes');
@@ -4609,7 +4609,7 @@ function taskHTML(t,showDate,drag){
   if(r)meta.push(`<span class="tk-rep">${ic('repeat')}${repLabel(r)}</span>`);
   if(n)meta.push(`<span>${nd}/${n} subtarefas</span><span class="tk-mini"><span style="width:${Math.round(nd/n*100)}%"></span></span>`);
   const subs=open?`<div class="tk-subs">${t.subs.map(s=>`
-      <div class="tk-sub" data-tid="${t.id}"><div class="hck${s.done?' on':''}" onclick="tkSub('${t.id}','${s.id}')" role="checkbox" aria-checked="${!!s.done}"></div><div class="tk-sn${s.done?' done':''}" onclick="tkSub('${t.id}','${s.id}')">${esc(s.name)}</div><button class="tk-sx" onclick="tkDelSub('${t.id}','${s.id}')" aria-label="Remover subtarefa">${ic('x')}</button></div>`).join('')}
+      <div class="tk-sub" data-tid="${t.id}"><div class="hck${s.done?' on':''}" data-sid="${s.id}" onclick="tkSub('${t.id}','${s.id}')" role="checkbox" aria-checked="${!!s.done}"></div><div class="tk-sn${s.done?' done':''}" onclick="tkSub('${t.id}','${s.id}')">${esc(s.name)}</div><button class="tk-sx" onclick="tkDelSub('${t.id}','${s.id}')" aria-label="Remover subtarefa">${ic('x')}</button></div>`).join('')}
       <div class="tk-sadd"><input type="text" id="tsi-${t.id}" placeholder="${n?'Outra subtarefa':'Primeira subtarefa, ex: Painel'}" maxlength="60" enterkeyhint="done" onkeydown="if(event.key==='Enter'){event.preventDefault();tkAddSub('${t.id}')}"><button class="ibtn" onclick="tkAddSub('${t.id}')" aria-label="Adicionar subtarefa">${ic('plus')}</button></div>
     </div>`:'';
   return `<div class="tk${done?' done':''}${open?' open':''}" data-id="${t.id}">
@@ -4622,7 +4622,9 @@ function taskHTML(t,showDate,drag){
 function setTaskDay(k){taskDay=k;buzz(5);renderTasks()}
 function shiftWeek(n){taskDay=shiftKey(taskDay,n*7);buzz(5);renderTasks()}
 function renderAfterTask(){if(curPage==='tasks')renderTasks();else if(curPage==='dash')refreshDash()}
-function focusSub(id){const el=document.getElementById('tsi-'+id);if(el)el.focus()}
+// O Início e a tela de Tarefas mostram a mesma tarefa, cada um com o seu campo de nova subtarefa (mesmo id): usa o da tela aberta
+function campoSub(id){return document.querySelector('#page-'+curPage+' [id="tsi-'+id+'"]')||document.getElementById('tsi-'+id)}
+function focusSub(id){const el=campoSub(id);if(el)el.focus()}
 function addTask(inputId){
   const fromDash=inputId==='d-t-inp',el=document.getElementById(inputId||'t-inp'),v=el.value.trim();
   if(!v){el.focus();return}
@@ -4647,13 +4649,13 @@ function tkSub(tid,sid){
   const was=taskDone(t);
   s.done=!s.done;buzz(s.done?12:6);ss('e2_tasks',tasks);
   renderAfterTask();
-  if(s.done)popCk(`.tk[data-id="${tid}"] .hck[onclick="tkSub('${tid}','${sid}')"]`);
+  if(s.done)popCk(`.tk[data-id="${tid}"] .hck[data-sid="${sid}"]`);
   if(!was&&taskDone(t))celebrateTask(t);
 }
 function tkAddSub(tid){
-  const t=findTask(tid),el=document.getElementById('tsi-'+tid);if(!t||!el)return;
+  const t=findTask(tid),el=campoSub(tid);if(!t||!el)return;
   const v=el.value.trim();if(!v){el.focus();return}
-  t.subs.push({id:uid('s'),name:v,done:false});
+  t.subs.push({id:uid('s'),name:v,done:false});el.value='';
   t.done=false;taskOpen[tid]=true;
   buzz(8);ss('e2_tasks',tasks);renderAfterTask();focusSub(tid);
 }
@@ -4702,6 +4704,7 @@ function startDrag(e){
   };
   const up=()=>{
     grip.removeEventListener('pointermove',move);grip.removeEventListener('pointerup',up);grip.removeEventListener('pointercancel',up);
+    items.forEach(x=>{x.style.transform='';x.classList.remove('dragging','slide')});
     if(to!==idx){
       const ids=items.map(x=>x.dataset.id),[m]=ids.splice(idx,1);ids.splice(to,0,m);
       const pos=ids.map(i=>tasks.findIndex(t=>t.id===i)).sort((a,b)=>a-b),objs=ids.map(findTask);
@@ -4841,6 +4844,7 @@ function renderToday(){
 }
 // Atualiza so o topo e o card Hoje, sem redesenhar os graficos
 function refreshDash(){
+  if(window.__inicioReact){ensureRecurring(today());window.dispatchEvent(new CustomEvent('guapos:inicio',{detail:{completo:false}}));return}
   const pct=dayPct(today()),circ=169.6;
   document.getElementById('d-ring').style.strokeDashoffset=circ-(circ*pct);
   document.getElementById('d-ring-pct').textContent=Math.round(pct*100)+'%';
@@ -4943,92 +4947,52 @@ document.addEventListener('visibilitychange',()=>{
 // ════════════════════════════════
 // FINANCAS
 // ════════════════════════════════
+// ── Regras financeiras ──
+// Ficam em src/dominio/financas.ts (carregadas antes deste script, em dominio.js, como GuaposDominio.financas).
+// As funções abaixo mantêm os nomes de antes e só passam os dados do perfil aberto e o dia de hoje.
+function finCtx(){return {receitas,fixos,variaveis,vaMovs,cfg,horas,hoje:today()}}
 // ── Modelo dos gastos ──
 // Gasto variável: sem o campo "pago" conta como pago (era assim antes). "data" é a data do gasto ou o vencimento;
 // "pagoEm" é o dia em que foi pago. Gasto fixo: pagos[AAAA-MM] guarda a data do pagamento (ou true nos registros antigos).
-const varPago=v=>v.pago!==false;
-const varVenc=v=>String(v.data||'').slice(0,10)||today();
-const varPagoEm=v=>v.pagoEm||varVenc(v);
-const catOf=x=>CATS.some(c=>c.k===x.cat)?x.cat:'outros';
+const varPago=GuaposDominio.financas.varPago;
+const varVenc=v=>GuaposDominio.financas.varVenc(finCtx(),v);
+const varPagoEm=v=>GuaposDominio.financas.varPagoEm(finCtx(),v);
+const catOf=GuaposDominio.financas.catOf;
 const catInfo=k=>CATS.find(c=>c.k===k)||CATS[CATS.length-1];
 const validDate=k=>/^\d{4}-\d{2}-\d{2}$/.test(k||'')&&!isNaN(new Date(k+'T12:00:00'))&&+k.slice(0,4)>=2000&&+k.slice(0,4)<=2100;
 const fmtDia=k=>new Date(k+'T12:00:00').toLocaleDateString('pt-BR',{day:'2-digit',month:'short'}).replace('.','');
 const diasAte=k=>Math.round((new Date(k+'T12:00:00')-new Date(today()+'T12:00:00'))/864e5);
 function mkey(m=curMes(),a=curAno()){return a+'-'+pad(m+1)}
-function isPaid(f,m,a){return !!(f.pagos||{})[mkey(m,a)]}
-function fixoVenc(f,m,a){return dkey(a,m,Math.min(parseInt(f.dia)||1,dim(m,a)))}
-function fixoPagoEm(f,m,a){const p=(f.pagos||{})[mkey(m,a)];return typeof p==='string'?p:(p?fixoVenc(f,m,a):null)}
-const mesAntes=(m,a)=>a<curAno()||(a===curAno()&&m<curMes());
+function isPaid(f,m,a){return GuaposDominio.financas.isPaid(f,m,a)}
+function fixoVenc(f,m,a){return GuaposDominio.financas.fixoVenc(f,m,a)}
+function fixoPagoEm(f,m,a){return GuaposDominio.financas.fixoPagoEm(f,m,a)}
+const mesAntes=(m,a)=>GuaposDominio.financas.mesAntes(finCtx(),m,a);
 // O fixo vale de "desde" até "ate" (quando encerrado). O valor de um mês pago fica guardado em valPago:
 // mudar o valor do cadastro só vale daqui para a frente.
-const fixoAtivo=(f,m,a)=>{const k=mkey(m,a);return k>=(f.desde||mkey())&&(!f.ate||k<=f.ate)};
-const fixoValor=(f,m,a)=>{const v=(f.valPago||{})[mkey(m,a)];return v!=null?+v:+f.valor||0};
+const fixoAtivo=(f,m,a)=>GuaposDominio.financas.fixoAtivo(finCtx(),f,m,a);
+const fixoValor=GuaposDominio.financas.fixoValor;
 // Meses antes de m/a (desde o início do fixo) que ficaram sem pagamento
-function fixosAtrasados(m=curMes(),a=curAno()){
-  const out=[],alvo=mkey(m,a);
-  fixos.forEach(f=>{
-    if(!f.desde)return;
-    let y=+f.desde.slice(0,4),mm=+f.desde.slice(5,7)-1;
-    for(let i=0;i<240&&mkey(mm,y)<alvo;i++){
-      if(fixoAtivo(f,mm,y)&&!fixoPagoEm(f,mm,y))out.push({tipo:'fixo',id:f.id,nome:f.nome,valor:fixoValor(f,mm,y),cat:catOf(f),venc:fixoVenc(f,mm,y),pago:false,quando:fixoVenc(f,mm,y),m:mm,a:y,dia:parseInt(f.dia)||1});
-      if(++mm>11){mm=0;y++}
-    }
-  });
-  return out.sort((x,y)=>x.venc.localeCompare(y.venc));
-}
+function fixosAtrasados(m=curMes(),a=curAno()){return GuaposDominio.financas.fixosAtrasados(finCtx(),m,a)}
 // Todas as saídas de um mês com a data que vale para elas: dia do pagamento (pagas) ou vencimento (a pagar)
-function saidasMes(m,a){
-  const ini=dkey(a,m,1),fim=dkey(a,m,dim(m,a)),out=[];
-  fixos.forEach(f=>{
-    const pe=fixoPagoEm(f,m,a);
-    // fora do período do fixo (antes de "desde" ou depois de encerrado) só aparece o que foi pago
-    if(!pe&&!fixoAtivo(f,m,a))return;
-    out.push({tipo:'fixo',id:f.id,nome:f.nome,valor:fixoValor(f,m,a),cat:catOf(f),venc:fixoVenc(f,m,a),pago:!!pe,quando:pe||fixoVenc(f,m,a),m,a,dia:parseInt(f.dia)||1});
-  });
-  variaveis.forEach(v=>{
-    const pg=varPago(v),q=pg?varPagoEm(v):varVenc(v);
-    if(q>=ini&&q<=fim)out.push({tipo:'var',id:v.id,nome:v.nome,valor:+v.valor||0,cat:catOf(v),venc:varVenc(v),pago:pg,quando:q});
-  });
-  return out;
-}
-const variaveisAPagar=()=>variaveis.filter(v=>!varPago(v)).sort((x,y)=>varVenc(x).localeCompare(varVenc(y)));
+function saidasMes(m,a){return GuaposDominio.financas.saidasMes(finCtx(),m,a)}
+const variaveisAPagar=()=>GuaposDominio.financas.variaveisAPagar(finCtx());
 // Contas em aberto: fixos atrasados de meses anteriores + fixos do mês atual + variáveis a pagar (qualquer data), da mais urgente para a menos
-function contasAbertas(){
-  const m=curMes(),a=curAno();
-  const fx=[...fixosAtrasados(m,a),...saidasMes(m,a).filter(x=>x.tipo==='fixo'&&!x.pago)];
-  const vr=variaveisAPagar().map(v=>({tipo:'var',id:v.id,nome:v.nome,valor:+v.valor||0,cat:catOf(v),venc:varVenc(v),pago:false,quando:varVenc(v)}));
-  return [...fx,...vr].sort((x,y)=>x.venc.localeCompare(y.venc));
-}
+function contasAbertas(){return GuaposDominio.financas.contasAbertas(finCtx())}
 
 // ── Horas trabalhadas ──
 // Horas do mês = horas mensais de referência − folgas do mês + horas informadas nas receitas Extra do mês
-const horasBase=()=>{const b=parseFloat(cfg.horasMes);return b>0?b:160};
-const jornada=()=>{const j=parseFloat(cfg.jornada);return j>=0&&j<=24?j:8};
-const folgasMes=(m,a)=>(horas.folgas||[]).filter(x=>x.data.slice(0,7)===mkey(m,a)).sort((x,y)=>x.data.localeCompare(y.data));
-const extrasComHoras=(m,a)=>receitasMes(m,a).filter(r=>r.tipo==='extra'&&+r.horas>0);
+const horasBase=()=>GuaposDominio.financas.horasBase(finCtx());
+const jornada=()=>GuaposDominio.financas.jornada(finCtx());
+const folgasMes=(m,a)=>GuaposDominio.financas.folgasMes(finCtx(),m,a);
+const extrasComHoras=(m,a)=>GuaposDominio.financas.extrasComHoras(finCtx(),m,a);
 // o: simula mudanças antes de salvar (base nova, tirar uma folga/receita, somar folga/horas extra)
-function horasCalc(m,a,o={}){
-  const base=o.base!=null?o.base:horasBase();
-  const folga=folgasMes(m,a).filter(x=>x.id!==o.semFolga).reduce((s,x)=>s+(+x.h||0),0)+(o.maisFolga||0);
-  const extra=extrasComHoras(m,a).filter(r=>r.id!==o.semReceita).reduce((s,r)=>s+(+r.horas||0),0)+(o.maisExtra||0);
-  return{base,folga,extra,total:base-folga+extra};
-}
-const horasMes=(m,a)=>horasCalc(m,a).total;
+function horasCalc(m,a,o={}){return GuaposDominio.financas.horasCalc(finCtx(),m,a,o)}
+const horasMes=(m,a)=>GuaposDominio.financas.horasMes(finCtx(),m,a);
 const formulaHoras=(m,a,c=horasCalc(m,a))=>`${fmtH(c.base)} de referência${c.folga?' − '+fmtH(c.folga)+' de folga':''}${c.extra?' + '+fmtH(c.extra)+' de extras':''} = ${fmtH(c.total)}`;
 // renda do mês (inclui o que ainda vai cair); em meses futuros sem salário lançado usa o salário configurado
-function rendaMes(m,a){
-  let r=somaValor(receitasMes(m,a));
-  if(cfg.salario>0&&!mesAntes(m,a)&&!receitas.some(x=>x.origem==='auto-salario'&&x.mes===m&&x.ano===a))r+=+cfg.salario;
-  return r;
-}
-function valorHora(m,a){const r=rendaMes(m,a),h=horasMes(m,a);return r>0&&h>0?r/h:0}
-function horasDoDia(k){
-  if((horas.dias||{})[k]!=null)return{h:+horas.dias[k],padrao:false};
-  const wd=new Date(k+'T12:00:00').getDay();
-  // dia útil sem horas informadas: jornada padrão, descontando folga lançada para esse dia
-  const folga=(horas.folgas||[]).filter(x=>x.data===k).reduce((s,x)=>s+(+x.h||0),0);
-  return{h:wd===0||wd===6?0:Math.max(0,jornada()-folga),padrao:true,folga};
-}
+function rendaMes(m,a){return GuaposDominio.financas.rendaMes(finCtx(),m,a)}
+function valorHora(m,a){return GuaposDominio.financas.valorHora(finCtx(),m,a)}
+function horasDoDia(k){return GuaposDominio.financas.horasDoDia(finCtx(),k)}
 function fmtHoras(h){
   if(h<=0)return'—';
   if(h<1)return Math.round(h*60)+'min';
@@ -5040,32 +5004,7 @@ const fmtH=h=>(Math.round(h*10)/10).toLocaleString('pt-BR')+' h';
 // ── Projeção do saldo ──
 // Parte do saldo agora, soma o que vai cair e tira o que vence, dia a dia, de hoje até "ate".
 // Contas vencidas e não pagas entram hoje. Salário de meses futuros entra como previsto.
-function projecao(ate){
-  const td=today(),res={};
-  if(!validDate(ate)||ate<td)return res;
-  const ent={},sai={},contas={};
-  const add=(o,k,v)=>{o[k]=(o[k]||0)+v};
-  const conta=(x,k)=>{add(sai,k,x.valor);(contas[k]=contas[k]||[]).push(x)};
-  // receitas a receber (as atrasadas contam como se chegassem hoje)
-  aReceber().forEach(r=>{const k=recData(r);add(ent,k<td?td:k,+r.valor||0)});
-  fixosAtrasados().forEach(x=>conta(x,td));
-  let m=curMes(),a=curAno();
-  const am=+ate.slice(5,7)-1,ay=+ate.slice(0,4);
-  for(let i=0;i<24&&(a<ay||(a===ay&&m<=am));i++){
-    saidasMes(m,a).forEach(x=>{if(x.tipo==='fixo'&&!x.pago)conta(x,x.venc<td?td:x.venc)});
-    // meses que ainda não começaram: salário e receitas fixas previstos (os lançamentos só são criados no mês)
-    if(i>0&&cfg.salario>0&&!receitas.some(r=>r.origem==='auto-salario'&&r.mes===m&&r.ano===a))add(ent,dkey(a,m,Math.min(cfg.diaPag||1,dim(m,a))),+cfg.salario);
-    if(i>0)recFixasAtivas(m,a).forEach(t=>{if(!receitas.some(r=>r.fixaId===t.id&&r.mes===m&&r.ano===a))add(ent,dkey(a,m,Math.min(t.dia||1,dim(m,a))),+t.valor||0)});
-    if(++m>11){m=0;a++}
-  }
-  variaveisAPagar().forEach(v=>{const k=varVenc(v);conta({tipo:'var',id:v.id,nome:v.nome,valor:+v.valor||0,venc:k},k<td?td:k)});
-  let saldo=finResumo().agora;
-  for(let k=td,n=0;k<=ate&&n<800;k=shiftKey(k,1),n++){
-    saldo=centavos(saldo+(ent[k]||0)-(sai[k]||0));
-    res[k]={saldo,saidas:sai[k]||0,falta:(sai[k]||0)>0&&saldo<0,contas:contas[k]||[]};
-  }
-  return res;
-}
+function projecao(ate){return GuaposDominio.financas.projecao(finCtx(),ate)}
 
 // ════════════════════════════════
 // FINANCAS — tela
@@ -5091,6 +5030,19 @@ function finRefresh(){
   if(document.getElementById('fdia-ol').classList.contains('on'))renderFinDia();
 }
 function renderFin(){
+  if(window.__financasReact){
+    window.dispatchEvent(new Event('guapos:financas'));
+    if(finLocked())return;
+    caberTexto(PREV_IDS);
+    renderFalta(document.getElementById('f-falta'),false);
+    renderLembretes(document.getElementById('f-lembretes'),false);
+    renderOrcAlerta(document.getElementById('f-orc-alerta'));
+    vaDisp();renderFinChart(curMes());
+    return;
+  }
+  renderFinLegado();
+}
+function renderFinLegado(){
   setIco('f-ey','wallet','Controle financeiro');
   if(!renderFinLock())return;
   setIco('f-va-t','card','Vale alimentação');
@@ -5112,7 +5064,9 @@ function renderFin(){
   // de onde vem o saldo: o que sobrou (ou faltou) no fim do mês anterior
   const abreEl=document.getElementById('f-abre');
   abreEl.hidden=!R.abertura;
-  if(R.abertura)abreEl.textContent=`Saldo agora inclui ${brlC(Math.abs(R.abertura))} que ${R.abertura>0?'sobraram':'faltaram'} no fim de ${MS[(m+11)%12].toLowerCase()}.`;
+  // no primeiro mês com movimento a abertura é só o saldo inicial do Perfil; depois, a sobra do mês anterior
+  const iniFin=primeiroMesFin(),primeiroMes=!iniFin||iniFin>=mkey(m,a);
+  if(R.abertura)abreEl.textContent=primeiroMes?`Saldo agora inclui o saldo inicial de ${brlC(R.abertura)}, informado no Perfil.`:`Saldo agora inclui ${brlC(Math.abs(R.abertura))} que ${R.abertura>0?'sobraram':'faltaram'} no fim de ${MS[(m+11)%12].toLowerCase()}.`;
 
   document.getElementById('f-prev-atual').textContent=brlC(R.agora);
   document.getElementById('f-prev-receber').textContent='+'+fmtBRL(R.receber);
@@ -5190,6 +5144,7 @@ function renderFin(){
 
 // ── Calendário financeiro ──
 function renderFinCal(){
+  if(window.__financasReact){window.dispatchEvent(new Event('guapos:financas'));return}
   const box=document.getElementById('fc-grid');if(!box)return;
   document.getElementById('fc-prev').innerHTML=ic('left');
   document.getElementById('fc-next').innerHTML=ic('right');
@@ -5284,6 +5239,7 @@ function setHorasDia(v){
 
 // ── Valor da hora e ajustes ──
 function renderHoraCard(){
+  if(window.__financasReact){window.dispatchEvent(new Event('guapos:financas'));return}
   const m=fcM,a=fcY,c=horasCalc(m,a),hv=valorHora(m,a),renda=rendaMes(m,a);
   document.getElementById('f-hora-val').textContent=hv>0?fmtBRL(hv)+'/h':'—';
   document.getElementById('f-hora-sub').textContent=hv>0?`${MS[m]}: ${fmtBRL(renda)} ÷ ${fmtH(c.total)}`:`Lance as receitas de ${MS[m]} para calcular`;
@@ -5382,16 +5338,9 @@ function delFolga(id){
 }
 
 // ── Para onde vai o dinheiro ──
-function setCatFiltro(f){catFiltro=f;document.querySelectorAll('[data-cf]').forEach(e=>e.classList.toggle('on',e.dataset.cf===f));buzz(5);renderCatPanel()}
+function setCatFiltro(f){catFiltro=f;if(window.__financasReact){buzz(5);renderCatPanel();return}document.querySelectorAll('[data-cf]').forEach(e=>e.classList.toggle('on',e.dataset.cf===f));buzz(5);renderCatPanel()}
 // Gastos do mês por categoria: pago e previsto a pagar (filtro: total, var ou fixo)
-function gastosPorCat(m,a,filtro='total'){
-  const por={};
-  saidasMes(m,a).forEach(x=>{
-    if(filtro!=='total'&&x.tipo!==filtro)return;
-    const o=por[x.cat]=por[x.cat]||{pago:0,prev:0};if(x.pago)o.pago+=x.valor;else o.prev+=x.valor;
-  });
-  return por;
-}
+function gastosPorCat(m,a,filtro='total'){return GuaposDominio.financas.gastosPorCat(finCtx(),m,a,filtro)}
 // Barra do limite: o limite fica a 80% da barra, sobrando espaço para mostrar o excesso; se o gasto passar disso, a escala acompanha o gasto.
 // Até a linha, a cor da categoria; depois dela, a cor de alerta. Cheio = pago, listrado = a pagar.
 // Acima do limite, a parte até a linha fica neutra: algumas categorias já são avermelhadas e o excesso precisa se destacar.
@@ -5412,6 +5361,7 @@ function textoLimite(o){
     +(o.prev?` · ${fmtBRL(o.prev)} a pagar`:'');
 }
 function renderCatPanel(){
+  if(window.__financasReact){window.dispatchEvent(new Event('guapos:financas'));return}
   const box=document.getElementById('f-cat');if(!box)return;
   document.querySelectorAll('[data-cf]').forEach(e=>e.classList.toggle('on',e.dataset.cf===catFiltro));
   const mes=MS[fcM]+(fcY!==curAno()?' '+fcY:''),total=catFiltro==='total',por=gastosPorCat(fcM,fcY,catFiltro);
@@ -5451,17 +5401,11 @@ function renderCatPanel(){
 // ── Orçamento por categoria ──
 // cfg.orcamento = { categoria: limite por mês }, o mesmo para todos os meses.
 // Uso do mês = o que já foi pago + o que está previsto a pagar (fixos e variáveis), na data que vale para cada conta.
-const ORC_PERTO=.8;
-const orcLim=k=>+((cfg.orcamento||{})[k])||0;
+const ORC_PERTO=GuaposDominio.financas.ORC_PERTO;
+const orcLim=k=>GuaposDominio.financas.orcLim(finCtx(),k);
 // faixa do uso: ok, perto (a partir de 80%) ou passou (acima do limite), comparando em centavos
-function orcNivelDe(usado,lim){const cent=Math.round(usado*100),limC=Math.round(lim*100);return cent>limC?'passou':cent>=limC*ORC_PERTO?'perto':'ok'}
-function orcUso(m,a){
-  const por=gastosPorCat(m,a);
-  return CATS.filter(c=>orcLim(c.k)>0).map(c=>{
-    const o=por[c.k]||{pago:0,prev:0},lim=orcLim(c.k),usado=o.pago+o.prev;
-    return {k:c.k,lim,pago:o.pago,prev:o.prev,usado,estado:orcNivelDe(usado,lim)};
-  });
-}
+function orcNivelDe(usado,lim){return GuaposDominio.financas.orcNivelDe(usado,lim)}
+function orcUso(m,a){return GuaposDominio.financas.orcUso(finCtx(),m,a)}
 const ORC_NIVEL={ok:0,perto:1,passou:2};
 const orcEstado=(k,m,a)=>(orcUso(m,a).find(x=>x.k===k)||{}).estado||'ok';
 // Aviso no topo de Finanças e do Início: categorias do mês atual perto ou acima do limite
@@ -5512,15 +5456,9 @@ function saveOrc(){
 // ── Lembretes ──
 // Sem servidor de notificações o app não consegue avisar com ele fechado. Mostra os avisos ao abrir e
 // oferece adicionar as contas ao calendário do celular, que dispara os alertas mesmo com o app fechado.
-function contasLembrete(){
-  const td=today(),am=shiftKey(td,1);
-  return contasAbertas().filter(x=>x.venc<=am).map(x=>({...x,quando:x.venc<td?'atrasada':x.venc===td?'hoje':'amanhã'}));
-}
+function contasLembrete(){return GuaposDominio.financas.contasLembrete(finCtx())}
 // Primeiro dia (nos próximos 30) em que o saldo projetado fica negativo ao pagar uma conta, mesmo que uma receita depois cubra
-function riscoFalta(){
-  const p=projecao(shiftKey(today(),30)),k=Object.keys(p).sort().find(k=>p[k].falta);
-  return k?{k,...p[k]}:null;
-}
+function riscoFalta(){return GuaposDominio.financas.riscoFalta(finCtx())}
 function renderFalta(el,dash){
   if(!el)return;
   const r=finLocked()?null:riscoFalta();
@@ -5560,7 +5498,7 @@ async function baixarICS(itens,nome,vazio){
     showToast(`${itens.length} lembrete${itens.length>1?'s':''}: abra o arquivo para adicionar ao calendário`,'calendar');
 }
 // Contas a pagar de um mês que ainda vão vencer (as já vencidas não teriam mais aviso)
-function contasDoMes(m,a){const td=today();return saidasMes(m,a).filter(x=>!x.pago&&x.venc>=td).sort((x,y)=>x.venc.localeCompare(y.venc))}
+function contasDoMes(m,a){return GuaposDominio.financas.contasDoMes(finCtx(),m,a)}
 const slugMes=(m,a)=>MS[m].normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase()+'-'+a;
 function exportarMes(m=fcM,a=fcY){
   if(mesAntes(m,a)){showToast(MS[m]+' já passou','x');return}
@@ -5593,27 +5531,25 @@ function renderFinChart(m){
       scales:{x:{grid:{display:false},ticks:{color:tok('--t2'),font:{size:9},maxTicksLimit:10}},y:{grid:{color:tok('--br2')},ticks:{color:tok('--t2'),font:{size:9},callback:v=>'R$'+v}}}}
   });
 }
-function vaSaldo(){return vaSaldoEm(today())}
-const vaSinal=v=>v.tipo==='recarga'?+v.valor||0:-(+v.valor||0);
-function vaSaldoEm(k){return centavos(vaMovs.filter(v=>(v.data||today())<=k).reduce((acc,v)=>acc+vaSinal(v),0))}
+function vaSaldo(){return GuaposDominio.financas.vaSaldo(finCtx())}
+const vaSinal=GuaposDominio.financas.vaSinal;
+function vaSaldoEm(k){return GuaposDominio.financas.vaSaldoEm(finCtx(),k)}
 // Menor saldo do vale em qualquer data (recargas primeiro no mesmo dia): não pode ficar abaixo de zero
-function vaMinimo(movs){
-  let s=0,min=0;
-  [...movs].sort((x,y)=>(x.data||'').localeCompare(y.data||'')||(x.tipo==='recarga'?-1:1)-(y.tipo==='recarga'?-1:1)).forEach(v=>{s=centavos(s+vaSinal(v));min=Math.min(min,s)});
-  return min;
-}
+function vaMinimo(movs){return GuaposDominio.financas.vaMinimo(movs)}
 // Recusa um movimento que deixaria o vale negativo e diz quanto há
 function vaPermite(novo){
   if(vaMinimo([...vaMovs,novo])>=0)return true;
   showToast(`Não cabe no vale: há ${fmtBRL(Math.max(0,vaSaldoEm(novo.data)))} em ${fmtDia(novo.data)}`,'x',3600);buzz([20,60,20]);
   return false;
 }
-function vaMes(m=curMes(),a=curAno()){return vaMovs.filter(v=>{const d=new Date((v.data||today())+'T12:00:00');return d.getMonth()===m&&d.getFullYear()===a})}
+function vaMes(m=curMes(),a=curAno()){return GuaposDominio.financas.vaMes(finCtx(),m,a)}
+function vaDisp(){document.querySelectorAll('.va-disp').forEach(e=>{e.textContent='Disponível no vale hoje: '+fmtBRL(Math.max(0,vaSaldo()))})}
 function renderVA(m=curMes(),a=curAno()){
+  if(window.__financasReact){window.dispatchEvent(new Event('guapos:financas'));return}
   const el=document.getElementById('f-va-list');if(!el)return;
   const movs=vaMes(m,a).sort((x,y)=>(y.data||'').localeCompare(x.data||''));
   document.getElementById('va-saldo').textContent=fmtBRL(vaSaldo());
-  document.querySelectorAll('.va-disp').forEach(e=>{e.textContent='Disponível no vale hoje: '+fmtBRL(Math.max(0,vaSaldo()))});
+  vaDisp();
   document.getElementById('va-gasto-mes').textContent=fmtBRL(movs.filter(v=>v.tipo==='gasto').reduce((acc,v)=>acc+parseFloat(v.valor||0),0));
   document.getElementById('va-conv-mes').textContent=fmtBRL(movs.filter(v=>v.tipo==='conversao').reduce((acc,v)=>acc+parseFloat(v.valor||0),0));
   el.innerHTML=movs.length?movs.map(v=>{
@@ -5897,7 +5833,14 @@ function delVAMov(id){
 // ════════════════════════════════
 // SAUDE
 // ════════════════════════════════
+// A tela de Saúde é desenhada em React (src/features/saude). O app antigo só avisa para ela redesenhar
+// quando a página abre, os dados mudam, o tema muda ou outro aparelho sincroniza.
 function renderSaude(){
+  if(window.__saudeReact){window.dispatchEvent(new Event('guapos:saude'));return}
+  renderSaudeLegado();
+}
+// Reserva: a tela antiga, usada só se o React não carregar
+function renderSaudeLegado(){
   setIco('s-ey','heart','Corpo e movimento');
   setIco('s-l1','scale','Peso atual');
   setIco('s-l2','target','Meta de peso');
@@ -6026,6 +5969,39 @@ function delPerf(k){
   const u=snap(['perf']);delete perf[k];ss('e2_perf',perf);renderSaude();
   offerUndo('Registro de '+MS[+k.slice(5)-1]+' '+k.slice(0,4)+' apagado',u);
 }
+// Ponte com as partes em React: os mesmos dados e ações do app antigo (ver src/legado.d.ts)
+window.guaposPonte={
+  pid:()=>PID,hoje:()=>today(),perf:()=>perf,cfg:()=>cfg,
+  salvarPerf:v=>{perf=v;save('e2_perf',perf);renderSaude()},
+  apagarPerf:k=>delPerf(k),
+  abrirPesoRapido:()=>openSheet('peso-ol'),
+  ic:(n,cls)=>ic(n,cls),tok:n=>tok(n),transl:(c,a)=>transl(c,a),
+  habCtx:()=>habCtx(),nomePerfil:p=>profName(p),avatarHtml:p=>avatar(p),nuvem:()=>!!Sync.on,
+  backupDias:()=>backupSince(),backupTexto:()=>backupText(),financasBloqueadas:()=>finLocked(),
+  salvarCfg:v=>{cfg=v;ss('e2_cfg',cfg);clearTimeout(cfgToastT);cfgToastT=setTimeout(()=>showToast(),700);ensureMonthly()},
+  trocarPerfil:()=>switchProfile(),sairDaConta:()=>signOutApp(),refazerCadastro:()=>reopenOnb(),
+  fazerBackup:()=>exportData(),restaurarBackup:e=>importData(e),
+  estadoHabitos:()=>({edicao:editMode,vista:calView,mes:curMonth,ano:curCalY,dicaVista:!!cfg.tipSeen}),
+  marcarHabito:id=>toggleHabit(id,today()),alternarEdicao:()=>toggleEditMode(),moverHabito:(i,d)=>moveHabit(i,d),
+  novoHabito:()=>openNewHabit(),editarHabito:id=>openEditHabit(id),fecharDica:()=>hideTip(),
+  verCalendario:v=>setCalView(v),mudarMes:d=>shiftMonth(d),abrirDia:k=>openDia(k),marcarNoCalendario:(id,dia)=>toggleCalDay(id,dia),
+  tarCtx:()=>tarCtx(),estadoTarefas:()=>({dia:taskDay||today(),abertas:taskOpen}),regrasTarefas:()=>taskRules,
+  adicionarTarefa:()=>addTask(),marcarTarefa:id=>tkCheck(id),abrirTarefa:id=>tkOpen(id),editarTarefa:id=>openEditTask(id),
+  marcarSubtarefa:(t,s)=>tkSub(t,s),adicionarSubtarefa:t=>tkAddSub(t),removerSubtarefa:(t,s)=>tkDelSub(t,s),
+  trazerPendentes:()=>moveOverdue(),escolherDia:k=>setTaskDay(k),mudarSemana:n=>shiftWeek(n),arrastarTarefa:e=>startDrag(e),
+  irPara:p=>go(p),redesenhar:()=>{if(PID)go(curPage)},adicionarTarefaHoje:()=>addTask('d-t-inp'),
+  pagarConta:(tipo,id,m,a)=>tipo==='fixo'?togglePaid(id,m,a):toggleVarPago(id),
+  financas:{
+    ctx:()=>finCtx(),estado:()=>({mes:fcM,ano:fcY,sel:fcSel,filtro:catFiltro,temSenha:!!cfg.finPin}),
+    lancarGasto:()=>openVarSheet(null,today(),true),botaoCadeado:()=>finLockBtn(),desbloquear:()=>unlockFin(),
+    novaConta:()=>openVarSheet(null,fcSel||today(),false),mudarMes:d=>fcShift(d),abrirDia:k=>openFinDia(k),exportarMes:()=>exportarMes(),
+    ajustarHora:()=>openHorasSheet(),abrirLimites:()=>openOrcSheet(),filtrar:f=>setCatFiltro(f),
+    abrirVale:id=>openSheet(id),apagarMovVale:id=>delVAMov(id),
+    novaReceita:()=>openRecSheet(null),editarReceita:id=>openRecSheet(id),marcarRecebida:id=>toggleRecebida(id),apagarReceita:id=>delReceita(id),
+    novoFixo:()=>openFixoSheet(null),editarFixo:id=>openFixoSheet(id),marcarFixo:id=>togglePaid(id),encerrarFixo:id=>delFixo(id),
+    editarVariavel:id=>openVarSheet(id),pagarVariavel:id=>toggleVarPago(id),apagarVariavel:id=>delVariavel(id),
+  },
+};
 function savePesoRapido(){
   const v=parseFloat(document.getElementById('peso-val').value);
   if(!v){showToast('Informe o peso','x');return}
@@ -6040,27 +6016,13 @@ function savePesoRapido(){
 // ════════════════════════════════
 // PERFIL
 // ════════════════════════════════
-const MD=[
-  {i:'star',n:'Primeiro check',r:()=>totalCI()>=1},
-  {i:'flame',n:'7 dias seguidos',r:()=>bestStreak()>=7},
-  {i:'dumbbell',n:'30 dias seguidos',r:()=>bestStreak()>=30},
-  {i:'award',n:'100 check-ins',r:()=>totalCI()>=100},
-  {i:'target',n:'500 check-ins',r:()=>totalCI()>=500},
-  {i:'book',n:'Leitor 30x',r:()=>hCount('h12')>=30},
-  {i:'activity',n:'Corredor 20x',r:()=>hCount('h4')>=20},
-  {i:'bookopen',n:'Devoto 30x',r:()=>hCount('h0')>=30},
-  {i:'droplet',n:'Hidratado 30x',r:()=>hCount('h6')>=30},
-  {i:'moon',n:'Sono em dia 20x',r:()=>hCount('h7')>=20},
-  {i:'bowl',n:'Saudável 20x',r:()=>hCount('h8')>=20},
-  {i:'globe',n:'Inglês 30x',r:()=>hCount('h3')>=30}
-];
-const GOALS=[
-  {d:7,l:'1 semana',c:'var(--c)'},
-  {d:30,l:'30 dias',c:'var(--b)'},
-  {d:90,l:'90 dias',c:'var(--p)'},
-  {d:365,l:'1 ano inteiro',c:'var(--y)'}
-];
+const MD=GuaposDominio.perfil.MEDALHAS.map(m=>({i:m.i,n:m.n,r:()=>m.r(habCtx())}));
+const GOALS=GuaposDominio.perfil.METAS_SEQUENCIA;
 function renderPerfil(){
+  if(window.__perfilReact){window.dispatchEvent(new Event('guapos:perfil'));renderSyncStatus();arqPrefetch();renderInstall();return}
+  renderPerfilLegado();
+}
+function renderPerfilLegado(){
   setIco('p-ey','award','Nível e conquistas');
   setIco('p-acc-t','user','Conta e perfil');
   document.getElementById('p-acc-av').innerHTML=avatar(PID);

@@ -1,7 +1,7 @@
 // Service worker: guarda o app no aparelho para abrir e funcionar sem internet.
 // Ao publicar uma versão nova, troque o número da VERSION.
-const VERSION='guapos-v14';
-const CORE=['./','./index.html','./firebase-config.js','./manifest.webmanifest','./icons/icon-192.png','./icons/icon-512.png','./icons/apple-touch-icon.png'];
+const VERSION='guapos-v24';
+const CORE=['./','./index.html','./dominio.js','./firebase-config.js','./manifest.webmanifest','./icons/icon-192.png','./icons/icon-512.png','./icons/apple-touch-icon.png'];
 // Bibliotecas e fontes que podem ser guardadas (o login e o banco do Firebase nunca passam pelo cache)
 const CDN=['fonts.googleapis.com','fonts.gstatic.com','cdn.jsdelivr.net','www.gstatic.com'];
 
