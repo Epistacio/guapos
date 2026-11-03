@@ -1800,7 +1800,8 @@ html:is([data-theme^=vidro],[data-theme^=liquid]) .prev-c.tot{background:var(--a
 
 /* ════ Temas Liquid Glass: claro e escuro ════
    Usam a mesma estrutura dos Minimalistas (tipografia SF Pro / Inter, menu em cápsula, controles redondos),
-   mas todo o conteúdo é vidro: translúcido, com desfoque, aro de luz de 1px e sombra suave.
+   com o vidro só em barras e botões (menu, barra lateral, aviso, botões, chips e controle segmentado):
+   translúcido, com desfoque, aro de luz de 1px e sombra suave. Cartões e janelas são superfícies sólidas.
    Sem brilho em degradê nem chanfro: o efeito vem só da transparência real.
    Cores medidas nas referências:
    - claro (1ª imagem): fundo #D5D5DE, trilho #C6C9D1, texto #131519, verde #5EB35C, azul #4A7CD4,
@@ -1811,7 +1812,7 @@ html:is([data-theme^=vidro],[data-theme^=liquid]) .prev-c.tot{background:var(--a
    Sem desfoque no navegador, ou com menos transparência pedida no sistema, o vidro vira superfície sólida. */
 :root[data-theme=liquid]{
   color-scheme:light;
-  --bg:#D5D5DE;--s1:rgba(255,255,255,.5);--s2:rgba(198,201,209,.5);--s3:#C6C9D1;--field:rgba(255,255,255,.72);
+  --bg:#D5D5DE;--s1:#EBEBEF;--s2:rgba(198,201,209,.5);--s3:#C6C9D1;--field:rgba(255,255,255,.72);
   --t1:#131519;--t2:#464A53;--t3:#52565F;
   --br:rgba(19,21,25,.14);--br2:rgba(19,21,25,.08);
   --c-hab:#2A6328;--c-task:#2A54A3;--c-fin:#9A3A22;--c-saude:#A8262E;--c-perfil:#6E2F84;
@@ -1823,14 +1824,13 @@ html:is([data-theme^=vidro],[data-theme^=liquid]) .prev-c.tot{background:var(--a
   --hm0:#C6C9D1;--scrim:rgba(19,21,25,.22);
   --glass:rgba(255,255,255,.62);--glass-br:rgba(255,255,255,.85);--glass-hi:rgba(255,255,255,.9);
   --sel:rgba(255,255,255,.75);--hck-br:#6B6F78;
-  --lg-solido:#E9E9EE;--lg-blur:20px;
   --sh:0 12px 32px rgba(19,21,25,.12),0 2px 6px rgba(19,21,25,.06);
   --sh-lg:0 30px 70px -20px rgba(19,21,25,.35);--sh-float:0 14px 36px rgba(19,21,25,.16);
-  --sheet:rgba(233,233,238,.86);
+  --sheet:#ECECF0;
 }
 :root[data-theme=liquid-escuro]{
   color-scheme:dark;
-  --bg:#1B1D21;--s1:rgba(61,64,71,.55);--s2:rgba(43,44,48,.72);--s3:#3D4047;--field:rgba(38,39,43,.88);
+  --bg:#1B1D21;--s1:#2E3036;--s2:rgba(43,44,48,.72);--s3:#3D4047;--field:rgba(38,39,43,.88);
   --t1:#FFFFFF;--t2:#B9BCC3;--t3:#A3A7AF;
   --br:rgba(255,255,255,.14);--br2:rgba(255,255,255,.08);
   --c-hab:#4DCA67;--c-task:#8EA6F0;--c-fin:#E78B3D;--c-saude:#FF7AB8;--c-perfil:#F27CCB;
@@ -1842,32 +1842,40 @@ html:is([data-theme^=vidro],[data-theme^=liquid]) .prev-c.tot{background:var(--a
   --hm0:#2B2C30;--scrim:rgba(0,0,0,.5);
   --glass:rgba(48,50,56,.7);--glass-br:rgba(255,255,255,.12);--glass-hi:rgba(255,255,255,.14);
   --sel:#E0328A;--hck-br:#8A8E96;
-  --lg-solido:#2B2C30;--lg-blur:20px;
   --sh:0 18px 40px rgba(0,0,0,.55),0 2px 6px rgba(0,0,0,.3);
   --sh-lg:0 30px 70px -20px rgba(0,0,0,.85);--sh-float:0 14px 36px rgba(0,0,0,.6);
-  --sheet:rgba(38,39,43,.9);
+  --sheet:#26272B;
 }
 /* fundo: o cinza-lavanda da referência com luz vinda de cima (claro) ou o grafite em degradê (escuro), parados */
 html[data-theme^=liquid] body{background:transparent}
 html[data-theme^=liquid] body::before{display:block;content:'';position:fixed;inset:0;height:auto;z-index:-1;pointer-events:none;transition:none}
 html[data-theme=liquid] body::before{background:radial-gradient(90% 55% at 50% -12%,rgba(255,255,255,.6),transparent 70%)}
 html[data-theme=liquid-escuro] body::before{background:radial-gradient(80% 50% at 15% 0%,#2A2C33,transparent 70%),linear-gradient(160deg,#25262A,#13171B 70%)}
-/* placas de conteúdo: vidro com aro de luz e sombra suave */
-html[data-theme^=liquid] .card,html[data-theme^=liquid] .fin-summary{background:var(--s1);border:1px solid var(--glass-br);
-  backdrop-filter:blur(var(--lg-blur)) saturate(170%);-webkit-backdrop-filter:blur(var(--lg-blur)) saturate(170%);
-  box-shadow:inset 0 1px 0 var(--glass-hi),var(--sh)}
-html[data-theme^=liquid] .tk{background:var(--s2);border-color:var(--glass-br);box-shadow:inset 0 1px 0 var(--glass-hi)}
+/* placas de conteúdo e janelas: superfícies sólidas com sombra suave (o vidro fica só em barras e botões,
+   como no iOS: conteúdo firme embaixo, controles de vidro por cima, e nunca vidro sobre vidro) */
+html[data-theme^=liquid] .card,html[data-theme^=liquid] .fin-summary{background:var(--s1);border:1px solid var(--br2);box-shadow:var(--sh)}
+html[data-theme^=liquid] .tk{background:var(--s2);border-color:var(--br2);box-shadow:none}
 html[data-theme^=liquid] .tk.done{background:transparent}
+html[data-theme^=liquid] .sheet{backdrop-filter:none;-webkit-backdrop-filter:none;box-shadow:var(--sh-lg)}
+/* a janela sai pelo mesmo caminho: desce (no celular) ou encolhe e some (na tela larga), com o fundo esmaecendo junto */
+@keyframes olOut-lg{to{opacity:0}}
+@keyframes shOut-lg{to{transform:translateY(100%)}}
+@keyframes popOut-lg{to{opacity:0;transform:translateY(12px) scale(.98)}}
+html[data-theme^=liquid] .overlay.saindo:not(.on){display:flex;pointer-events:none;animation:olOut-lg .26s ease forwards}
+html[data-theme^=liquid] .overlay.saindo:not(.on) .sheet{animation:shOut-lg .26s var(--ease) forwards}
+@media(min-width:1000px){html[data-theme^=liquid] .overlay.saindo:not(.on) .sheet{animation:popOut-lg .2s var(--ease) forwards}}
 /* menu: vidro mais denso; aba escolhida em lente branca (claro) ou pílula rosa da referência (escuro) */
 html[data-theme^=liquid] .bnav{border:1px solid var(--glass-br)}
 html[data-theme=liquid] .bni.on .ic{background:var(--sel);color:var(--acc);box-shadow:inset 0 0 0 1px var(--glass-br),0 4px 12px rgba(19,21,25,.14)}
 html[data-theme=liquid-escuro] .bni.on{color:#FFFFFF}
 html[data-theme=liquid-escuro] .bni.on .ic{background:var(--sel);color:#FFFFFF}
-/* botões: o principal é sempre o azul "Continue"; o secundário e os redondos são vidro */
+/* botões: o principal é sempre o azul "Continue", sólido e vivo; o secundário, os redondos, os chips e o trilho
+   do controle segmentado são vidro de verdade (translúcido, com desfoque e saturação, que mantém vivas as cores de trás) */
 html[data-theme^=liquid] .bp{background:#4266D3;color:#FFFFFF}
-html[data-theme^=liquid] .bg,html[data-theme^=liquid] .chip:not(.on),html[data-theme^=liquid] .ibtn{background:var(--glass);border:1px solid var(--glass-br);box-shadow:inset 0 1px 0 var(--glass-hi),0 4px 12px -6px rgba(0,0,0,.3)}
+html[data-theme^=liquid] .bg,html[data-theme^=liquid] .chip:not(.on),html[data-theme^=liquid] .ibtn,html[data-theme^=liquid] .seg{background:var(--glass);border:1px solid var(--glass-br);
+  backdrop-filter:blur(12px) saturate(180%);-webkit-backdrop-filter:blur(12px) saturate(180%);
+  box-shadow:inset 0 1px 0 var(--glass-hi),0 4px 12px -6px rgba(0,0,0,.3)}
 html[data-theme^=liquid] .ibtn.on{background:var(--acc-soft);color:var(--acc)}
-html[data-theme^=liquid] .seg{background:var(--s2);border:1px solid var(--br2)}
 html[data-theme=liquid] .seg-i.on{background:rgba(255,255,255,.85);box-shadow:inset 0 0 0 1px var(--glass-br),0 3px 10px rgba(19,21,25,.14)}
 html[data-theme=liquid-escuro] .seg-i.on{background:#45474E;box-shadow:inset 0 1px 0 var(--glass-hi)}
 /* marcação: lente vazia com aro; marcada, a cor exata da área */
@@ -1883,19 +1891,22 @@ html[data-theme^=liquid] #d-today-pb{background:linear-gradient(90deg,#449BD2,#4
 .tp-prev.liquid-escuro b{background:#E0328A}
 /* sem desfoque no navegador, ou com menos transparência pedida no sistema: superfícies sólidas e legíveis */
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
-  :root[data-theme^=liquid]{--s1:var(--lg-solido);--glass:var(--lg-solido);--sheet:var(--lg-solido)}
+  :root[data-theme=liquid]{--glass:#F8F8FA}
+  :root[data-theme=liquid-escuro]{--glass:#383A40}
 }
+/* menos transparência ou mais contraste: tudo sólido (barras, botões, linhas, campos e trilhos), com a mesma cor viva */
 @media(prefers-reduced-transparency:reduce){
-  :root[data-theme^=liquid]{--s1:var(--lg-solido);--glass:var(--lg-solido);--sheet:var(--lg-solido)}
-  html[data-theme^=liquid] .card,html[data-theme^=liquid] .fin-summary,html[data-theme^=liquid] .bnav,html[data-theme^=liquid] .sheet,html[data-theme^=liquid] .toast,html[data-theme^=liquid] .side{backdrop-filter:none;-webkit-backdrop-filter:none}
+  :root[data-theme=liquid]{--glass:#F8F8FA;--s2:#DCDDE3;--field:#FFFFFF;--sel:#FFFFFF}
+  :root[data-theme=liquid-escuro]{--glass:#383A40;--s2:#34363B;--field:#26272B}
+  html[data-theme^=liquid] :is(.bnav,.side,.toast,.bg,.chip,.ibtn,.seg){backdrop-filter:none;-webkit-backdrop-filter:none}
 }
 @media(prefers-contrast:more){
-  :root[data-theme^=liquid]{--s1:var(--lg-solido);--glass:var(--lg-solido)}
-  :root[data-theme=liquid]{--glass-br:rgba(19,21,25,.45)}
-  :root[data-theme=liquid-escuro]{--glass-br:rgba(255,255,255,.45)}
+  :root[data-theme=liquid]{--glass:#F8F8FA;--s2:#DCDDE3;--field:#FFFFFF;--sel:#FFFFFF;--glass-br:rgba(19,21,25,.45);--br2:rgba(19,21,25,.3)}
+  :root[data-theme=liquid-escuro]{--glass:#383A40;--s2:#34363B;--field:#26272B;--glass-br:rgba(255,255,255,.45);--br2:rgba(255,255,255,.3)}
+  html[data-theme^=liquid] :is(.bnav,.side,.toast,.bg,.chip,.ibtn,.seg){backdrop-filter:none;-webkit-backdrop-filter:none}
 }
 </style>
-  <script type="module" crossorigin src="./assets/index-es9dIc7o.js"></script>
+  <script type="module" crossorigin src="./assets/index-AQsczGP3.js"></script>
   <link rel="stylesheet" crossorigin href="./assets/index-CjlNt6MZ.css">
 </head>
 <body>
@@ -2709,7 +2720,7 @@ html[data-theme^=liquid] #d-today-pb{background:linear-gradient(90deg,#449BD2,#4
 
 <!-- ═══ SHEETS ═══ -->
 <div class="overlay" id="edit-ol" onclick="closeSh(event,'edit-ol')">
-  <div class="sheet">
+  <div class="sheet"><div id="editar-habito-react" style="display:contents">
     <div class="drag"></div>
     <div class="sheet-t" id="edit-t">Novo hábito</div>
     <div class="fgrp"><label class="flbl" for="edit-inp">Nome</label><input type="text" id="edit-inp" placeholder="Ex: Academia" maxlength="40"></div>
@@ -2740,11 +2751,11 @@ html[data-theme^=liquid] #d-today-pb{background:linear-gradient(90deg,#449BD2,#4
       <button class="btn bg" style="flex:1" onclick="closeSh(null,'edit-ol')">Cancelar</button>
       <button class="btn bp" style="flex:1" onclick="saveHabit()">Salvar</button>
     </div>
-  </div>
+  </div></div>
 </div>
 
 <div class="overlay" id="task-ol" onclick="closeSh(event,'task-ol')">
-  <div class="sheet">
+  <div class="sheet"><div id="editar-tarefa-react" style="display:contents">
     <div class="drag"></div>
     <div class="sheet-t">Editar tarefa</div>
     <div class="fgrp"><label class="flbl" for="task-nome">Nome</label><input type="text" id="task-nome" maxlength="60"></div>
@@ -2782,7 +2793,7 @@ html[data-theme^=liquid] #d-today-pb{background:linear-gradient(90deg,#449BD2,#4
       <button class="btn bg" style="flex:1" onclick="closeSh(null,'task-ol')">Cancelar</button>
       <button class="btn bp" style="flex:1" onclick="saveTask()">Salvar</button>
     </div>
-  </div>
+  </div></div>
 </div>
 
 <div class="overlay" id="fpin-ol" onclick="closeSh(event,'fpin-ol')">
@@ -2803,7 +2814,7 @@ html[data-theme^=liquid] #d-today-pb{background:linear-gradient(90deg,#449BD2,#4
 </div>
 
 <div class="overlay" id="dia-ol" onclick="closeSh(event,'dia-ol')">
-  <div class="sheet">
+  <div class="sheet"><div id="dia-react" style="display:contents">
     <div class="drag"></div>
     <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:10px;margin-bottom:8px">
       <div style="min-width:0">
@@ -2818,11 +2829,11 @@ html[data-theme^=liquid] #d-today-pb{background:linear-gradient(90deg,#449BD2,#4
       <button class="btn bg" style="flex:1" onclick="markDay(false)">Limpar dia</button>
       <button class="btn bp" style="flex:1" onclick="markDay(true)">Marcar todos</button>
     </div>
-  </div>
+  </div></div>
 </div>
 
 <div class="overlay" id="rec-ol" onclick="closeSh(event,'rec-ol')">
-  <div class="sheet">
+  <div class="sheet"><div id="rec-react" style="display:contents">
     <div class="drag"></div>
     <div class="sheet-t" id="rec-t">Nova receita</div>
     <div class="fgrp"><label class="flbl" for="rec-nome">Nome</label><input type="text" id="rec-nome" placeholder="Ex: Representante técnico" maxlength="60"></div>
@@ -2854,11 +2865,11 @@ html[data-theme^=liquid] #d-today-pb{background:linear-gradient(90deg,#449BD2,#4
       <button class="btn bg" style="flex:1" onclick="closeSh(null,'rec-ol')">Cancelar</button>
       <button class="btn bp" style="flex:1" onclick="saveReceita()" id="rec-save">Adicionar</button>
     </div>
-  </div>
+  </div></div>
 </div>
 
 <div class="overlay" id="fix-ol" onclick="closeSh(event,'fix-ol')">
-  <div class="sheet">
+  <div class="sheet"><div id="fix-react" style="display:contents">
     <div class="drag"></div>
     <div class="sheet-t" id="fix-t">Gasto fixo</div>
     <div class="fgrp"><label class="flbl" for="fix-nome">Descrição</label><input type="text" id="fix-nome" placeholder="Ex: Faculdade" maxlength="60"></div>
@@ -2876,11 +2887,11 @@ html[data-theme^=liquid] #d-today-pb{background:linear-gradient(90deg,#449BD2,#4
       <button class="btn bg" style="flex:1" onclick="closeSh(null,'fix-ol')">Cancelar</button>
       <button class="btn bp" style="flex:1" onclick="saveFixo()" id="fix-save">Salvar</button>
     </div>
-  </div>
+  </div></div>
 </div>
 
 <div class="overlay" id="var-ol" onclick="closeSh(event,'var-ol')">
-  <div class="sheet">
+  <div class="sheet"><div id="var-react" style="display:contents">
     <div class="drag"></div>
     <div class="sheet-t" id="var-t">Gasto variável</div>
     <div class="fgrp"><label class="flbl" for="var-nome">Descrição</label><input type="text" id="var-nome" placeholder="Ex: Almoço" maxlength="60"></div>
@@ -2904,18 +2915,18 @@ html[data-theme^=liquid] #d-today-pb{background:linear-gradient(90deg,#449BD2,#4
       <button class="btn bg" style="flex:1" onclick="closeSh(null,'var-ol')">Cancelar</button>
       <button class="btn bp" style="flex:1" onclick="saveVariavel()" id="var-save">Adicionar</button>
     </div>
-  </div>
+  </div></div>
 </div>
 
 <div class="overlay" id="fdia-ol" onclick="closeSh(event,'fdia-ol')">
-  <div class="sheet">
+  <div class="sheet"><div id="fdia-react" style="display:contents">
     <div class="drag"></div>
     <div id="fdia-body"></div>
-  </div>
+  </div></div>
 </div>
 
 <div class="overlay" id="horas-ol" onclick="closeSh(event,'horas-ol')">
-  <div class="sheet">
+  <div class="sheet"><div id="horas-react" style="display:contents">
     <div class="drag"></div>
     <div class="sheet-t">Ajustar hora</div>
     <div class="hs-sec">Referência</div>
@@ -2944,11 +2955,11 @@ html[data-theme^=liquid] #d-today-pb{background:linear-gradient(90deg,#449BD2,#4
 
     <div class="hora-tot" id="hr-total"></div>
     <button class="btn bg" style="width:100%;margin-top:14px" onclick="closeSh(null,'horas-ol')">Fechar</button>
-  </div>
+  </div></div>
 </div>
 
 <div class="overlay" id="orc-ol" onclick="closeSh(event,'orc-ol')">
-  <div class="sheet">
+  <div class="sheet"><div id="orc-react" style="display:contents">
     <div class="drag"></div>
     <div class="sheet-t">Limites por categoria</div>
     <div class="fhint" style="margin:-8px 0 14px">Quanto você quer gastar por mês em cada categoria. O limite vale para todos os meses. Deixe em branco para não acompanhar.</div>
@@ -2958,11 +2969,11 @@ html[data-theme^=liquid] #d-today-pb{background:linear-gradient(90deg,#449BD2,#4
       <button class="btn bg" style="flex:1" onclick="closeSh(null,'orc-ol')">Cancelar</button>
       <button class="btn bp" style="flex:1" onclick="saveOrc()">Salvar limites</button>
     </div>
-  </div>
+  </div></div>
 </div>
 
 <div class="overlay" id="va-rec-ol" onclick="closeSh(event,'va-rec-ol')">
-  <div class="sheet">
+  <div class="sheet"><div id="va-rec-react" style="display:contents">
     <div class="drag"></div>
     <div class="sheet-t">Recarga do vale</div>
     <div class="fgrp"><label class="flbl">Descrição</label><input type="text" id="va-rec-nome" placeholder="Ex: Recarga mensal"></div>
@@ -2972,11 +2983,11 @@ html[data-theme^=liquid] #d-today-pb{background:linear-gradient(90deg,#449BD2,#4
       <button class="btn bg" style="flex:1" onclick="closeSh(null,'va-rec-ol')">Cancelar</button>
       <button class="btn bp" style="flex:1" onclick="addVAMov('recarga')">Salvar</button>
     </div>
-  </div>
+  </div></div>
 </div>
 
 <div class="overlay" id="va-gasto-ol" onclick="closeSh(event,'va-gasto-ol')">
-  <div class="sheet">
+  <div class="sheet"><div id="va-gasto-react" style="display:contents">
     <div class="drag"></div>
     <div class="sheet-t">Gasto no vale</div>
     <div class="fgrp"><label class="flbl">Descrição</label><input type="text" id="va-gasto-nome" placeholder="Ex: Compra do mês"></div>
@@ -2987,11 +2998,11 @@ html[data-theme^=liquid] #d-today-pb{background:linear-gradient(90deg,#449BD2,#4
       <button class="btn bg" style="flex:1" onclick="closeSh(null,'va-gasto-ol')">Cancelar</button>
       <button class="btn bp" style="flex:1" onclick="addVAMov('gasto')">Salvar</button>
     </div>
-  </div>
+  </div></div>
 </div>
 
 <div class="overlay" id="va-conv-ol" onclick="closeSh(event,'va-conv-ol')">
-  <div class="sheet">
+  <div class="sheet"><div id="va-conv-react" style="display:contents">
     <div class="drag"></div>
     <div class="sheet-t">Converter VA em receita</div>
     <div style="font-size:11.5px;color:var(--t2);line-height:1.5;margin-bottom:14px">Use quando alguém usar seu vale e te passar dinheiro. O valor sai do saldo VA e entra como receita do mês.</div>
@@ -3003,11 +3014,11 @@ html[data-theme^=liquid] #d-today-pb{background:linear-gradient(90deg,#449BD2,#4
       <button class="btn bg" style="flex:1" onclick="closeSh(null,'va-conv-ol')">Cancelar</button>
       <button class="btn bp" style="flex:1" onclick="convertVAReceita()">Converter</button>
     </div>
-  </div>
+  </div></div>
 </div>
 
 <div class="overlay" id="peso-ol" onclick="closeSh(event,'peso-ol')">
-  <div class="sheet">
+  <div class="sheet"><div id="peso-react" style="display:contents">
     <div class="drag"></div>
     <div class="sheet-t">Registrar peso</div>
     <div class="fgrp"><label class="flbl">Peso atual (kg)</label><input type="number" id="peso-val" step="0.1" inputmode="decimal" placeholder="115"></div>
@@ -3015,7 +3026,7 @@ html[data-theme^=liquid] #d-today-pb{background:linear-gradient(90deg,#449BD2,#4
       <button class="btn bg" style="flex:1" onclick="closeSh(null,'peso-ol')">Cancelar</button>
       <button class="btn bp" style="flex:1" onclick="savePesoRapido()">Salvar</button>
     </div>
-  </div>
+  </div></div>
 </div>
 <script>
 // Vigia da abertura: se o app travar ou der erro antes de entrar, mostra o motivo em vez de girar para sempre.
@@ -3862,21 +3873,27 @@ function go(id){
   else if(id==='perfil')renderPerfil();
 }
 function openSheet(id){
-  const ol=document.getElementById(id);
-  if(!ol.classList.contains('on'))ol._opener=document.activeElement;
+  const ol=document.getElementById(id),abrindo=!ol.classList.contains('on');
+  if(abrindo)ol._opener=document.activeElement;
   ol.classList.add('on');
   document.body.classList.add('lock');
   const t=today();
+  // avisa as janelas em React (ex.: preencher a data com hoje); depois disso o campo já não está vazio
+  window.dispatchEvent(new CustomEvent('guapos:janela',{detail:id}));
   const map={'rec-ol':'rec-data','var-ol':'var-data','va-rec-ol':'va-rec-data','va-gasto-ol':'va-gasto-data','va-conv-ol':'va-conv-data'};
   if(map[id]){const el=document.getElementById(map[id]);if(el&&!el.value)el.value=t}
   // leva o foco para dentro da janela (teclado e leitor de tela) sem abrir o teclado do celular
   const sh=ol.querySelector('.sheet');
-  if(sh&&!sh.contains(document.activeElement))sh.focus({preventScroll:true});
+  // ao abrir, sempre: nada dentro de uma janela fechada (escondida) fica com o foco, como no navegador
+  if(sh&&(abrindo||!sh.contains(document.activeElement)))sh.focus({preventScroll:true});
 }
 function closeSh(e,id){
   if(!e||e.target.classList.contains('overlay')){
     const ol=document.getElementById(id),tinhaFoco=ol.contains(document.activeElement);
     ol.classList.remove('on');
+    // sai pelo mesmo caminho por onde entrou (o tema decide se anima); arrastada para baixo, já saiu
+    const sh=ol.querySelector('.sheet');
+    if(sh&&!sh.style.transform){ol.classList.add('saindo');clearTimeout(ol._saida);ol._saida=setTimeout(()=>ol.classList.remove('saindo'),340)}
     if(!document.querySelector('.overlay.on'))document.body.classList.remove('lock');
     if(id==='edit-ol')askDelete(false);
     if(id==='task-ol')askDelTask(false);
@@ -4240,6 +4257,7 @@ function moveHabit(i,dir){
 }
 function openNewHabit(){
   editId=null;editMode=false;
+  if(window.__editarHabitoReact){window.dispatchEvent(new Event('guapos:editar-habito'));openSheet('edit-ol');setTimeout(()=>document.getElementById('edit-inp').focus(),120);return}
   document.getElementById('edit-t').textContent='Novo hábito';
   document.getElementById('edit-inp').value='';
   document.getElementById('edit-del').style.display='none';
@@ -4250,6 +4268,7 @@ function openNewHabit(){
 function openEditHabit(id){
   const h=habits.find(x=>x.id===id);if(!h)return;
   editId=id;
+  if(window.__editarHabitoReact){window.dispatchEvent(new Event('guapos:editar-habito'));openSheet('edit-ol');return}
   document.getElementById('edit-t').textContent='Editar hábito';
   document.getElementById('edit-inp').value=h.name;
   const del=document.getElementById('edit-del');
@@ -4289,6 +4308,7 @@ function toggleWd(i){
   buzz(6);renderWdPick();
 }
 function askDelete(show){
+  if(window.__editarHabitoReact){window.dispatchEvent(new CustomEvent('guapos:apagar-habito',{detail:!!show}));return}
   const c=document.getElementById('edit-confirm'),a=document.getElementById('edit-actions');
   if(!c)return;
   c.style.display=show?'':'none';
@@ -4398,12 +4418,14 @@ function toggleCalDay(id,day){
 // ── Folha do dia ──
 function openDia(k){
   diaKey=k;
+  if(window.__diaReact){window.dispatchEvent(new Event('guapos:dia'));openSheet('dia-ol');return}
   const d=new Date(k+'T12:00:00');
   document.getElementById('dia-sub').textContent=WD[d.getDay()]+' · '+d.toLocaleDateString('pt-BR',{day:'2-digit',month:'long'});
   document.getElementById('dia-t').textContent=k===today()?'Hoje':d.toLocaleDateString('pt-BR',{day:'numeric',month:'long'});
   renderDiaList();openSheet('dia-ol');
 }
 function renderDiaList(){
+  if(window.__diaReact){window.dispatchEvent(new Event('guapos:dia'));return}
   const dc=checks[diaKey]||{},list=habitsFor(diaKey),wk=weeklyHabits();
   const row=h=>`<div class="hi" onclick="toggleDia('${h.id}')"><div class="hck${dc[h.id]?' on':''}"></div><div class="hn${dc[h.id]?' done':''}">${esc(h.name)}</div>${isWeekly(h)?`<div class="hwk${weekCount(h,diaKey)>=h.perWeek?' ok':''}">${weekCount(h,diaKey)}/${h.perWeek}</div>`:''}</div>`;
   let h=list.length?list.map(row).join(''):'<div class="empty">'+(habits.length?'Nenhum hábito fixo neste dia':'Nenhum hábito na lista')+'</div>';
@@ -4721,6 +4743,7 @@ let tDraft=null;
 function openEditTask(id){
   const t=findTask(id);if(!t)return;
   editTaskId=id;
+  if(window.__editarTarefaReact){window.dispatchEvent(new Event('guapos:editar-tarefa'));openSheet('task-ol');return}
   const r=findRule(t.ruleId);
   tDraft={subs:t.subs.map(s=>({...s})),rep:r?r.type:'n',days:r&&r.days?[...r.days]:[new Date(t.date+'T12:00:00').getDay()],dom:r&&r.dom?r.dom:parseInt(t.date.slice(8))};
   document.getElementById('task-nome').value=t.name;
@@ -4771,6 +4794,7 @@ function edAddSub(){
 function edMoveSub(i,d){const j=i+d;if(j<0||j>=tDraft.subs.length)return;const x=tDraft.subs[i];tDraft.subs[i]=tDraft.subs[j];tDraft.subs[j]=x;buzz(5);renderSubEd()}
 function edDelSub(i){tDraft.subs.splice(i,1);buzz(5);renderSubEd()}
 function askDelTask(show){
+  if(window.__editarTarefaReact){window.dispatchEvent(new CustomEvent('guapos:apagar-tarefa',{detail:!!show}));return}
   const t=findTask(editTaskId),rep=!!(t&&findRule(t.ruleId));
   document.getElementById('task-confirm-txt').textContent=rep?'Esta tarefa se repete. Apagar só esta ou esta e as próximas?':'Apagar esta tarefa e todas as subtarefas dela?';
   document.getElementById('task-del-one').textContent=rep?'Só esta':'Apagar';
@@ -5173,6 +5197,7 @@ function renderFinCal(){
 }
 function openFinDia(k){fcSel=k;renderFinDia();openSheet('fdia-ol');renderFinCal()}
 function renderFinDia(){
+  if(window.__finExtrasReact){window.dispatchEvent(new Event('guapos:fdia'));return}
   const k=fcSel;if(!k)return;
   const d=new Date(k+'T12:00:00'),m=d.getMonth(),a=d.getFullYear(),td=today();
   const hv=valorHora(m,a),hd=horasDoDia(k),ganho=hv>0?hd.h*hv:null;
@@ -5255,6 +5280,7 @@ function mesesComHoras(){
   return [...s].map(k=>({m:+k.slice(5,7)-1,a:+k.slice(0,4)}));
 }
 function openHorasSheet(){
+  if(window.__finExtrasReact){openSheet('horas-ol');return}
   document.getElementById('hr-base').value=horasBase();
   document.getElementById('hr-jornada').value=jornada();
   document.getElementById('hr-ref-err').textContent='';
@@ -5432,6 +5458,7 @@ function avisoOrc(k,m,a,antes){
   buzz(o.estado==='passou'?[20,60,20]:15);
 }
 function openOrcSheet(){
+  if(window.__finExtrasReact){openSheet('orc-ol');return}
   const m=curMes(),a=curAno(),g=gastosPorCat(m,a),por={};
   Object.keys(g).forEach(k=>{por[k]=g[k].pago+g[k].prev});
   document.getElementById('orc-campos').innerHTML=CATS.map(c=>`<div class="orc-in">
@@ -5586,6 +5613,7 @@ function toggleRecebida(id){
 const recTpl=r=>r&&r.fixaId&&(cfg.recFixas||[]).find(t=>t.id===r.fixaId);
 function openRecSheet(id){
   const r=id&&receitas.find(x=>x.id===id);editRecId=r?r.id:null;
+  if(window.__lancamentosReact){window.dispatchEvent(new CustomEvent('guapos:lancamento',{detail:{qual:'rec'}}));openSheet('rec-ol');return}
   document.getElementById('rec-t').textContent=r?'Editar receita':'Nova receita';
   document.getElementById('rec-nome').value=r?r.nome:'';
   document.getElementById('rec-val').value=r?r.valor:'';
@@ -5672,6 +5700,7 @@ function delReceitaEd(){const id=editRecId;closeSh(null,'rec-ol');if(id)delRecei
 let editFixId=null;
 function openFixoSheet(id){
   const f=id&&fixos.find(x=>x.id===id);editFixId=f?f.id:null;
+  if(window.__lancamentosReact){window.dispatchEvent(new CustomEvent('guapos:lancamento',{detail:{qual:'fix'}}));if(document.getElementById('fdia-ol').classList.contains('on'))closeSh(null,'fdia-ol');openSheet('fix-ol');return}
   document.getElementById('fix-t').textContent=f?'Editar gasto fixo':'Gasto fixo';
   document.getElementById('fix-nome').value=f?f.nome:'';
   document.getElementById('fix-val').value=f?f.valor:'';
@@ -5735,6 +5764,7 @@ function setVarStatus(p){
 }
 function openVarSheet(id,data,pago){
   const v=id&&variaveis.find(x=>x.id===id);editVarId=v?v.id:null;
+  if(window.__lancamentosReact){window.dispatchEvent(new CustomEvent('guapos:lancamento',{detail:{qual:'var',data,pago}}));if(document.getElementById('fdia-ol').classList.contains('on'))closeSh(null,'fdia-ol');openSheet('var-ol');return}
   document.getElementById('var-t').textContent=v?'Editar gasto':pago===false?'Conta a pagar':'Gasto variável';
   document.getElementById('var-nome').value=v?v.nome:'';
   document.getElementById('var-val').value=v?v.valor:'';
@@ -5989,6 +6019,12 @@ window.guaposPonte={
   adicionarTarefa:()=>addTask(),marcarTarefa:id=>tkCheck(id),abrirTarefa:id=>tkOpen(id),editarTarefa:id=>openEditTask(id),
   marcarSubtarefa:(t,s)=>tkSub(t,s),adicionarSubtarefa:t=>tkAddSub(t),removerSubtarefa:(t,s)=>tkDelSub(t,s),
   trazerPendentes:()=>moveOverdue(),escolherDia:k=>setTaskDay(k),mudarSemana:n=>shiftWeek(n),arrastarTarefa:e=>startDrag(e),
+  aviso:(msg,icone)=>showToast(msg,icone),fecharJanela:id=>closeSh(null,id),vibrar:n=>buzz(n),
+  habitoEmEdicao:()=>editId,novoIdHabito:()=>newHabitId(),apagarHabito:()=>delHabit(),
+  salvarHabitos:v=>{habits=v;save('e2_habits',habits);closeSh(null,'edit-ol');go(curPage)},
+  tarefaEmEdicao:()=>editTaskId,novoId:p=>uid(p),apagarTarefa:todas=>delTask(todas),
+  salvarTarefas:(lista,regras,comRegras)=>{if(comRegras){taskRules=regras;ss('e2_taskRules',taskRules)}tasks=lista;save('e2_tasks',tasks);closeSh(null,'task-ol');renderAfterTask()},
+  diaAberto:()=>diaKey,marcarNoDia:id=>toggleDia(id),marcarDiaTodo:todos=>markDay(todos),
   irPara:p=>go(p),redesenhar:()=>{if(PID)go(curPage)},adicionarTarefaHoje:()=>addTask('d-t-inp'),
   pagarConta:(tipo,id,m,a)=>tipo==='fixo'?togglePaid(id,m,a):toggleVarPago(id),
   financas:{
@@ -5999,6 +6035,18 @@ window.guaposPonte={
     abrirVale:id=>openSheet(id),apagarMovVale:id=>delVAMov(id),
     novaReceita:()=>openRecSheet(null),editarReceita:id=>openRecSheet(id),marcarRecebida:id=>toggleRecebida(id),apagarReceita:id=>delReceita(id),
     novoFixo:()=>openFixoSheet(null),editarFixo:id=>openFixoSheet(id),marcarFixo:id=>togglePaid(id),encerrarFixo:id=>delFixo(id),
+    receitaEmEdicao:()=>editRecId,fixoEmEdicao:()=>editFixId,variavelEmEdicao:()=>editVarId,
+    apagarReceitaAberta:()=>delReceitaEd(),apagarFixoAberto:()=>delFixoEd(),apagarVariavelAberta:()=>delVariavelEd(),
+    salvarReceitas:(lista,novoCfg,cfgMudou)=>{receitas=lista;if(cfgMudou){cfg=novoCfg;ss('e2_cfg',cfg)}ensureMonthly();save('e2_receitas',receitas);closeSh(null,'rec-ol');finRefresh()},
+    salvarFixos:(lista,cat)=>{const m=curMes(),a=curAno(),antes=orcEstado(cat,m,a);fixos=lista;save('e2_fixos',fixos);closeSh(null,'fix-ol');finRefresh();avisoOrc(cat,m,a,antes)},
+    salvarVariaveis:(lista,cat,m,a)=>{const antes=orcEstado(cat,m,a);variaveis=lista;save('e2_variaveis',variaveis);closeSh(null,'var-ol');finRefresh();avisoOrc(cat,m,a,antes)},
+    definirHorasDoDia:v=>setHorasDia(v),lembreteConta:(tipo,id)=>lembreteConta(tipo,id),gastoNoDia:(k,pago)=>openVarSheet(null,k,pago),
+    salvarReferenciaHoras:(base,jorn)=>{cfg.horasMes=base;cfg.jornada=jorn;save('e2_cfg',cfg);renderFin()},
+    salvarFolgas:(novas,m,a)=>{horas=novas;save('e2_horas',horas);fcM=m;fcY=a;renderFin()},
+    apagarFolga:id=>{const x=(horas.folgas||[]).find(f=>f.id===id);if(!x)return;const u=snap(['horas']);horas={...horas,folgas:horas.folgas.filter(f=>f.id!==id)};ss('e2_horas',horas);renderFin();offerUndo('Folga de '+fmtDia(x.data)+' apagada',u)},
+    salvarLimites:o=>{cfg.orcamento=o;ss('e2_cfg',cfg);closeSh(null,'orc-ol');finRefresh();showToast(Object.keys(o).length?'Limites salvos':'Limites removidos','target')},
+    valeComporta:m=>vaPermite(m),
+    salvarMovVale:(m,r,janela)=>{vaMovs=[...vaMovs,m];if(r)receitas=[...receitas,r];save('e2_vaMovs',vaMovs);if(r)ss('e2_receitas',receitas);closeSh(null,janela);renderFin()},
     editarVariavel:id=>openVarSheet(id),pagarVariavel:id=>toggleVarPago(id),apagarVariavel:id=>delVariavel(id),
   },
 };
