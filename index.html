@@ -9,14 +9,15 @@
 <meta name="theme-color" content="#F4F0E8" id="meta-tc">
 <meta name="color-scheme" content="light dark">
 <script>
-// Tema antes de desenhar (evita piscar): Automático segue o iPhone; os outros ficam fixos neste aparelho
+// Tema antes de desenhar (evita piscar). São 4: Liquid Glass claro e escuro, Neon verde e Neon rosa.
+// Sem escolha salva (ou com um tema que não existe mais), fica o Liquid Glass claro ou escuro, conforme o aparelho.
 (function(){
-  var t='auto';try{t=localStorage.getItem('g_tema')||'auto'}catch(e){}
-  if(['light','dark','neon','neon-rosa','vidro','vidro-escuro','liquid','liquid-escuro'].indexOf(t)<0)t='auto';
-  if(t!=='auto')document.documentElement.setAttribute('data-theme',t);
-  var neon=t.indexOf('neon')===0,dark=neon||t==='dark'||t==='vidro-escuro'||t==='liquid-escuro'||(t==='auto'&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches);
-  document.getElementById('meta-tc').setAttribute('content',neon?'#05070B':t==='vidro-escuro'?'#000000':t==='liquid-escuro'?'#1B1D21':dark?'#131210':t==='vidro'?'#F2F2F7':t==='liquid'?'#D5D5DE':'#F4F0E8');
-  document.getElementById('meta-sb').setAttribute('content',dark?'black-translucent':'default');
+  var t=null;try{t=localStorage.getItem('g_tema')}catch(e){}
+  t={light:'liquid',vidro:'liquid',dark:'liquid-escuro','vidro-escuro':'liquid-escuro'}[t]||t;
+  if(['liquid','liquid-escuro','neon','neon-rosa'].indexOf(t)<0)t=window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'liquid-escuro':'liquid';
+  document.documentElement.setAttribute('data-theme',t);
+  document.getElementById('meta-tc').setAttribute('content',t.indexOf('neon')===0?'#05070B':t==='liquid-escuro'?'#1B1D21':'#D5D5DE');
+  document.getElementById('meta-sb').setAttribute('content',t==='liquid'?'default':'black-translucent');
 })();
 </script>
 <meta name="format-detection" content="telephone=no">
@@ -60,34 +61,6 @@
   --ff:'Instrument Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
   --fd:'Fraunces','Iowan Old Style',Georgia,serif;
   --ease:cubic-bezier(.2,.8,.2,1);
-}
-@media(prefers-color-scheme:dark){:root:not([data-theme]){
-  color-scheme:dark;
-  --bg:#131210;--s1:#1C1A17;--s2:#26231F;--s3:#312D27;--field:#211F1B;
-  --t1:#F2EDE4;--t2:#ACA598;--t3:#958E81;
-  --br:rgba(255,240,215,.115);--br2:rgba(255,240,215,.065);
-  --c-hab:#6CC98E;--c-task:#93ACFF;--c-fin:#E6B24F;--c-saude:#FF8F7E;--c-perfil:#BBA3FF;
-  --g:#6CC98E;--g2:#6CC98E;--b:#93ACFF;--p:#BBA3FF;--y:#E6B24F;--r:#FF8678;--c:#5FCDBF;--o:#F4A262;
-  --k-alimentacao:#FF8F7E;--k-transporte:#93ACFF;--k-lazer:#BBA3FF;--k-saude:#5FCDBF;--k-estudos:#E6B24F;--k-casa:#F4A262;--k-outros:#A39C8F;
-  --on-acc:#141210;
-  --sh:0 1px 0 rgba(255,240,215,.03) inset,0 16px 36px -24px rgba(0,0,0,.8);
-  --sh-lg:0 30px 70px -20px rgba(0,0,0,.85);
-  --scrim:rgba(0,0,0,.58);
-  --hm0:#2A2621;
-}}
-:root[data-theme=dark]{
-  color-scheme:dark;
-  --bg:#131210;--s1:#1C1A17;--s2:#26231F;--s3:#312D27;--field:#211F1B;
-  --t1:#F2EDE4;--t2:#ACA598;--t3:#958E81;
-  --br:rgba(255,240,215,.115);--br2:rgba(255,240,215,.065);
-  --c-hab:#6CC98E;--c-task:#93ACFF;--c-fin:#E6B24F;--c-saude:#FF8F7E;--c-perfil:#BBA3FF;
-  --g:#6CC98E;--g2:#6CC98E;--b:#93ACFF;--p:#BBA3FF;--y:#E6B24F;--r:#FF8678;--c:#5FCDBF;--o:#F4A262;
-  --k-alimentacao:#FF8F7E;--k-transporte:#93ACFF;--k-lazer:#BBA3FF;--k-saude:#5FCDBF;--k-estudos:#E6B24F;--k-casa:#F4A262;--k-outros:#A39C8F;
-  --on-acc:#141210;
-  --sh:0 1px 0 rgba(255,240,215,.03) inset,0 16px 36px -24px rgba(0,0,0,.8);
-  --sh-lg:0 30px 70px -20px rgba(0,0,0,.85);
-  --scrim:rgba(0,0,0,.58);
-  --hm0:#2A2621;
 }
 /* a cor da área acompanha a tela aberta (e cada item do menu usa a sua) */
 html:not([data-theme^=neon]) body[data-pg=habits],html:not([data-theme^=neon]) [data-nav=habits]{--acc:var(--c-hab)}
@@ -1638,7 +1611,7 @@ html[data-theme^=neon] .pk-av.sm{width:30px;height:30px}
 /* ════ Comum a todos os temas ════ */
 
 /* ── SELETOR DE TEMA (Perfil) ── */
-.tp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:8px}
+.tp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
 .tp{position:relative;display:flex;flex-direction:column;gap:7px;padding:7px 7px 9px;border-radius:14px;border:1.5px solid var(--br);background:var(--s2);cursor:pointer;min-width:0;transition:border-color .15s,transform .12s;-webkit-user-select:none;user-select:none}
 .tp:active{transform:scale(.97)}
 .tp[aria-checked=true]{border-color:var(--acc);box-shadow:0 0 0 3px var(--acc-soft)}
@@ -1650,7 +1623,6 @@ html[data-theme^=neon] .pk-av.sm{width:30px;height:30px}
 .tp-prev i:nth-child(2){top:28px;right:26px}
 .tp-prev b{position:absolute;left:14px;top:13px;width:18px;height:5px;border-radius:3px;background:var(--pa);box-shadow:var(--pg,none)}
 .tp-prev em{position:absolute;left:14px;top:32px;width:30px;height:4px;border-radius:2px;background:var(--pt);opacity:.7}
-.tp-prev.auto::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent 50%,#131210 50%)}
 .tp-n{font-size:12.5px;font-weight:700;color:var(--t1);line-height:1.2;padding:0 2px}
 .tp-s{font-size:11px;font-weight:500;color:var(--t2);line-height:1.25;padding:0 2px;margin-top:-4px}
 
@@ -1689,114 +1661,67 @@ html[data-theme^=neon] .pk-av.sm{width:30px;height:30px}
    Superfícies planas e cores sólidas, sem brilho nem degradê. O vidro (translúcido e com desfoque) fica só no que
    flutua sobre o conteúdo: menu, janelas e avisos. Quando a cor vira texto, usa a variante de alto contraste da
    própria Apple, para passar de 4,5:1. Tipografia: SF Pro (no iPhone, a fonte do sistema); fora da Apple, Inter. */
-:root:is([data-theme^=vidro],[data-theme^=liquid]){
+:root[data-theme^=liquid]{
   --ff:-apple-system,BlinkMacSystemFont,'SF Pro Text','SF Pro Display','Inter','Helvetica Neue',Arial,sans-serif;
   --fd:-apple-system,BlinkMacSystemFont,'SF Pro Display','SF Pro Text','Inter','Helvetica Neue',Arial,sans-serif;
   --rad:26px;--rad-s:14px;
 }
-:root[data-theme=vidro]{
-  color-scheme:light;
-  --bg:#F2F2F7;--s1:#FFFFFF;--s2:rgba(118,118,128,.12);--s3:#E7E7E7;--field:#FFFFFF;
-  --t1:#000000;--t2:#5E5E63;--t3:#6C6C70;
-  --br:rgba(60,60,67,.18);--br2:rgba(60,60,67,.12);
-  /* texto em cor: variantes de alto contraste da Apple */
-  --c-hab:#1C7031;--c-task:#0040DD;--c-fin:#C93400;--c-saude:#D70015;--c-perfil:#8944AB;
-  --g:#1C7031;--g2:#1C7031;--b:#0040DD;--p:#8944AB;--y:#A05A00;--r:#D70015;--c:#0071A4;--o:#C93400;
-  --k-alimentacao:#D70015;--k-transporte:#0040DD;--k-lazer:#8944AB;--k-saude:#0A6B66;--k-estudos:#A05A00;--k-casa:#C93400;--k-outros:#6C6C70;
-  /* preenchimentos: cores exatas da referência */
-  --f-hab:#4BC65C;--f-task:#3C86FC;--f-fin:#F69135;--f-saude:#F54443;--f-perfil:#C636DE;
-  --o-hab:#000000;--o-task:#FFFFFF;--o-fin:#000000;--o-saude:#FFFFFF;--o-perfil:#FFFFFF;
-  --on-acc:#FFFFFF;
-  --hm0:#E7E7E7;--scrim:rgba(0,0,0,.2);
-  --glass:rgba(249,249,251,.78);--glass-br:rgba(0,0,0,.07);--glass-hi:rgba(255,255,255,.9);
-  --sel:rgba(118,118,128,.14);--hck-br:#7C7C80;
-  --sh:none;--sh-lg:0 12px 40px rgba(0,0,0,.14);--sh-float:0 8px 28px rgba(0,0,0,.12);
-  --sheet:rgba(242,242,247,.9);
-}
-:root[data-theme=vidro-escuro]{
-  color-scheme:dark;
-  --bg:#000000;--s1:#1C1C1E;--s2:rgba(118,118,128,.24);--s3:#39393D;--field:#1C1C1E;
-  --t1:#FFFFFF;--t2:#AEAEB2;--t3:#98989D;
-  --br:rgba(84,84,88,.65);--br2:rgba(84,84,88,.45);
-  --c-hab:#30DB5B;--c-task:#409CFF;--c-fin:#FFB340;--c-saude:#FF6961;--c-perfil:#DA8FFF;
-  --g:#30DB5B;--g2:#30DB5B;--b:#409CFF;--p:#DA8FFF;--y:#FFD426;--r:#FF6961;--c:#70D7FF;--o:#FFB340;
-  --k-alimentacao:#FF6961;--k-transporte:#409CFF;--k-lazer:#DA8FFF;--k-saude:#66D4CF;--k-estudos:#FFD426;--k-casa:#FFB340;--k-outros:#98989D;
-  --f-hab:#4BD05B;--f-task:#3E8FFC;--f-fin:#F7963C;--f-saude:#F54C4B;--f-perfil:#D63AF0;
-  --o-hab:#000000;--o-task:#FFFFFF;--o-fin:#000000;--o-saude:#FFFFFF;--o-perfil:#FFFFFF;
-  --on-acc:#000000;
-  --hm0:#2C2C2E;--scrim:rgba(0,0,0,.5);
-  --glass:rgba(30,30,32,.74);--glass-br:rgba(255,255,255,.1);--glass-hi:rgba(255,255,255,.08);
-  --sel:rgba(118,118,128,.32);--hck-br:#7C7C80;
-  --sh:none;--sh-lg:0 12px 40px rgba(0,0,0,.6);--sh-float:0 8px 28px rgba(0,0,0,.5);
-  --sheet:rgba(28,28,30,.92);
-}
 /* cor de preenchimento da área aberta (e de cada item do menu) */
-:root:is([data-theme^=vidro],[data-theme^=liquid]),html:is([data-theme^=vidro],[data-theme^=liquid]) body{--fill:var(--f-hab);--on-fill:var(--o-hab)}
-html:is([data-theme^=vidro],[data-theme^=liquid]) body[data-pg=tasks],html:is([data-theme^=vidro],[data-theme^=liquid]) [data-nav=tasks]{--fill:var(--f-task);--on-fill:var(--o-task)}
-html:is([data-theme^=vidro],[data-theme^=liquid]) body[data-pg=fin],html:is([data-theme^=vidro],[data-theme^=liquid]) [data-nav=fin]{--fill:var(--f-fin);--on-fill:var(--o-fin)}
-html:is([data-theme^=vidro],[data-theme^=liquid]) body[data-pg=saude],html:is([data-theme^=vidro],[data-theme^=liquid]) [data-nav=saude]{--fill:var(--f-saude);--on-fill:var(--o-saude)}
-html:is([data-theme^=vidro],[data-theme^=liquid]) body[data-pg=perfil],html:is([data-theme^=vidro],[data-theme^=liquid]) [data-nav=perfil]{--fill:var(--f-perfil);--on-fill:var(--o-perfil)}
-html:is([data-theme^=vidro],[data-theme^=liquid]) [data-nav=habits],html:is([data-theme^=vidro],[data-theme^=liquid]) [data-nav=dash]{--fill:var(--f-hab);--on-fill:var(--o-hab)}
+:root[data-theme^=liquid],html[data-theme^=liquid] body{--fill:var(--f-hab);--on-fill:var(--o-hab)}
+html[data-theme^=liquid] body[data-pg=tasks],html[data-theme^=liquid] [data-nav=tasks]{--fill:var(--f-task);--on-fill:var(--o-task)}
+html[data-theme^=liquid] body[data-pg=fin],html[data-theme^=liquid] [data-nav=fin]{--fill:var(--f-fin);--on-fill:var(--o-fin)}
+html[data-theme^=liquid] body[data-pg=saude],html[data-theme^=liquid] [data-nav=saude]{--fill:var(--f-saude);--on-fill:var(--o-saude)}
+html[data-theme^=liquid] body[data-pg=perfil],html[data-theme^=liquid] [data-nav=perfil]{--fill:var(--f-perfil);--on-fill:var(--o-perfil)}
+html[data-theme^=liquid] [data-nav=habits],html[data-theme^=liquid] [data-nav=dash]{--fill:var(--f-hab);--on-fill:var(--o-hab)}
 
 /* tipografia: SF Pro, regular no texto, semibold nos valores, negrito nos títulos grandes */
-html:is([data-theme^=vidro],[data-theme^=liquid]) body{font-weight:400;letter-spacing:-.01em;background:var(--bg)}
-html:is([data-theme^=vidro],[data-theme^=liquid]) body::before{display:none}
-html:is([data-theme^=vidro],[data-theme^=liquid]) .ph h1,html:is([data-theme^=vidro],[data-theme^=liquid]) .greet,html:is([data-theme^=vidro],[data-theme^=liquid]) .onb h2,html:is([data-theme^=vidro],[data-theme^=liquid]) .gate h2,html:is([data-theme^=vidro],[data-theme^=liquid]) .gate-brand{font-weight:700;letter-spacing:-.025em}
-html:is([data-theme^=vidro],[data-theme^=liquid]) .sheet-t{font-weight:700;letter-spacing:-.02em}
-html:is([data-theme^=vidro],[data-theme^=liquid]) .kpi-val,html:is([data-theme^=vidro],[data-theme^=liquid]) .fin-col-val,html:is([data-theme^=vidro],[data-theme^=liquid]) .prev-c b,html:is([data-theme^=vidro],[data-theme^=liquid]) .radar-pill b,html:is([data-theme^=vidro],[data-theme^=liquid]) .stat-card-val,html:is([data-theme^=vidro],[data-theme^=liquid]) .wday b{font-weight:600;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+html[data-theme^=liquid] body{font-weight:400;letter-spacing:-.01em;background:var(--bg)}
+html[data-theme^=liquid] body::before{display:none}
+html[data-theme^=liquid] .ph h1,html[data-theme^=liquid] .greet,html[data-theme^=liquid] .onb h2,html[data-theme^=liquid] .gate h2,html[data-theme^=liquid] .gate-brand{font-weight:700;letter-spacing:-.025em}
+html[data-theme^=liquid] .sheet-t{font-weight:700;letter-spacing:-.02em}
+html[data-theme^=liquid] .kpi-val,html[data-theme^=liquid] .fin-col-val,html[data-theme^=liquid] .prev-c b,html[data-theme^=liquid] .radar-pill b,html[data-theme^=liquid] .stat-card-val,html[data-theme^=liquid] .wday b{font-weight:600;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
 
 /* cartões: planos, sem borda nem sombra, cantos de 26px */
-html:is([data-theme^=vidro],[data-theme^=liquid]) .card,html:is([data-theme^=vidro],[data-theme^=liquid]) .fin-summary{border-color:transparent;box-shadow:none}
-html:is([data-theme^=vidro],[data-theme^=liquid]) .tk{border-color:var(--br2);box-shadow:none}
-html:is([data-theme^=vidro],[data-theme^=liquid]) .tk.done{background:transparent}
+html[data-theme^=liquid] .card,html[data-theme^=liquid] .fin-summary{border-color:transparent;box-shadow:none}
+html[data-theme^=liquid] .tk{border-color:var(--br2);box-shadow:none}
+html[data-theme^=liquid] .tk.done{background:transparent}
 
 /* vidro de verdade só no que flutua: menu, barra lateral, janelas e avisos */
-html:is([data-theme^=vidro],[data-theme^=liquid]) .bnav{left:16px;right:16px;bottom:calc(8px + env(safe-area-inset-bottom));padding:5px;border-radius:32px;
+html[data-theme^=liquid] .bnav{left:16px;right:16px;bottom:calc(8px + env(safe-area-inset-bottom));padding:5px;border-radius:32px;
   background:var(--glass);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);
   border:.5px solid var(--glass-br);box-shadow:inset 0 .5px 0 var(--glass-hi),var(--sh-float)}
-html:is([data-theme^=vidro],[data-theme^=liquid]) .bni{color:var(--t1)}
-html:is([data-theme^=vidro],[data-theme^=liquid]) .bni.on{color:var(--acc)}
-html:is([data-theme^=vidro],[data-theme^=liquid]) .bni.on .ic{background:var(--sel);color:var(--acc)}
-html:is([data-theme^=vidro],[data-theme^=liquid]) .side{background:var(--glass);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border-right:.5px solid var(--glass-br)}
-html:is([data-theme^=vidro],[data-theme^=liquid]) .sheet{background:var(--sheet);backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);border-radius:34px 34px 0 0;box-shadow:inset 0 .5px 0 var(--glass-hi),var(--sh-lg)}
-html:is([data-theme^=vidro],[data-theme^=liquid]) .toast{background:var(--glass);color:var(--t1);border:.5px solid var(--glass-br);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);box-shadow:var(--sh-float)}
+html[data-theme^=liquid] .bni{color:var(--t1)}
+html[data-theme^=liquid] .bni.on{color:var(--acc)}
+html[data-theme^=liquid] .bni.on .ic{background:var(--sel);color:var(--acc)}
+html[data-theme^=liquid] .side{background:var(--glass);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border-right:.5px solid var(--glass-br)}
+html[data-theme^=liquid] .sheet{background:var(--sheet);backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);border-radius:34px 34px 0 0;box-shadow:inset 0 .5px 0 var(--glass-hi),var(--sh-lg)}
+html[data-theme^=liquid] .toast{background:var(--glass);color:var(--t1);border:.5px solid var(--glass-br);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);box-shadow:var(--sh-float)}
 
 /* botões: cápsulas de cor sólida, como na referência */
-html:is([data-theme^=vidro],[data-theme^=liquid]) .btn{border-radius:999px;font-weight:600}
-html:is([data-theme^=vidro],[data-theme^=liquid]) .bp{background:var(--fill);color:var(--on-fill);box-shadow:none}
-html:is([data-theme^=vidro],[data-theme^=liquid]) .bg{background:var(--s2);color:var(--t1);border-color:transparent;box-shadow:none}
-html:is([data-theme^=vidro],[data-theme^=liquid]) .ibtn{border-radius:50%;background:var(--s2);border-color:transparent;box-shadow:none}
-html:is([data-theme^=vidro],[data-theme^=liquid]) .ibtn.on{background:var(--acc-soft);color:var(--acc)}
-html:is([data-theme^=vidro],[data-theme^=liquid]) .chip:not(.on){background:var(--s2);border-color:transparent}
+html[data-theme^=liquid] .btn{border-radius:999px;font-weight:600}
+html[data-theme^=liquid] .bp{background:var(--fill);color:var(--on-fill);box-shadow:none}
+html[data-theme^=liquid] .bg{background:var(--s2);color:var(--t1);border-color:transparent;box-shadow:none}
+html[data-theme^=liquid] .ibtn{border-radius:50%;background:var(--s2);border-color:transparent;box-shadow:none}
+html[data-theme^=liquid] .ibtn.on{background:var(--acc-soft);color:var(--acc)}
+html[data-theme^=liquid] .chip:not(.on){background:var(--s2);border-color:transparent}
 /* controle segmentado: trilho em cápsula e item escolhido em cápsula branca (cinza no escuro) */
-html:is([data-theme^=vidro],[data-theme^=liquid]) .seg{border-radius:999px;background:var(--s2);padding:2px}
-html:is([data-theme^=vidro],[data-theme^=liquid]) .seg-i{border-radius:999px}
-html[data-theme=vidro] .seg-i.on{background:#FFFFFF;box-shadow:0 3px 8px rgba(0,0,0,.12),0 .5px 1px rgba(0,0,0,.08)}
-html[data-theme=vidro-escuro] .seg-i.on{background:#636366;box-shadow:none}
+html[data-theme^=liquid] .seg{border-radius:999px;background:var(--s2);padding:2px}
+html[data-theme^=liquid] .seg-i{border-radius:999px}
 
 /* marcação redonda, como nos Lembretes: contorno cinza e, marcada, a cor sólida da área */
-html:is([data-theme^=vidro],[data-theme^=liquid]) .hck,html:is([data-theme^=vidro],[data-theme^=liquid]) .tk-sub .hck{border-radius:50%;border-color:var(--hck-br);background:transparent}
-html:is([data-theme^=vidro],[data-theme^=liquid]) .hck.on{background:var(--fill);border-color:var(--fill)}
-html:is([data-theme^=vidro],[data-theme^=liquid]) .hck.on::after{border-color:var(--on-fill)}
-html:is([data-theme^=vidro],[data-theme^=liquid]) .wday.on{background:var(--fill)}
-html:is([data-theme^=vidro],[data-theme^=liquid]) .wday.on b,html:is([data-theme^=vidro],[data-theme^=liquid]) .wday.on small{color:var(--on-fill)}
-html:is([data-theme^=vidro],[data-theme^=liquid]) .wday.on i.pend,html:is([data-theme^=vidro],[data-theme^=liquid]) .wday.on i.ok{background:var(--on-fill)}
+html[data-theme^=liquid] .hck,html[data-theme^=liquid] .tk-sub .hck{border-radius:50%;border-color:var(--hck-br);background:transparent}
+html[data-theme^=liquid] .hck.on{background:var(--fill);border-color:var(--fill)}
+html[data-theme^=liquid] .hck.on::after{border-color:var(--on-fill)}
+html[data-theme^=liquid] .wday.on{background:var(--fill)}
+html[data-theme^=liquid] .wday.on b,html[data-theme^=liquid] .wday.on small{color:var(--on-fill)}
+html[data-theme^=liquid] .wday.on i.pend,html[data-theme^=liquid] .wday.on i.ok{background:var(--on-fill)}
 
 /* barras: trilho fino e preenchimento sólido, como o controle deslizante da referência */
-html:is([data-theme^=vidro],[data-theme^=liquid]) .pb{height:6px;background:var(--s3);box-shadow:none}
-html:is([data-theme^=vidro],[data-theme^=liquid]) .pbf,html:is([data-theme^=vidro],[data-theme^=liquid]) .tk-mini span{background:var(--fill)}
-html:is([data-theme^=vidro],[data-theme^=liquid]) .prev-c.tot{background:var(--acc-soft);box-shadow:none}
+html[data-theme^=liquid] .pb{height:6px;background:var(--s3);box-shadow:none}
+html[data-theme^=liquid] .pbf,html[data-theme^=liquid] .tk-mini span{background:var(--fill)}
+html[data-theme^=liquid] .prev-c.tot{background:var(--acc-soft);box-shadow:none}
 
-/* prévias no seletor de tema */
-.tp-prev.vidro b{background:#3C86FC}
-.tp-prev.vidro-escuro b{background:#3E8FFC}
 
-/* quem pede menos transparência no sistema recebe superfícies sólidas */
-@media(prefers-reduced-transparency:reduce){
-  :root[data-theme=vidro]{--glass:#F9F9FB;--sheet:#F2F2F7}
-  :root[data-theme=vidro-escuro]{--glass:#1E1E20;--sheet:#1C1C1E}
-  html:is([data-theme^=vidro],[data-theme^=liquid]) .bnav,html:is([data-theme^=vidro],[data-theme^=liquid]) .side,html:is([data-theme^=vidro],[data-theme^=liquid]) .sheet,html:is([data-theme^=vidro],[data-theme^=liquid]) .toast{backdrop-filter:none;-webkit-backdrop-filter:none}
-}
 
 /* ════ Temas Liquid Glass: claro e escuro ════
    Usam a mesma estrutura dos Minimalistas (tipografia SF Pro / Inter, menu em cápsula, controles redondos),
@@ -1905,8 +1830,33 @@ html[data-theme^=liquid] #d-today-pb{background:linear-gradient(90deg,#449BD2,#4
   :root[data-theme=liquid-escuro]{--glass:#383A40;--s2:#34363B;--field:#26272B;--glass-br:rgba(255,255,255,.45);--br2:rgba(255,255,255,.3)}
   html[data-theme^=liquid] :is(.bnav,.side,.toast,.bg,.chip,.ibtn,.seg){backdrop-filter:none;-webkit-backdrop-filter:none}
 }
+
+/* ════ Uso diário (vale para os 4 temas) ════ */
+/* avisos: a linha "e mais N" fica discreta */
+html[data-theme] .lemb-mais{color:var(--t3);font-weight:600}
+/* Início: lançar um gasto sem sair da tela, logo abaixo do "Hoje" */
+html[data-theme] #d-gasto{width:100%;margin-bottom:12px}
+/* listas de lançamentos: a linha de detalhes quebra em vez de cortar com "…" */
+html[data-theme] .tx-cat{white-space:normal;overflow:visible;line-height:1.35}
+/* campos de linha (Saúde e Perfil): sem a placa branca que o Liquid Glass dá aos outros campos */
+html[data-theme^=liquid] .pfield input.pfinp{background:transparent}
+@media(max-width:999px){
+  html[data-theme] #d-gasto{order:-1}
+  /* Finanças no celular: depois do calendário vem o que se mexe todo dia (gastos, contas e receitas);
+     os números para consulta (limites, previsão, valor da hora e gráfico) ficam no fim */
+  html[data-theme] #f-body{display:flex;flex-direction:column}
+  html[data-theme] #page-fin .cols>.col:first-child>.card:nth-child(1){order:1}
+  html[data-theme] #page-fin .cols>.col:last-child>.card:nth-child(4){order:2}
+  html[data-theme] #page-fin .cols>.col:last-child>.card:nth-child(3){order:3}
+  html[data-theme] #page-fin .cols>.col:last-child>.card:nth-child(2){order:4}
+  html[data-theme] #page-fin .cols>.col:first-child>.card:nth-child(5){order:5}
+  html[data-theme] #page-fin .cols>.col:last-child>.card:nth-child(1){order:6}
+  html[data-theme] #page-fin .cols>.col:first-child>.card:nth-child(3){order:7}
+  html[data-theme] #page-fin .cols>.col:first-child>.card:nth-child(2){order:8}
+  html[data-theme] #page-fin .cols>.col:first-child>.card:nth-child(4){order:9}
+}
 </style>
-  <script type="module" crossorigin src="./assets/index-AQsczGP3.js"></script>
+  <script type="module" crossorigin src="./assets/index-CzKVb4Sv.js"></script>
   <link rel="stylesheet" crossorigin href="./assets/index-CjlNt6MZ.css">
 </head>
 <body>
@@ -2116,6 +2066,8 @@ html[data-theme^=liquid] #d-today-pb{background:linear-gradient(90deg,#449BD2,#4
           <button class="btn bp" id="d-t-add" onclick="addTask('d-t-inp')" aria-label="Adicionar tarefa"></button>
         </div>
       </div>
+
+      <button class="btn bg" id="d-gasto" onclick="openVarSheet(null,today(),true)"></button>
 
       <div class="banner" id="d-banner">
         <div class="banner-ico" id="d-banner-ico"></div>
@@ -2647,17 +2599,12 @@ html[data-theme^=liquid] #d-today-pb{background:linear-gradient(90deg,#449BD2,#4
         <div style="display:flex;flex-direction:column;gap:12px">
           <div>
             <div class="cfg-t" style="font-size:14.5px;font-weight:600">Aparência</div>
-            <div class="cfg-s" style="font-size:12px;color:var(--t2);margin-bottom:10px">Fica guardada neste aparelho. Automático alterna entre Claro e Escuro conforme o modo do celular.</div>
+            <div class="cfg-s" style="font-size:12px;color:var(--t2);margin-bottom:10px">A escolha fica guardada neste aparelho.</div>
             <div id="tema-picker"><div class="tp-grid" role="radiogroup" aria-label="Aparência">
-              <div class="tp" role="radio" data-tema="auto" onclick="setTema('auto')"><span class="tp-prev auto" style="--pb:#F4F0E8;--pc:#FFFDF9;--pa:#29724A;--pt:#1F1C17"><i></i><i></i><b></b><em></em></span><span class="tp-n">Automático</span><span class="tp-s">Segue o celular</span></div>
-              <div class="tp" role="radio" data-tema="light" onclick="setTema('light')"><span class="tp-prev" style="--pb:#F4F0E8;--pc:#FFFDF9;--pa:#29724A;--pt:#1F1C17"><i></i><i></i><b></b><em></em></span><span class="tp-n">Claro</span><span class="tp-s">Papel quente</span></div>
-              <div class="tp" role="radio" data-tema="dark" onclick="setTema('dark')"><span class="tp-prev" style="--pb:#131210;--pc:#1C1A17;--pa:#6CC98E;--pt:#F2EDE4"><i></i><i></i><b></b><em></em></span><span class="tp-n">Escuro</span><span class="tp-s">Carvão</span></div>
-              <div class="tp" role="radio" data-tema="neon" onclick="setTema('neon')"><span class="tp-prev" style="--pb:#05070B;--pc:#121722;--pa:#4ADE80;--pt:#F2F5FA;--pg:0 0 8px #4ADE80"><i></i><i></i><b></b><em></em></span><span class="tp-n">Neon verde</span><span class="tp-s">O visual anterior</span></div>
-              <div class="tp" role="radio" data-tema="neon-rosa" onclick="setTema('neon-rosa')"><span class="tp-prev" style="--pb:#05070B;--pc:#121722;--pa:#FF6EB4;--pt:#F2F5FA;--pg:0 0 8px #FF6EB4"><i></i><i></i><b></b><em></em></span><span class="tp-n">Neon rosa</span><span class="tp-s">Rosa-choque</span></div>
-              <div class="tp" role="radio" data-tema="vidro" onclick="setTema('vidro')"><span class="tp-prev vidro" style="--pb:#F2F2F7;--pc:#FFFFFF;--pa:#3C86FC;--pt:#6C6C70"><i></i><i></i><b></b><em></em></span><span class="tp-n">Minimalista claro</span><span class="tp-s">Estilo Apple, plano</span></div>
-              <div class="tp" role="radio" data-tema="vidro-escuro" onclick="setTema('vidro-escuro')"><span class="tp-prev vidro vidro-escuro" style="--pb:#000000;--pc:#1C1C1E;--pa:#3E8FFC;--pt:#AEAEB2"><i></i><i></i><b></b><em></em></span><span class="tp-n">Minimalista escuro</span><span class="tp-s">Estilo Apple, plano</span></div>
               <div class="tp" role="radio" data-tema="liquid" onclick="setTema('liquid')"><span class="tp-prev liquid" style="--pb:#D5D5DE;--pc:rgba(255,255,255,.6);--pa:#4A7CD4;--pt:#464A53"><i></i><i></i><b></b><em></em></span><span class="tp-n">Liquid Glass claro</span><span class="tp-s">Vidro translúcido</span></div>
               <div class="tp" role="radio" data-tema="liquid-escuro" onclick="setTema('liquid-escuro')"><span class="tp-prev liquid-escuro" style="--pb:linear-gradient(160deg,#2A2C33,#13171B);--pc:rgba(61,64,71,.75);--pa:#E0328A;--pt:#B9BCC3"><i></i><i></i><b></b><em></em></span><span class="tp-n">Liquid Glass escuro</span><span class="tp-s">Vidro translúcido</span></div>
+              <div class="tp" role="radio" data-tema="neon" onclick="setTema('neon')"><span class="tp-prev" style="--pb:#05070B;--pc:#121722;--pa:#4ADE80;--pt:#F2F5FA;--pg:0 0 8px #4ADE80"><i></i><i></i><b></b><em></em></span><span class="tp-n">Neon verde</span><span class="tp-s">Escuro com brilho</span></div>
+              <div class="tp" role="radio" data-tema="neon-rosa" onclick="setTema('neon-rosa')"><span class="tp-prev" style="--pb:#05070B;--pc:#121722;--pa:#FF6EB4;--pt:#F2F5FA;--pg:0 0 8px #FF6EB4"><i></i><i></i><b></b><em></em></span><span class="tp-n">Neon rosa</span><span class="tp-s">Rosa-choque</span></div>
             </div></div>
           </div>
           <div class="divider" style="margin:0"></div>
@@ -3412,6 +3359,9 @@ async function afterLogin(){
   perfis=await loadProfiles();
   if(perfis.length<2){showGate('setup');return}
   if(hasLegacy()&&!rawGet('g_migrado',false)){showGate('migrate');return}
+  // abre direto no perfil usado por último neste aparelho; para mudar: Perfil › Trocar perfil
+  const ultimo=rawGet('g_last',null);
+  if(ultimo&&perfis.some(p=>p.id===ultimo)){await enterProfile(ultimo);return}
   showGate('picker');
 }
 async function loadProfiles(){
@@ -3615,15 +3565,16 @@ function primeiroMesFin(){return GuaposDominio.financas.primeiroMesFin(finCtx())
 function saldoAbertura(m,a){return GuaposDominio.financas.saldoAbertura(finCtx(),m,a)}
 function saldoMes(m=curMes(),a=curAno()){return GuaposDominio.financas.saldoMes(finCtx(),m,a)}
 
-// ── Tema: Automático (segue o aparelho), Claro, Escuro, Neon verde ou Neon rosa. A escolha fica guardada neste aparelho ──
-// ids salvos em 'g_tema' (os antigos não mudam: 'vidro' e 'vidro-escuro' agora se chamam Minimalista claro/escuro)
-const TEMAS=['auto','light','dark','neon','neon-rosa','vidro','vidro-escuro','liquid','liquid-escuro'];
-function temaAtual(){let t='auto';try{t=localStorage.getItem('g_tema')||'auto'}catch(e){}return TEMAS.includes(t)?t:'auto'}
+// ── Tema: Liquid Glass claro ou escuro, Neon verde ou Neon rosa. A escolha fica guardada neste aparelho ('g_tema') ──
+// Quem tinha um tema que saiu (Claro, Escuro, Minimalista) ou nunca escolheu fica no Liquid Glass claro ou escuro.
+const TEMAS=['liquid','liquid-escuro','neon','neon-rosa'];
+const TEMAS_ANTIGOS={light:'liquid',vidro:'liquid',dark:'liquid-escuro','vidro-escuro':'liquid-escuro'};
+function temaSalvo(){let t=null;try{t=localStorage.getItem('g_tema')}catch(e){}t=TEMAS_ANTIGOS[t]||t;return TEMAS.includes(t)?t:null}
+function temaAtual(){return temaSalvo()||(matchMedia('(prefers-color-scheme: dark)').matches?'liquid-escuro':'liquid')}
 function aplicarTema(){
-  const t=temaAtual(),r=document.documentElement,neon=t.startsWith('neon');
-  if(t==='auto')r.removeAttribute('data-theme');else r.setAttribute('data-theme',t);
-  const dark=neon||t==='dark'||t==='vidro-escuro'||t==='liquid-escuro'||(t==='auto'&&matchMedia('(prefers-color-scheme: dark)').matches);
-  document.getElementById('meta-tc').setAttribute('content',neon?'#05070B':t==='vidro-escuro'?'#000000':t==='liquid-escuro'?'#1B1D21':dark?'#131210':t==='vidro'?'#F2F2F7':t==='liquid'?'#D5D5DE':'#F4F0E8');
+  const t=temaAtual();
+  document.documentElement.setAttribute('data-theme',t);
+  document.getElementById('meta-tc').setAttribute('content',t.startsWith('neon')?'#05070B':t==='liquid-escuro'?'#1B1D21':'#D5D5DE');
   document.querySelectorAll('[data-tema]').forEach(e=>e.setAttribute('aria-checked',String(e.dataset.tema===t)));
   // avisa as partes em React (seletor de temas) que o tema mudou
   window.dispatchEvent(new CustomEvent('guapos:tema',{detail:t}));
@@ -3633,7 +3584,7 @@ function setTema(t){
   try{localStorage.setItem('g_tema',t)}catch(e){}
   aplicarTema();buzz(5);if(PID)go(curPage); // redesenha os gráficos com as cores do tema
 }
-matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{if(temaAtual()==='auto'){aplicarTema();if(PID)go(curPage)}});
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{if(!temaSalvo()){aplicarTema();if(PID)go(curPage)}});
 // Cores do tema atual para os gráficos (o canvas não entende var(--x))
 const tok=n=>getComputedStyle(document.body).getPropertyValue(n).trim();
 const corDe=v=>/^var\(/.test(v)?tok(v.slice(4,-1)):v;
@@ -4848,6 +4799,7 @@ function renderToday(){
   const td=today();ensureRecurring(td);
   setIco('d-today-t','zap','Hoje');
   document.getElementById('d-t-add').innerHTML=ic('plus');
+  document.getElementById('d-gasto').innerHTML=ic('plus')+'<span>Lançar gasto</span>';
   const hs=habitsFor(td),wk=weeklyHabits(),hd=doneIn(td);
   const tl=tasksOn(td),pend=tl.filter(t=>!taskDone(t)),done=tl.filter(taskDone);
   const total=hs.length+tl.length,ok=hd+done.length;
@@ -5486,6 +5438,10 @@ function saveOrc(){
 function contasLembrete(){return GuaposDominio.financas.contasLembrete(finCtx())}
 // Primeiro dia (nos próximos 30) em que o saldo projetado fica negativo ao pagar uma conta, mesmo que uma receita depois cubra
 function riscoFalta(){return GuaposDominio.financas.riscoFalta(finCtx())}
+// Avisos de Finanças: a mesma conta atrasada em vários meses vira uma linha só ("3 meses"), e a lista para em
+// `max` linhas com "e mais N" (no Início são 3; a lista inteira está em Finanças)
+const lembConta=x=>`${esc(x.nome)} · ${x.n>1?x.n+' meses · ':''}${fmtBRL(x.valor)}`;
+function lembLinhas(linhas,max){return linhas.slice(0,max).join('')+(linhas.length>max?`<span class="lemb-i lemb-mais">e mais ${linhas.length-max}</span>`:'')}
 function renderFalta(el,dash){
   if(!el)return;
   const r=finLocked()?null:riscoFalta();
@@ -5493,18 +5449,19 @@ function renderFalta(el,dash){
   el.style.display='';
   el.onclick=dash?()=>go('fin'):()=>openFinDia(r.k);
   const quando=r.k===today()?'hoje':fmtDia(r.k);
-  el.innerHTML=`${ic('zap')}<div class="lemb-t"><b>Pode faltar ${fmtBRL(-r.saldo)} ${r.k===today()?'hoje':'em '+quando}</b>${r.contas.map(x=>`<span class="lemb-i"><em class="late">${quando}</em> ${esc(x.nome)} · ${fmtBRL(x.valor)}</span>`).join('')}<span class="lemb-i">Com o que entra e sai até esse dia, o saldo ficaria em ${brlC(r.saldo)}.</span></div>${dash?ic('right'):''}`;
+  el.innerHTML=`${ic('zap')}<div class="lemb-t"><b>Pode faltar ${fmtBRL(-r.saldo)} ${r.k===today()?'hoje':'em '+quando}</b>${lembLinhas(GuaposDominio.financas.agruparContas(r.contas).map(x=>`<span class="lemb-i"><em class="late">${quando}</em> ${lembConta(x)}</span>`),dash?3:8)}<span class="lemb-i">Com o que entra e sai até esse dia, o saldo ficaria em ${brlC(r.saldo)}.</span></div>${dash?ic('right'):''}`;
 }
 function renderLembretes(el,dash){
   if(!el)return;
-  const l=contasLembrete(),ra=receitasAtrasadas();
+  const l=GuaposDominio.financas.agruparContas(contasLembrete(),x=>x.quando+x.tipo+':'+x.id),ra=receitasAtrasadas();
   if(!l.length&&!ra.length){el.style.display='none';return}
   el.style.display='';
   if(finLocked()){el.innerHTML=`${ic('clock')}<div class="lemb-t"><b>${l.length+ra.length} aviso${l.length+ra.length>1?'s':''} em Finanças</b>Desbloqueie Finanças para ver.</div>`;el.onclick=()=>go('fin');return}
   el.onclick=dash?()=>go('fin'):null;
   const tit=l.length&&ra.length?'Contas e receitas':l.length?'Contas para pagar':'Receitas atrasadas';
-  el.innerHTML=`${ic('clock')}<div class="lemb-t"><b>${tit}</b>${l.map(x=>`<span class="lemb-i"><em class="${x.quando==='atrasada'?'late':x.quando==='hoje'?'hoje':''}">${x.quando==='atrasada'?'Atrasada':'Vence '+x.quando}</em> ${esc(x.nome)} · ${fmtBRL(x.valor)}</span>`).join('')}${ra.map(r=>`<span class="lemb-i"><em class="late">A receber, atrasada</em> ${esc(r.nome)} · ${fmtBRL(r.valor)} · era para ${fmtDia(recData(r))}</span>`).join('')}</div>`+
-    (dash?'':`<button class="btn bg bs" onclick="lembreteTodas()">${ic('calendar')}<span>Exportar lembretes do mês</span></button>`);
+  const linhas=l.map(x=>`<span class="lemb-i"><em class="${x.quando==='atrasada'?'late':x.quando==='hoje'?'hoje':''}">${x.quando==='atrasada'?'Atrasada':'Vence '+x.quando}</em> ${lembConta(x)}</span>`)
+    .concat(ra.map(r=>`<span class="lemb-i"><em class="late">A receber, atrasada</em> ${esc(r.nome)} · ${fmtBRL(r.valor)} · era para ${fmtDia(recData(r))}</span>`));
+  el.innerHTML=`${ic('clock')}<div class="lemb-t"><b>${tit}</b>${lembLinhas(linhas,dash?3:8)}</div>${dash?ic('right'):''}`;
 }
 function icsEsc(s){return String(s).replace(/[\\;,]/g,m=>'\\'+m).replace(/\n/g,'\\n')}
 // Um evento de dia inteiro por conta e por vencimento (sem repetição): exportar vários meses não duplica a mesma conta.
@@ -5535,7 +5492,6 @@ function lembreteConta(tipo,id){
   const x=contasAbertas().find(c=>c.tipo===tipo&&c.id===id)||(tipo==='fixo'?(()=>{const d=new Date(fcSel+'T12:00:00');return saidasMes(d.getMonth(),d.getFullYear()).find(c=>c.id===id)})():null);
   if(x)baixarICS([x],'guapos-lembrete.ics');
 }
-function lembreteTodas(){exportarMes(curMes(),curAno())}
 
 // ── Saldo dia a dia (gráfico) ──
 function renderFinChart(m){
@@ -6207,9 +6163,11 @@ function backupText(){
 }
 // Avisa a cada 7 dias sem backup (ou depois de 3 dias de uso, se nunca fez)
 function backupDue(){
-  if(Sync.on)return false; // com a nuvem configurada, os dados já ficam guardados fora do aparelho
   if(cfg.bkSnooze&&cfg.bkSnooze>today())return false;
   const s=backupSince();
+  // com a nuvem, os dados já ficam fora do aparelho, mas ela guarda só a versão mais recente:
+  // uma cópia por mês é o que permite voltar atrás se algo for apagado ou gravado errado
+  if(Sync.on)return s===null||s>=30;
   if(s===null){const ini=cfg.criadoEm||today();return Math.round((new Date(today()+'T12:00:00')-new Date(ini+'T12:00:00'))/864e5)>=3}
   return s>=7;
 }
@@ -6218,7 +6176,7 @@ function renderBackupBanner(){
   const el=document.getElementById('d-backup');if(!el)return;
   if(!backupDue()){el.style.display='none';return}
   el.style.display='flex';
-  el.innerHTML=`${ic('shield')}<div class="bk-t"><b>Hora de fazer backup</b>${backupText()}. Guarde uma cópia para não perder nada.</div><div class="bk-a"><button class="btn bp" onclick="exportData()">Fazer backup</button><button class="bk-later" onclick="snoozeBackup()">Depois</button></div>`;
+  el.innerHTML=`${ic('shield')}<div class="bk-t"><b>Hora de fazer backup</b>${backupText()}. ${Sync.on?'A nuvem guarda só a versão mais recente: uma cópia por mês deixa voltar atrás.':'Guarde uma cópia para não perder nada.'}</div><div class="bk-a"><button class="btn bp" onclick="exportData()">Fazer backup</button><button class="bk-later" onclick="snoozeBackup()">Depois</button></div>`;
 }
 function renderInstall(){
   const el=document.getElementById('p-install');if(!el)return;
