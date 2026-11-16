@@ -15,8 +15,10 @@
   var t=null;try{t=localStorage.getItem('g_tema')}catch(e){}
   t={light:'liquid',vidro:'liquid',dark:'liquid-escuro','vidro-escuro':'liquid-escuro'}[t]||t;
   if(['liquid','liquid-escuro','neon','neon-rosa'].indexOf(t)<0)t=window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'liquid-escuro':'liquid';
+  // no computador (1000 px ou mais) vale sempre o tema Desktop; a escolha salva continua valendo no celular
+  if(window.matchMedia&&matchMedia('(min-width: 1000px)').matches)t='liquid-desktop';
   document.documentElement.setAttribute('data-theme',t);
-  document.getElementById('meta-tc').setAttribute('content',t.indexOf('neon')===0?'#05070B':t==='liquid-escuro'?'#1B1D21':'#D5D5DE');
+  document.getElementById('meta-tc').setAttribute('content',t.indexOf('neon')===0?'#05070B':t==='liquid-escuro'?'#1B1D21':t==='liquid-desktop'?'#121315':'#D5D5DE');
   document.getElementById('meta-sb').setAttribute('content',t==='liquid'?'default':'black-translucent');
 })();
 </script>
@@ -1818,17 +1820,116 @@ html[data-theme^=liquid] #d-today-pb{background:linear-gradient(90deg,#449BD2,#4
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
   :root[data-theme=liquid]{--glass:#F8F8FA}
   :root[data-theme=liquid-escuro]{--glass:#383A40}
+  :root[data-theme=liquid-desktop]{--glass:#26272B}
 }
 /* menos transparência ou mais contraste: tudo sólido (barras, botões, linhas, campos e trilhos), com a mesma cor viva */
 @media(prefers-reduced-transparency:reduce){
   :root[data-theme=liquid]{--glass:#F8F8FA;--s2:#DCDDE3;--field:#FFFFFF;--sel:#FFFFFF}
   :root[data-theme=liquid-escuro]{--glass:#383A40;--s2:#34363B;--field:#26272B}
-  html[data-theme^=liquid] :is(.bnav,.side,.toast,.bg,.chip,.ibtn,.seg){backdrop-filter:none;-webkit-backdrop-filter:none}
+  :root[data-theme=liquid-desktop]{--glass:#26272B;--s2:#2A2C31;--field:#24262A}
+  html[data-theme^=liquid] :is(.bnav,.side,.toast,.bg,.chip,.ibtn,.seg,.tb-bar){backdrop-filter:none;-webkit-backdrop-filter:none}
 }
 @media(prefers-contrast:more){
   :root[data-theme=liquid]{--glass:#F8F8FA;--s2:#DCDDE3;--field:#FFFFFF;--sel:#FFFFFF;--glass-br:rgba(19,21,25,.45);--br2:rgba(19,21,25,.3)}
   :root[data-theme=liquid-escuro]{--glass:#383A40;--s2:#34363B;--field:#26272B;--glass-br:rgba(255,255,255,.45);--br2:rgba(255,255,255,.3)}
-  html[data-theme^=liquid] :is(.bnav,.side,.toast,.bg,.chip,.ibtn,.seg){backdrop-filter:none;-webkit-backdrop-filter:none}
+  :root[data-theme=liquid-desktop]{--glass:#26272B;--s2:#2A2C31;--field:#24262A;--glass-br:rgba(255,255,255,.45);--br2:rgba(255,255,255,.3)}
+  html[data-theme^=liquid] :is(.bnav,.side,.toast,.bg,.chip,.ibtn,.seg,.tb-bar){backdrop-filter:none;-webkit-backdrop-filter:none}
+}
+
+/* ════ Tema Desktop: automático no computador (1000 px ou mais) e fora do seletor de temas ════
+   Grafite sóbrio, inspirado em painéis de controle: superfícies sólidas em camadas, vidro só no menu lateral,
+   na barra superior e nos botões, e a cor guardada para o que importa (números, ícones, marcações).
+   O item ativo do menu e o botão principal são cápsulas claras; cada área continua com a sua cor nos dados.
+   Herda todas as regras do Liquid Glass (o id começa com "liquid"). */
+.topbar,.sn-grp,.sn-dica{display:none}
+:root[data-theme=liquid-desktop]{
+  color-scheme:dark;
+  --bg:#121315;--s1:#1C1D20;--s2:rgba(255,255,255,.055);--s3:#2B2D32;--field:rgba(255,255,255,.055);
+  --t1:#F3F3F5;--t2:#AEB0B7;--t3:#8E9199;
+  --br:rgba(255,255,255,.12);--br2:rgba(255,255,255,.07);
+  --c-hab:#4DCA67;--c-task:#8EA6F0;--c-fin:#E78B3D;--c-saude:#FF7AB8;--c-perfil:#C9A4FF;
+  --g:#4DCA67;--g2:#4DCA67;--b:#8EA6F0;--p:#C9A4FF;--y:#EBD35A;--r:#FF7A90;--c:#6FD3E8;--o:#E78B3D;
+  --k-alimentacao:#FF7A90;--k-transporte:#8EA6F0;--k-lazer:#C9A4FF;--k-saude:#6FD3E8;--k-estudos:#EBD35A;--k-casa:#E78B3D;--k-outros:#9A9DA5;
+  --f-hab:#4DCA68;--f-task:#5B7FE6;--f-fin:#E78B3D;--f-saude:#E0466A;--f-perfil:#A77BF2;
+  --o-hab:#131519;--o-task:#FFFFFF;--o-fin:#131519;--o-saude:#FFFFFF;--o-perfil:#FFFFFF;
+  --on-acc:#131519;
+  --hm0:#25272B;--scrim:rgba(0,0,0,.55);
+  --glass:rgba(40,41,46,.6);--glass-br:rgba(255,255,255,.09);--glass-hi:rgba(255,255,255,.07);
+  --sel:#ECECEF;--hck-br:#7E828B;
+  --sh:inset 0 1px 0 rgba(255,255,255,.035),0 16px 36px -22px rgba(0,0,0,.8);
+  --sh-lg:0 30px 70px -20px rgba(0,0,0,.85);--sh-float:0 18px 44px -14px rgba(0,0,0,.7);
+  --sheet:#1F2024;
+  --rad:20px;
+}
+html[data-theme=liquid-desktop] body::before{background:radial-gradient(55% 40% at 22% 0%,#26282D,transparent 70%),linear-gradient(170deg,#17181B,#0F1012 75%)}
+html[data-theme=liquid-desktop] .bp{background:#ECECEF;color:#141518}
+html[data-theme=liquid-desktop] .seg-i.on{background:#3A3C42;box-shadow:inset 0 1px 0 var(--glass-hi)}
+html[data-theme=liquid-desktop] .card,html[data-theme=liquid-desktop] .fin-summary{border-color:var(--br2)}
+html[data-theme=liquid-desktop] kbd{display:inline-flex;align-items:center;justify-content:center;min-width:19px;height:19px;padding:0 5px;border-radius:6px;border:1px solid var(--br);background:rgba(255,255,255,.04);color:var(--t2);font:600 11px/1 var(--ff)}
+@media(min-width:1000px){
+  /* menu lateral: um painel que flutua, com grupos, contadores e a dica dos atalhos */
+  html[data-theme=liquid-desktop] .side{top:12px;bottom:12px;left:12px;width:232px;padding:20px 12px 12px;border:1px solid var(--glass-br);border-radius:24px;box-shadow:var(--sh-float)}
+  html[data-theme=liquid-desktop] .side-brand{padding:2px 8px 16px}
+  html[data-theme=liquid-desktop] .side-brand b{font-size:21px}
+  html[data-theme=liquid-desktop] .side-logo{width:36px;height:36px;border-radius:12px}
+  html[data-theme=liquid-desktop] .sn-grp{display:block;padding:16px 12px 6px;font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--t3)}
+  html[data-theme=liquid-desktop] .sn-grp:first-child{padding-top:4px}
+  html[data-theme=liquid-desktop] .sni{padding:9px 12px;font-size:14.5px;border-radius:12px}
+  html[data-theme=liquid-desktop] .sni .ic{width:18px;height:18px}
+  html[data-theme=liquid-desktop] .sni.on,html[data-theme=liquid-desktop] .sni.on:hover{background:var(--sel);color:#141518}
+  html[data-theme=liquid-desktop] .sni.on .ic{color:#141518}
+  html[data-theme=liquid-desktop] .sni[data-n]::after{content:attr(data-n);margin-left:auto;min-width:22px;height:20px;padding:0 7px;border-radius:999px;background:var(--s2);color:var(--t2);font-size:12px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;font-variant-numeric:tabular-nums}
+  html[data-theme=liquid-desktop] .sni.on[data-n]::after{background:rgba(20,21,24,.1);color:#141518}
+  html[data-theme=liquid-desktop] .sn-dica{display:block;margin:18px 10px 0;font-size:12px;line-height:1.9;color:var(--t3)}
+  html[data-theme=liquid-desktop] .side-foot{background:var(--s2);border-color:var(--br2);border-radius:16px}
+  /* barra superior: alinhada com o conteúdo da página */
+  html[data-theme=liquid-desktop] .topbar{display:block;position:fixed;top:12px;left:256px;right:0;z-index:70;padding:0 44px;pointer-events:none}
+  html[data-theme=liquid-desktop] .tb-bar{pointer-events:auto;max-width:1232px;margin:0 auto;height:58px;display:flex;align-items:center;gap:10px;padding:0 9px 0 16px;border-radius:18px;background:var(--glass);border:1px solid var(--glass-br);backdrop-filter:blur(24px) saturate(160%);-webkit-backdrop-filter:blur(24px) saturate(160%);box-shadow:var(--sh-float)}
+  html[data-theme=liquid-desktop] .tb-dia{display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;color:var(--t2);white-space:nowrap}
+  html[data-theme=liquid-desktop] .tb-dia .ic{width:16px;height:16px}
+  html[data-theme=liquid-desktop] .tb-dia em{font-style:normal;padding:3px 9px;border-radius:999px;background:var(--s2);color:var(--t1);font-variant-numeric:tabular-nums}
+  html[data-theme=liquid-desktop] .tb-campo{flex:1;min-width:0;display:flex;align-items:center;gap:9px;height:40px;margin:0 6px;padding:0 9px 0 12px;border-radius:12px;background:var(--field);border:1px solid var(--br2);transition:border-color .15s,background .15s}
+  html[data-theme=liquid-desktop] .tb-campo:focus-within{border-color:var(--br);background:rgba(255,255,255,.08)}
+  html[data-theme=liquid-desktop] .tb-ico .ic{width:17px;height:17px;color:var(--t3)}
+  html[data-theme=liquid-desktop] #tb-inp{flex:1;min-width:0;height:auto;padding:0;border:none;border-radius:0;background:transparent;box-shadow:none;font-size:14.5px;color:var(--t1);outline:none}
+  html[data-theme=liquid-desktop] .tb-saldo{display:flex;align-items:center;gap:8px;height:40px;padding:0 13px;border-radius:12px;border:1px solid var(--br2);background:transparent;color:var(--t2);font:700 14.5px var(--ff);font-variant-numeric:tabular-nums;cursor:pointer;transition:background .15s}
+  html[data-theme=liquid-desktop] .tb-saldo .ic{width:17px;height:17px}
+  html[data-theme=liquid-desktop] #tb-gasto{height:40px;border-radius:12px;gap:7px;padding:0 10px 0 13px}
+  html[data-theme=liquid-desktop] #tb-gasto kbd{border-color:rgba(20,21,24,.18);background:rgba(20,21,24,.06);color:#45474D}
+  /* páginas: começam abaixo da barra e usam mais largura */
+  html[data-theme=liquid-desktop] .pg{padding:100px 0 60px}
+  /* avisos rápidos (Salvo, Desfazer) logo abaixo da barra superior, sem cobrir o campo de nova tarefa */
+  html[data-theme=liquid-desktop] .toast{top:82px}
+  html[data-theme=liquid-desktop] .w{max-width:1320px}
+  html[data-theme=liquid-desktop] .ph{margin-bottom:22px}
+  html[data-theme=liquid-desktop] .ph h1,html[data-theme=liquid-desktop] .greet{font-size:34px}
+  html[data-theme=liquid-desktop] .dhead{margin-bottom:22px}
+  html[data-theme=liquid-desktop] .kpi-val{font-size:34px}
+  /* a barra superior já tem "Gasto": some o atalho repetido do Início e de Finanças */
+  html[data-theme=liquid-desktop] #d-gasto,html[data-theme=liquid-desktop] #f-add-btn{display:none}
+  /* avisos lado a lado, em vez de faixas da largura da tela */
+  html[data-theme=liquid-desktop] #page-dash .w,html[data-theme=liquid-desktop] #f-body{display:flex;flex-wrap:wrap;column-gap:20px;align-items:stretch}
+  html[data-theme=liquid-desktop] #page-dash .w>*,html[data-theme=liquid-desktop] #f-body>*{flex:1 1 100%;min-width:0}
+  html[data-theme=liquid-desktop] #page-dash .w>:is(.lemb,.bk-banner),html[data-theme=liquid-desktop] #f-body>.lemb{flex:1 1 300px;margin-bottom:20px}
+  /* Finanças: na coluna da direita, o que se lança todo dia vem primeiro (variáveis, fixos, receitas, limites);
+     na da esquerda, o calendário, a previsão e o vale antes dos números de consulta */
+  html[data-theme=liquid-desktop] #page-fin .cols>.col{display:flex;flex-direction:column}
+  html[data-theme=liquid-desktop] #page-fin .cols>.col:first-child>.card:nth-child(3){order:1}
+  html[data-theme=liquid-desktop] #page-fin .cols>.col:first-child>.card:nth-child(5){order:2}
+  html[data-theme=liquid-desktop] #page-fin .cols>.col:first-child>.card:nth-child(2){order:3}
+  html[data-theme=liquid-desktop] #page-fin .cols>.col:first-child>.card:nth-child(4){order:4}
+  html[data-theme=liquid-desktop] #page-fin .cols>.col:last-child>.card:nth-child(4){order:-3}
+  html[data-theme=liquid-desktop] #page-fin .cols>.col:last-child>.card:nth-child(3){order:-2}
+  html[data-theme=liquid-desktop] #page-fin .cols>.col:last-child>.card:nth-child(2){order:-1}
+}
+@media(min-width:1000px) and (max-width:1240px){
+  html[data-theme=liquid-desktop] .topbar{padding:0 28px}
+  html[data-theme=liquid-desktop] .tb-dia em{display:none}
+}
+@media(hover:hover) and (min-width:1000px){
+  html[data-theme=liquid-desktop] .sni:not(.on):hover{background:rgba(255,255,255,.06)}
+  html[data-theme=liquid-desktop] .tb-saldo:hover{background:var(--s2);color:var(--t1)}
+  html[data-theme=liquid-desktop] .bp:hover{filter:none;background:#FFFFFF}
 }
 
 /* ════ Uso diário (vale para os 4 temas) ════ */
@@ -1856,7 +1957,7 @@ html[data-theme^=liquid] .pfield input.pfinp{background:transparent}
   html[data-theme] #page-fin .cols>.col:first-child>.card:nth-child(4){order:9}
 }
 </style>
-  <script type="module" crossorigin src="./assets/index-CzKVb4Sv.js"></script>
+  <script type="module" crossorigin src="./assets/index-Bczx0StS.js"></script>
   <link rel="stylesheet" crossorigin href="./assets/index-CjlNt6MZ.css">
 </head>
 <body>
@@ -1999,15 +2100,33 @@ html[data-theme^=liquid] .pfield input.pfinp{background:transparent}
     <div style="min-width:0"><b>Guapos</b><small id="side-sub">Nível 1</small></div>
   </div>
   <nav class="side-nav" aria-label="Navegação principal">
+    <div class="sn-grp" aria-hidden="true">Dia a dia</div>
     <div class="sni" data-nav="dash" onclick="go('dash')" id="snav-dash"></div>
     <div class="sni" data-nav="habits" onclick="go('habits')" id="snav-habits"></div>
     <div class="sni" data-nav="tasks" onclick="go('tasks')" id="snav-tasks"></div>
+    <div class="sn-grp" aria-hidden="true">Acompanhar</div>
     <div class="sni" data-nav="fin" onclick="go('fin')" id="snav-fin"></div>
     <div class="sni" data-nav="saude" onclick="go('saude')" id="snav-saude"></div>
+    <div class="sn-grp" aria-hidden="true">Você</div>
     <div class="sni" data-nav="perfil" onclick="go('perfil')" id="snav-perfil"></div>
   </nav>
+  <div class="sn-dica">Atalhos: <kbd>1</kbd>–<kbd>6</kbd> telas<br><kbd>N</kbd> nova tarefa · <kbd>G</kbd> gasto</div>
   <div class="side-foot" id="side-bk"></div>
 </aside>
+
+<!-- Barra superior (só no tema Desktop): nova tarefa, saldo e gasto de qualquer tela -->
+<header class="topbar" id="topbar">
+  <div class="tb-bar">
+    <div class="tb-dia" id="tb-dia"></div>
+    <form class="tb-campo" onsubmit="event.preventDefault();novaTarefaTopo()">
+      <span class="tb-ico" id="tb-ico"></span>
+      <input type="text" id="tb-inp" placeholder="Nova tarefa para hoje" maxlength="60" enterkeyhint="done" aria-label="Nova tarefa para hoje" aria-keyshortcuts="N">
+      <kbd aria-hidden="true">N</kbd>
+    </form>
+    <button class="tb-saldo" id="tb-saldo" onclick="go('fin')"></button>
+    <button class="btn bp bs" id="tb-gasto" onclick="gastoTopo()" aria-keyshortcuts="G"></button>
+  </div>
+</header>
 
 <!-- ═══════════════════ DASHBOARD ═══════════════════ -->
 <div class="pg on" id="page-dash"><div id="inicio-react">
@@ -2599,7 +2718,7 @@ html[data-theme^=liquid] .pfield input.pfinp{background:transparent}
         <div style="display:flex;flex-direction:column;gap:12px">
           <div>
             <div class="cfg-t" style="font-size:14.5px;font-weight:600">Aparência</div>
-            <div class="cfg-s" style="font-size:12px;color:var(--t2);margin-bottom:10px">A escolha fica guardada neste aparelho.</div>
+            <div class="cfg-s" style="font-size:12px;color:var(--t2);margin-bottom:10px">A escolha fica guardada neste aparelho e vale para o celular. No computador, o Guapos usa sempre o tema Desktop.</div>
             <div id="tema-picker"><div class="tp-grid" role="radiogroup" aria-label="Aparência">
               <div class="tp" role="radio" data-tema="liquid" onclick="setTema('liquid')"><span class="tp-prev liquid" style="--pb:#D5D5DE;--pc:rgba(255,255,255,.6);--pa:#4A7CD4;--pt:#464A53"><i></i><i></i><b></b><em></em></span><span class="tp-n">Liquid Glass claro</span><span class="tp-s">Vidro translúcido</span></div>
               <div class="tp" role="radio" data-tema="liquid-escuro" onclick="setTema('liquid-escuro')"><span class="tp-prev liquid-escuro" style="--pb:linear-gradient(160deg,#2A2C33,#13171B);--pc:rgba(61,64,71,.75);--pa:#E0328A;--pt:#B9BCC3"><i></i><i></i><b></b><em></em></span><span class="tp-n">Liquid Glass escuro</span><span class="tp-s">Vidro translúcido</span></div>
@@ -3115,7 +3234,7 @@ const rawGet=(k,d)=>{try{const v=localStorage.getItem(k);return v?JSON.parse(v):
 const rawSet=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch{}};
 const ls=(k,d)=>rawGet(storeKey(k),d);
 const ss=(k,v)=>{
-  rawSet(storeKey(k),v);
+  rawSet(storeKey(k),v);agendarTopo();
   if(PID&&k.startsWith('e2_'))Sync.push(k.slice(3),v);
 };
 
@@ -3473,9 +3592,13 @@ async function enterProfile(pid){
   hideGate();buzz(10);
   migrarFin();
   if(needsOnb()||!habits.length)openOnb();
-  else{ensureMonthly();go('dash')}
+  else{ensureMonthly();go(paginaInicial())}
   arquivarTarefas();
 }
+const PAGINAS=['dash','habits','tasks','fin','saude','perfil'];
+// No computador, abre na tela que estava no endereço (recarregar não volta para o Início)
+function paginaInicial(){const p=location.hash.slice(1);return noComputador()&&PAGINAS.includes(p)?p:'dash'}
+window.addEventListener('popstate',()=>{const p=location.hash.slice(1);if(PID&&PAGINAS.includes(p)&&p!==curPage)go(p)});
 function switchProfile(){Sync.flush();Sync.stop();PID=null;showGate('picker')}
 let taskDay=null,taskOpen={},editTaskId=null;
 let editDays=[],editFreq='d',editGoal=3;
@@ -3571,11 +3694,16 @@ const TEMAS=['liquid','liquid-escuro','neon','neon-rosa'];
 const TEMAS_ANTIGOS={light:'liquid',vidro:'liquid',dark:'liquid-escuro','vidro-escuro':'liquid-escuro'};
 function temaSalvo(){let t=null;try{t=localStorage.getItem('g_tema')}catch(e){}t=TEMAS_ANTIGOS[t]||t;return TEMAS.includes(t)?t:null}
 function temaAtual(){return temaSalvo()||(matchMedia('(prefers-color-scheme: dark)').matches?'liquid-escuro':'liquid')}
+// No computador (1000 px ou mais) o app usa sempre o tema Desktop, que não aparece no seletor:
+// a escolha salva (temaAtual) continua valendo no celular e volta sozinha se a janela ficar estreita
+const TEMA_DESKTOP='liquid-desktop';
+const noComputador=()=>!!(window.matchMedia&&matchMedia('(min-width: 1000px)').matches);
+const temaAplicado=()=>noComputador()?TEMA_DESKTOP:temaAtual();
 function aplicarTema(){
-  const t=temaAtual();
+  const t=temaAplicado(),salvo=temaAtual();
   document.documentElement.setAttribute('data-theme',t);
-  document.getElementById('meta-tc').setAttribute('content',t.startsWith('neon')?'#05070B':t==='liquid-escuro'?'#1B1D21':'#D5D5DE');
-  document.querySelectorAll('[data-tema]').forEach(e=>e.setAttribute('aria-checked',String(e.dataset.tema===t)));
+  document.getElementById('meta-tc').setAttribute('content',t.startsWith('neon')?'#05070B':t==='liquid-escuro'?'#1B1D21':t===TEMA_DESKTOP?'#121315':'#D5D5DE');
+  document.querySelectorAll('[data-tema]').forEach(e=>e.setAttribute('aria-checked',String(e.dataset.tema===salvo)));
   // avisa as partes em React (seletor de temas) que o tema mudou
   window.dispatchEvent(new CustomEvent('guapos:tema',{detail:t}));
 }
@@ -3585,6 +3713,7 @@ function setTema(t){
   aplicarTema();buzz(5);if(PID)go(curPage); // redesenha os gráficos com as cores do tema
 }
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{if(!temaSalvo()){aplicarTema();if(PID)go(curPage)}});
+matchMedia('(min-width: 1000px)').addEventListener('change',()=>{aplicarTema();if(PID)go(curPage)});
 // Cores do tema atual para os gráficos (o canvas não entende var(--x))
 const tok=n=>getComputedStyle(document.body).getPropertyValue(n).trim();
 const corDe=v=>/^var\(/.test(v)?tok(v.slice(4,-1)):v;
@@ -3814,6 +3943,8 @@ function go(id){
   document.getElementById('page-'+id).classList.add('on');
   document.querySelectorAll('[data-nav]').forEach(b=>{const on=b.dataset.nav===id;b.classList.toggle('on',on);if(on)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')});
   if(changed){buzz(5);window.scrollTo(0,0);hideUndo()}
+  // no computador a tela vai para o endereço (#fin): Voltar e Avançar do navegador funcionam e recarregar mantém a tela
+  if(noComputador()&&location.hash!=='#'+id)history[location.hash&&changed?'pushState':'replaceState'](null,'','#'+id);
   renderSide();
   if(changed&&id==='tasks')taskDay=today();
   if(id==='dash')renderDash();
@@ -3850,7 +3981,8 @@ function closeSh(e,id){
     if(id==='task-ol')askDelTask(false);
     // devolve o foco para quem abriu a janela
     const op=ol._opener;ol._opener=null;
-    if(tinhaFoco&&op&&op.isConnected&&op!==document.body)op.focus({preventScroll:true});
+    // (nunca para algo de dentro da própria janela, que está sumindo)
+    if(tinhaFoco&&op&&op.isConnected&&op!==document.body&&!ol.contains(op))op.focus({preventScroll:true});
   }
 }
 // Janelas: anunciadas como diálogo e, no celular, fecham ao arrastar para baixo
@@ -4599,7 +4731,7 @@ function renderAfterTask(){if(curPage==='tasks')renderTasks();else if(curPage===
 function campoSub(id){return document.querySelector('#page-'+curPage+' [id="tsi-'+id+'"]')||document.getElementById('tsi-'+id)}
 function focusSub(id){const el=campoSub(id);if(el)el.focus()}
 function addTask(inputId){
-  const fromDash=inputId==='d-t-inp',el=document.getElementById(inputId||'t-inp'),v=el.value.trim();
+  const fromDash=inputId==='d-t-inp'||inputId==='tb-inp',el=document.getElementById(inputId||'t-inp'),v=el.value.trim();
   if(!v){el.focus();return}
   tasks.push({id:uid('t'),name:v,date:fromDash?today():(taskDay||today()),done:false,subs:[]});
   el.value='';buzz(10);save('e2_tasks',tasks);renderAfterTask();
@@ -6188,6 +6320,46 @@ function renderInstall(){
   if(!web)h+=`<div style="margin-top:8px;color:var(--y)">Para instalar e funcionar sem internet, o app precisa estar publicado em um endereço https (por exemplo, GitHub Pages ou Netlify). Aberto direto do arquivo, ele funciona, mas não instala.</div>`;
   el.innerHTML=h;
 }
+// Barra superior e contadores do menu lateral (só aparecem no tema Desktop). Qualquer gravação pede uma
+// atualização, juntada num quadro só para não refazer as contas a cada item salvo
+let _topo=0;
+function agendarTopo(){if(_topo||!PID)return;_topo=requestAnimationFrame(()=>{_topo=0;renderTopo()})}
+function renderTopo(){
+  if(!PID||!noComputador())return;
+  const k=today(),pct=Math.round(dayPct(k)*100),fl=finLocked(),sal=fl?0:saldoMes();
+  document.getElementById('tb-dia').innerHTML=`${ic('calendar')}<span>${(d=>d.charAt(0).toUpperCase()+d.slice(1))(new Date().toLocaleDateString('pt-BR',{weekday:'short',day:'numeric',month:'short'}).replace(/\./g,''))}</span><em title="Progresso de hoje">${pct}%</em>`;
+  const sb=document.getElementById('tb-saldo');
+  sb.innerHTML=`${ic(fl?'lock':'wallet')}<span style="color:${fl?'var(--t2)':sal>=0?'var(--t1)':'var(--r)'}">${fl?'••••':(sal<0?'−':'')+fmtShort(Math.abs(sal))}</span>`;
+  sb.title=fl?'Finanças bloqueadas':'Saldo agora · abrir Finanças';sb.setAttribute('aria-label',fl?'Finanças bloqueadas: abrir Finanças':'Saldo agora '+fmtBRL(sal)+': abrir Finanças');
+  const marcas=checks[k]||{},n={
+    habits:habitsFor(k).filter(h=>!marcas[h.id]).length,
+    tasks:tasksOn(k).filter(t=>!t.done).length+overdueTasks().length,
+    fin:fl?0:GuaposDominio.financas.agruparContas(contasLembrete()).length,
+  };
+  for(const [pg,v] of Object.entries(n)){const el=document.getElementById('snav-'+pg);if(v)el.dataset.n=v;else delete el.dataset.n}
+}
+function novaTarefaTopo(){
+  const el=document.getElementById('tb-inp');if(!el.value.trim()){el.focus();return}
+  addTask('tb-inp');showToast('Tarefa adicionada a hoje','check');agendarTopo();
+}
+function gastoTopo(){
+  if(finLocked()){go('fin');showToast('Desbloqueie Finanças para lançar','lock');return}
+  openVarSheet(null,today(),true);
+}
+// Atalhos do computador: 1 a 6 trocam de tela, N (ou /) vai para "Nova tarefa", G lança um gasto.
+// Não valem enquanto se digita, com uma janela aberta, no login/cadastro ou com Ctrl/Alt/Cmd.
+function atalhoDesktop(e){
+  if(!PID||!noComputador()||e.ctrlKey||e.metaKey||e.altKey||document.querySelector('.overlay.on'))return false;
+  const t=e.target;
+  if(t&&(/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)||t.isContentEditable))return false;
+  if(document.getElementById('gate').classList.contains('on')||document.getElementById('onb').classList.contains('on'))return false;
+  const n=+e.key;
+  if(n>=1&&n<=PAGINAS.length){e.preventDefault();go(PAGINAS[n-1]);return true}
+  const k=e.key.toLowerCase();
+  if(k==='n'||k==='/'){e.preventDefault();document.getElementById('tb-inp').focus();return true}
+  if(k==='g'){e.preventDefault();gastoTopo();return true}
+  return false;
+}
 function renderSide(){
   const sub=document.getElementById('side-sub');if(!sub)return;
   const lv=lvl(xpTotal());
@@ -6198,6 +6370,7 @@ function renderSide(){
     `<div class="side-sync" id="side-sync"></div>`+
     (Sync.on?'':`<div style="margin-top:8px">${backupText()}.</div><button class="btn ${ok?'bg':'bp'}" onclick="exportData()">${ic('down')}<span>Fazer backup</span></button>`);
   renderSyncStatus();
+  renderTopo();
 }
 function importData(e){
   const file=e.target.files[0];if(!file)return;
@@ -6246,7 +6419,9 @@ if(typeof Chart!=='undefined'){
 setIco('nav-saude','heart','Saúde');
 setIco('nav-perfil','user','Perfil');
 [['dash','grid','Início'],['habits','checksq','Hábitos'],['tasks','list','Tarefas'],['fin','dollar','Finanças'],['saude','heart','Saúde'],['perfil','user','Perfil']]
-  .forEach(([k,i,t])=>setIco('snav-'+k,i,t));
+  .forEach(([k,i,t],n)=>{setIco('snav-'+k,i,t);const el=document.getElementById('snav-'+k);el.title=`${t} (${n+1})`;el.setAttribute('aria-keyshortcuts',String(n+1))});
+document.getElementById('tb-ico').innerHTML=ic('plus');
+document.getElementById('tb-gasto').innerHTML=ic('plus')+'<span>Gasto</span><kbd aria-hidden="true">G</kbd>';
 document.getElementById('side-logo').innerHTML=ic('checkc');
 document.getElementById('snack-btn').textContent='Desfazer';
 renderCatChips();
@@ -6254,7 +6429,7 @@ setupSheets();a11yScan();aplicarTema();
 document.addEventListener('keydown',e=>{
   const o=[...document.querySelectorAll('.overlay.on')].pop();
   // Esc fecha a janela aberta (computador)
-  if(e.key==='Escape'){if(o)closeSh(null,o.id);return}
+  if(e.key==='Escape'){if(o)closeSh(null,o.id);else if(document.activeElement&&document.activeElement.id==='tb-inp')document.activeElement.blur();return}
   // Tab fica dentro da janela aberta
   if(e.key==='Tab'&&o){
     const f=[...o.querySelectorAll('button,input,select,textarea,[tabindex="0"]')].filter(x=>!x.disabled&&x.offsetParent!==null);
@@ -6264,6 +6439,7 @@ document.addEventListener('keydown',e=>{
     else if(!e.shiftKey&&(a===last||!o.contains(a))){e.preventDefault();first.focus()}
     return;
   }
+  if(atalhoDesktop(e))return;
   // Enter e espaço acionam os itens clicáveis que não são botões de verdade
   const t=e.target;
   if((e.key==='Enter'||e.key===' ')&&t&&t.tabIndex===0&&t.hasAttribute&&t.hasAttribute('onclick')&&!NATIVE_CTRL.test(t.tagName)){
