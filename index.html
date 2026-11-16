@@ -1878,8 +1878,6 @@ html[data-theme=liquid-desktop] kbd{display:inline-flex;align-items:center;justi
   html[data-theme=liquid-desktop] .sni .ic{width:18px;height:18px}
   html[data-theme=liquid-desktop] .sni.on,html[data-theme=liquid-desktop] .sni.on:hover{background:var(--sel);color:#141518}
   html[data-theme=liquid-desktop] .sni.on .ic{color:#141518}
-  html[data-theme=liquid-desktop] .sni[data-n]::after{content:attr(data-n);margin-left:auto;min-width:22px;height:20px;padding:0 7px;border-radius:999px;background:var(--s2);color:var(--t2);font-size:12px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;font-variant-numeric:tabular-nums}
-  html[data-theme=liquid-desktop] .sni.on[data-n]::after{background:rgba(20,21,24,.1);color:#141518}
   html[data-theme=liquid-desktop] .sn-dica{display:block;margin:18px 10px 0;font-size:12px;line-height:1.9;color:var(--t3)}
   html[data-theme=liquid-desktop] .side-foot{background:var(--s2);border-color:var(--br2);border-radius:16px}
   /* barra superior: alinhada com o conteúdo da página */
@@ -6320,7 +6318,7 @@ function renderInstall(){
   if(!web)h+=`<div style="margin-top:8px;color:var(--y)">Para instalar e funcionar sem internet, o app precisa estar publicado em um endereço https (por exemplo, GitHub Pages ou Netlify). Aberto direto do arquivo, ele funciona, mas não instala.</div>`;
   el.innerHTML=h;
 }
-// Barra superior e contadores do menu lateral (só aparecem no tema Desktop). Qualquer gravação pede uma
+// Barra superior (só aparece no tema Desktop). Qualquer gravação pede uma
 // atualização, juntada num quadro só para não refazer as contas a cada item salvo
 let _topo=0;
 function agendarTopo(){if(_topo||!PID)return;_topo=requestAnimationFrame(()=>{_topo=0;renderTopo()})}
@@ -6331,12 +6329,6 @@ function renderTopo(){
   const sb=document.getElementById('tb-saldo');
   sb.innerHTML=`${ic(fl?'lock':'wallet')}<span style="color:${fl?'var(--t2)':sal>=0?'var(--t1)':'var(--r)'}">${fl?'••••':(sal<0?'−':'')+fmtShort(Math.abs(sal))}</span>`;
   sb.title=fl?'Finanças bloqueadas':'Saldo agora · abrir Finanças';sb.setAttribute('aria-label',fl?'Finanças bloqueadas: abrir Finanças':'Saldo agora '+fmtBRL(sal)+': abrir Finanças');
-  const marcas=checks[k]||{},n={
-    habits:habitsFor(k).filter(h=>!marcas[h.id]).length,
-    tasks:tasksOn(k).filter(t=>!t.done).length+overdueTasks().length,
-    fin:fl?0:GuaposDominio.financas.agruparContas(contasLembrete()).length,
-  };
-  for(const [pg,v] of Object.entries(n)){const el=document.getElementById('snav-'+pg);if(v)el.dataset.n=v;else delete el.dataset.n}
 }
 function novaTarefaTopo(){
   const el=document.getElementById('tb-inp');if(!el.value.trim()){el.focus();return}
