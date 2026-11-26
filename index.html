@@ -1954,9 +1954,104 @@ html[data-theme^=liquid] .pfield input.pfinp{background:transparent}
   html[data-theme] #page-fin .cols>.col:first-child>.card:nth-child(2){order:8}
   html[data-theme] #page-fin .cols>.col:first-child>.card:nth-child(4){order:9}
 }
+
+/* ════ Painel vivo: uma linguagem só para todas as áreas (os 4 temas e o Desktop) ════
+   Referências reunidas no Inspo e no One Page Love: número grande com uma régua fina embaixo (relatórios de métricas),
+   uma cor por área que se repete em todo lugar (Morgen), contraste calmo e borda que acende sob o mouse (Linear).
+   Só transform e opacity se movem; quem pede menos movimento no sistema não vê nenhuma animação daqui. */
+:root{--mola:cubic-bezier(.22,1,.36,1);--mola-solta:cubic-bezier(.34,1.45,.64,1)}
+
+/* 1. cada cartão fala a cor da área de onde vem o dado, em qualquer tela */
+:root[data-theme] .pg{--area:var(--acc)}
+:root[data-theme] #page-habits{--area:var(--c-hab)}
+:root[data-theme] #page-tasks{--area:var(--c-task)}
+:root[data-theme] #page-fin{--area:var(--c-fin)}
+:root[data-theme] #page-saude{--area:var(--c-saude)}
+:root[data-theme] #page-perfil{--area:var(--c-perfil)}
+:root[data-theme] #page-dash .kpi-grid>.card:nth-child(-n+2),:root[data-theme] #d-today-card,:root[data-theme] #page-dash .cols>.col:last-child>.card:last-child{--area:var(--c-hab)}
+:root[data-theme] #page-dash .kpi-grid>.card:nth-child(3),:root[data-theme] #d-proxima-card,:root[data-theme] #d-entradas-card{--area:var(--c-fin)}
+:root[data-theme] #page-dash .kpi-grid>.card:nth-child(4){--area:var(--c-saude)}
+:root[data-theme] #d-radar-card{--area:var(--c-perfil)}
+:root[data-theme] .pg .card .sh-title>.ic,:root[data-theme] .pg .card .ey>.ic,:root[data-theme] .pg .ph .ey>.ic{color:var(--area)}
+:root[data-theme] .pg .kpi-grid .ey{color:color-mix(in srgb,var(--area) 70%,var(--t2))}
+/* a régua da área embaixo de cada número do Início (cresce ao passar o mouse) */
+:root[data-theme] .pg .stat-card{position:relative}
+:root[data-theme] .kpi-grid .kpi-lbl::after,:root[data-theme] .pg .stat-card-sub::after{content:'';display:block;width:44px;height:3px;margin-top:12px;border-radius:3px;background:var(--area);transform:scaleX(.55);transform-origin:left;transition:transform .45s var(--mola)}
+/* o número fala a mesma cor da régua (o saldo segue verde ou vermelho, porque a cor ali é o próprio aviso) */
+:root[data-theme] #d-streak,:root[data-theme] #d-month-pct,:root[data-theme] #d-peso,:root[data-theme] #s-peso{color:var(--area)!important}
+/* barras de progresso na cor da área */
+:root[data-theme^=liquid] .pg .pbf{background:var(--area)}
+
+/* 2. números: grandes, justos e alinhados, como num relatório */
+:root[data-theme] .kpi-val,:root[data-theme] .fin-col-val,:root[data-theme] .stat-card-val{font-variant-numeric:tabular-nums;letter-spacing:-.035em}
+:root[data-theme] .kpi-val{font-weight:700}
+@media(min-width:1000px){
+  :root[data-theme=liquid-desktop] .kpi-val{font-size:42px!important}
+  :root[data-theme=liquid-desktop] .fin-col-val{font-size:30px}
+  :root[data-theme=liquid-desktop] .stat-card-val{font-size:36px}
+  :root[data-theme=liquid-desktop] .pg .stat-card{padding:18px 20px}
+  :root[data-theme=liquid-desktop] .greet,:root[data-theme=liquid-desktop] .ph h1{font-size:40px;letter-spacing:-.035em}
+  :root[data-theme=liquid-desktop] .kpi-grid>.card{padding:20px 20px 18px}
+  /* menu lateral: os ícones já mostram a cor de cada área; o item aberto fica em destaque claro */
+  :root[data-theme=liquid-desktop] [data-nav=dash]{--acc:var(--t1)}
+  :root[data-theme=liquid-desktop] .sni:not(.on) .ic{color:var(--acc);opacity:.9}
+}
+
+/* 3. borda que acende onde o mouse está (só com mouse; a posição vem de src/lib/vida.ts) */
+@media(hover:hover) and (pointer:fine){
+  :root[data-theme] .pg .card::after,:root[data-theme] .pg .fin-summary::after,:root[data-theme] .pg .stat-card::after{content:'';position:absolute;inset:0;border-radius:inherit;padding:1px;pointer-events:none;opacity:0;transition:opacity .35s;
+    background:radial-gradient(240px circle at var(--mx,50%) var(--my,0%),color-mix(in srgb,var(--area) 75%,transparent),transparent 70%);
+    -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0)}
+  :root[data-theme] .pg .fin-summary{position:relative}
+  :root[data-theme] .pg .card:hover::after,:root[data-theme] .pg .fin-summary:hover::after,:root[data-theme] .pg .stat-card:hover::after{opacity:1}
+  :root[data-theme] .pg .stat-card:hover .stat-card-sub::after{transform:scaleX(1)}
+  /* cartões que levam a outra tela sobem um pouco, como um botão */
+  :root[data-theme] .pg .card[role=button]{transition:transform .35s var(--mola),box-shadow .35s var(--mola),border-color .2s;cursor:pointer}
+  :root[data-theme] .pg .card[role=button]:hover{transform:translateY(-3px);box-shadow:var(--sh-float,var(--sh))}
+  :root[data-theme] .kpi-grid>.card:hover .kpi-lbl::after{transform:scaleX(1)}
+  /* linhas e dias: o fundo ganha um toque da cor da área sob o mouse */
+  :root[data-theme] .pg .hi:not(.off):hover,:root[data-theme] .pg .wp-day:hover{background:color-mix(in srgb,var(--area) 9%,transparent)}
+  :root[data-theme] .pg .tk:hover{border-color:color-mix(in srgb,var(--area) 38%,transparent)}
+  :root[data-theme] .pg .dcell:not(.pad){transition:transform .3s var(--mola),background-color .2s,border-color .2s}
+  :root[data-theme] .pg .dcell:not(.pad):hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--area) 45%,transparent)}
+}
+:root[data-theme] .pg .dcell:not(.pad):active{transform:scale(.94);transition-duration:.08s}
+:root[data-theme] .pg .card[role=button]:active{transform:scale(.98);transition-duration:.1s}
+
+@keyframes vivoEntra{from{opacity:0;transform:translateY(14px) scale(.985)}to{opacity:1;transform:none}}
+@keyframes vivoNum{from{opacity:0;transform:translateY(.3em)}to{opacity:1;transform:none}}
+@keyframes vivoAnel27{from{stroke-dashoffset:169.6}}
+@keyframes vivoAnel22{from{stroke-dashoffset:138.2}}
+@keyframes vivoBarra{from{transform:scaleX(0)}}
+@keyframes vivoIcone{0%{transform:scale(.72)}100%{transform:none}}
+@keyframes vivoOnda{from{opacity:.75;transform:scale(1)}to{opacity:0;transform:scale(2)}}
+@keyframes vivoPilula{from{opacity:.4;transform:scale(.96)}to{opacity:1;transform:none}}
+
+@media(prefers-reduced-motion:no-preference){
+  /* 4. ao abrir uma tela, os blocos chegam em sequência, de cima para baixo */
+  :root[data-theme] .pg.on .ph,:root[data-theme] .pg.on .dhead{animation:vivoEntra .5s var(--mola) backwards}
+  :root[data-theme] .pg.on .kpi-grid>.card,:root[data-theme] .pg.on .stat-card,:root[data-theme] .pg.on .fin-summary,:root[data-theme] .pg.on .cols>.col>.card,:root[data-theme] .pg.on .lemb{animation:vivoEntra .6s var(--mola) backwards}
+  :root[data-theme] .pg.on .lemb,:root[data-theme] .pg.on .fin-summary,:root[data-theme] .pg.on .kpi-grid>.card:nth-child(1){animation-delay:40ms}
+  :root[data-theme] .pg.on .kpi-grid>.card:nth-child(2),:root[data-theme] .pg.on .stat-card:nth-child(2){animation-delay:80ms}
+  :root[data-theme] .pg.on .kpi-grid>.card:nth-child(3),:root[data-theme] .pg.on .stat-card:nth-child(3){animation-delay:120ms}
+  :root[data-theme] .pg.on .kpi-grid>.card:nth-child(4),:root[data-theme] .pg.on .stat-card:nth-child(4){animation-delay:160ms}
+  :root[data-theme] .pg.on .cols>.col>.card:nth-child(1){animation-delay:120ms}
+  :root[data-theme] .pg.on .cols>.col>.card:nth-child(2){animation-delay:180ms}
+  :root[data-theme] .pg.on .cols>.col>.card:nth-child(3){animation-delay:240ms}
+  :root[data-theme] .pg.on .cols>.col>.card:nth-child(n+4){animation-delay:300ms}
+  :root[data-theme] .pg.on .kpi-val,:root[data-theme] .pg.on .fin-col-val,:root[data-theme] .pg.on .stat-card-val{animation:vivoNum .7s var(--mola) .22s backwards}
+  /* anéis e barras se desenham até o valor de hoje */
+  :root[data-theme] .pg.on #d-ring{animation:vivoAnel27 1.3s var(--mola) .2s backwards}
+  :root[data-theme] .pg.on #h-ring,:root[data-theme] .pg.on #t-ring{animation:vivoAnel22 1.3s var(--mola) .2s backwards}
+  :root[data-theme] .pg.on .pbf{transform-origin:left;animation:vivoBarra 1s var(--mola) .3s backwards}
+  :root[data-theme] .pg.on .kpi-lbl::after,:root[data-theme] .pg.on .stat-card-sub::after{animation:vivoBarra .9s var(--mola) .45s backwards}
+  /* 5. marcar algo: além do pulo da caixinha, uma onda na cor da área */
+  :root[data-theme] .hck.pop::before{content:'';position:absolute;inset:-2px;border-radius:inherit;border:2px solid var(--fill,var(--area,var(--acc)));pointer-events:none;animation:vivoOnda .55s ease-out forwards}
+  /* 6. menu: o item escolhido chega com um leve assentar; o ícone do menu do celular pula */
+  :root[data-theme] .sni.on{animation:vivoPilula .35s var(--mola)}
+  :root[data-theme] .sni.on .ic,:root[data-theme] .bni.on .ic{animation:vivoIcone .45s var(--mola-solta)}
+}
 </style>
-  <script type="module" crossorigin src="./assets/index-Bczx0StS.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-CjlNt6MZ.css">
 </head>
 <body>
 
@@ -6451,5 +6546,6 @@ window.addEventListener('orientationchange',()=>setTimeout(()=>go(curPage),250))
 // Redesenha os gráficos quando a fonte nova terminar de carregar
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{if(!document.getElementById('onb').classList.contains('on'))go(curPage)});
 </script>
+<script type="module" src="./src/main.tsx"></script>
 </body>
 </html>
