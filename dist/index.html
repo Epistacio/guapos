@@ -2018,6 +2018,46 @@ html[data-theme^=liquid] .pfield input.pfinp{background:transparent}
 :root[data-theme] .pg .dcell:not(.pad):active{transform:scale(.94);transition-duration:.08s}
 :root[data-theme] .pg .card[role=button]:active{transform:scale(.98);transition-duration:.1s}
 
+/* ════ Painel vivo, 2ª rodada: fichas, avisos e calendários ════
+   Copilot Money (Inspo): cada categoria vira uma ficha na própria cor. Vimcal (Inspo): eventos como blocos com a faixa
+   da cor na borda. Capturas de apps no One Page Love: ícone sempre dentro de um quadradinho, estado vazio desenhado. */
+
+/* fichas: o ícone de cada lançamento fica num quadradinho tingido pela cor da categoria (a mesma do ícone) */
+:root[data-theme] .pg .tx-ico{background:color-mix(in srgb,currentColor 15%,transparent);box-shadow:inset 0 0 0 1px color-mix(in srgb,currentColor 20%,transparent)}
+/* o título de cada cartão abre com o ícone da área numa ficha */
+:root[data-theme] .pg .card .sh-title>.ic{box-sizing:content-box;width:16px;height:16px;padding:6px;border-radius:10px;opacity:1;background:color-mix(in srgb,var(--area) 15%,transparent)}
+:root[data-theme] .pg .card .sh-title{gap:10px}
+
+/* avisos e lembrete de backup: um bloco calmo com a faixa da cor na borda, no lugar do fundo amarelo inteiro */
+:root[data-theme] .lemb,:root[data-theme] .bk-banner{--aviso:var(--y);position:relative;overflow:hidden;background:var(--s1);border:1px solid var(--br2);box-shadow:var(--sh);padding-left:18px}
+:root[data-theme] .lemb.bad{--aviso:var(--r)}
+:root[data-theme] .lemb::before,:root[data-theme] .bk-banner::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--aviso)}
+:root[data-theme] .lemb>.ic,:root[data-theme] .bk-banner>.ic{box-sizing:content-box;width:20px;height:20px;padding:9px;border-radius:12px;color:var(--aviso);background:color-mix(in srgb,var(--aviso) 15%,transparent)}
+/* "Atrasada", "Hoje", "Perto": etiquetas em pílula, cada uma na sua cor */
+:root[data-theme] .lemb-i em{display:inline-block;padding:1px 8px;margin-right:4px;border-radius:999px;font-size:11.5px;letter-spacing:.01em;background:color-mix(in srgb,currentColor 15%,transparent)}
+:root[data-theme] .lemb-i{padding:2px 0}
+@media(hover:hover) and (pointer:fine){
+  :root[data-theme] .lemb[role=button]{transition:transform .35s var(--mola),box-shadow .35s var(--mola)}
+  :root[data-theme] .lemb[role=button]:hover{transform:translateY(-2px);box-shadow:var(--sh-float,var(--sh))}
+  /* botões de ação dos cartões ("Nova conta", "Adicionar"): acendem na cor da área */
+  :root[data-theme] .pg .sh-action{transition:background .2s,color .2s,transform .2s var(--mola)}
+  :root[data-theme] .pg .sh-action:hover{background:color-mix(in srgb,var(--area) 26%,transparent)}
+}
+
+/* calendários: hoje ganha o anel da cor da área; dia completo, a cor cheia */
+:root[data-theme] .pg .dcell.now{box-shadow:inset 0 0 0 2px var(--area);font-weight:800}
+:root[data-theme^=liquid] #page-habits .dcell.full{background:var(--area)}
+
+/* semana das tarefas: o dia escolhido leva a faixa azul das Tarefas na borda, como um evento */
+:root[data-theme] .pg .wp-day{position:relative;border-radius:14px;transition:background .2s}
+:root[data-theme] .pg .wp-day.on::before{content:'';position:absolute;left:0;top:8px;bottom:8px;width:3px;border-radius:3px;background:var(--area)}
+
+/* estado vazio: um espaço desenhado, não só uma frase solta */
+:root[data-theme] .pg .card .empty{border:1px dashed var(--br);border-radius:var(--rad-s);background:color-mix(in srgb,var(--area) 5%,transparent);margin-top:6px}
+
+/* Desktop: um leve brilho da área no alto da tela, que muda junto com a tela aberta */
+:root[data-theme=liquid-desktop] body::before{background:radial-gradient(48% 34% at 24% 0%,color-mix(in srgb,var(--acc) 11%,transparent),transparent 72%),radial-gradient(55% 40% at 22% 0%,#26282D,transparent 70%),linear-gradient(170deg,#17181B,#0F1012 75%)}
+
 @keyframes vivoEntra{from{opacity:0;transform:translateY(14px) scale(.985)}to{opacity:1;transform:none}}
 @keyframes vivoNum{from{opacity:0;transform:translateY(.3em)}to{opacity:1;transform:none}}
 @keyframes vivoAnel27{from{stroke-dashoffset:169.6}}
